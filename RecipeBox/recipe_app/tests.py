@@ -1,4 +1,21 @@
+from django.core.exceptions import ValidationError
 from django.test import TestCase
 from recipe_app.models import Ingredient
 
 # Create your tests here.
+class IngredientModelTests(TestCase):
+    def test_null_name_fails(self):
+        uut = Ingredient()
+
+        with self.assertRaises(ValidationError):
+            uut.full_clean()
+
+    def test_too_long_name_fails(self):
+        too_long_name = ''
+        for i in range(0,201):
+            too_long_name = too_long_name + str(i)
+
+        uut = Ingredient(name=too_long_name)
+
+        with self.assertRaises(ValidationError):
+            uut.full_clean()
