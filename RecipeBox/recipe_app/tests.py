@@ -1,9 +1,11 @@
+from django.db.utils import IntegrityError
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 from recipe_app.models import Ingredient
 
 # Create your tests here.
 class IngredientModelTests(TestCase):
+
     def test_null_name_fails(self):
         uut = Ingredient()
 
@@ -26,3 +28,12 @@ class IngredientModelTests(TestCase):
 
         uut.full_clean()
         self.assertEqual(uut.name,mixed_case_name.capitalize())
+
+    def test_duplicate_insert_fails(self):
+        ingredient_name = 'Ingredient Name'
+        first_ingredient = Ingredient(name=ingredient_name)
+        first_ingredient.save()
+
+        duplicate_ingredient = Ingredient(name=ingredient_name)
+        with self.assertRaises(IntegrityError):
+            duplicate_ingredient.save()
