@@ -19,3 +19,10 @@ class IngredientModelTests(TestCase):
 
         with self.assertRaises(ValidationError):
             uut.full_clean()
+
+    def test_name_casing(self):
+        mixed_case_name = 'iNgReDiEnt NaMe'
+        uut = Ingredient(name=mixed_case_name)
+
+        uut.full_clean()
+        self.assertEqual(uut.name,mixed_case_name.capitalize())
