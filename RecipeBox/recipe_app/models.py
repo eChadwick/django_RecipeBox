@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 
 # Create your models here.
@@ -6,5 +7,12 @@ from django.db import models
 class Ingredient(models.Model):
     name = models.CharField(null=False, max_length=200, unique=True)
 
-    def clean(self):
-        self.name = self.name.capitalize()
+    def save(self, *args, **kwargs):
+        self.name = self.name.title()
+        self.clean_fields()
+        try:
+            self.validate_unique()
+        except ValidationError:
+            return
+
+        models.Model.save(self, *args, **kwargs)

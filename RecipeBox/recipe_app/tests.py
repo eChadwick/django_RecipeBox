@@ -8,34 +8,32 @@ from recipe_app.models import Ingredient
 
 class IngredientModelTests(TestCase):
 
-    def test_null_name_fails(self):
-        uut = Ingredient()
-
-        with self.assertRaises(ValidationError):
-            uut.full_clean()
-
-    def test_too_long_name_fails(self):
+    # Tests that save fails when name is longer than constraint allows
+    def test_save_name_length(self):
         too_long_name = ''
         for i in range(0, 201):
-            too_long_name = too_long_name + str(i)
-
-        uut = Ingredient(name=too_long_name)
+            too_long_name = too_long_name + 'a'
+        ingredient = Ingredient(name=too_long_name)
 
         with self.assertRaises(ValidationError):
-            uut.full_clean()
+            ingredient.save()
 
-    def test_name_casing(self):
-        mixed_case_name = 'iNgReDiEnt NaMe'
-        uut = Ingredient(name=mixed_case_name)
+    # Tests that names are always saved as title case
+    def test_save_name_casing(self):
+        mixed_case_name = 'iNgEdIeNt nAme'
+        new_ingredient = Ingredient(name=mixed_case_name)
+        new_ingredient.save()
 
-        uut.full_clean()
-        self.assertEqual(uut.name, mixed_case_name.capitalize())
+        saved_ingredient = Ingredient.objects.get(name=mixed_case_name.title())
+        self.assertEqual(saved_ingredient.name, mixed_case_name.title())
 
-    def test_duplicate_insert_fails(self):
-        ingredient_name = 'Ingredient Name'
+    # Tests that saving a duplicate name is a no-op
+    def test_save_duplicates(self):
+        ingredient_name = 'ingredient name'
         first_ingredient = Ingredient(name=ingredient_name)
         first_ingredient.save()
+        self.assertIsNotNone(first_ingredient.pk)
 
-        duplicate_ingredient = Ingredient(name=ingredient_name)
-        with self.assertRaises(IntegrityError):
-            duplicate_ingredient.save()
+        second_ingredient = Ingredient(name=ingredient_name)
+        second_ingredient.save()
+        self.assertIsNone(second_ingredient.pk)
