@@ -4,6 +4,8 @@ from django.test import TestCase
 from recipe_app.models import Ingredient
 
 # Create your tests here.
+
+
 class IngredientModelTests(TestCase):
 
     def test_null_name_fails(self):
@@ -14,7 +16,7 @@ class IngredientModelTests(TestCase):
 
     def test_too_long_name_fails(self):
         too_long_name = ''
-        for i in range(0,201):
+        for i in range(0, 201):
             too_long_name = too_long_name + str(i)
 
         uut = Ingredient(name=too_long_name)
@@ -27,7 +29,7 @@ class IngredientModelTests(TestCase):
         uut = Ingredient(name=mixed_case_name)
 
         uut.full_clean()
-        self.assertEqual(uut.name,mixed_case_name.capitalize())
+        self.assertEqual(uut.name, mixed_case_name.capitalize())
 
     def test_duplicate_insert_fails(self):
         ingredient_name = 'Ingredient Name'
