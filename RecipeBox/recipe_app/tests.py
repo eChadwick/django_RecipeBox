@@ -2,6 +2,7 @@ from django.db.utils import IntegrityError
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 from recipe_app.models import Ingredient
+from recipe_app.models import Recipe
 
 # Create your tests here.
 
@@ -37,3 +38,32 @@ class IngredientModelTests(TestCase):
         second_ingredient = Ingredient(name=ingredient_name)
         second_ingredient.save()
         self.assertIsNone(second_ingredient.pk)
+
+class RecipeModelTests(TestCase):
+
+    def test_save_fails_on_too_long_name(self):
+        too_long_name = ''
+        for i in range(0, 201):
+            too_long_name = too_long_name + 'a'
+        recipe = Recipe(name=too_long_name)
+
+        with self.assertRaises(ValidationError):
+            recipe.save()
+
+    def test_save_title_cases_names(self):
+        mixed_case_name = 'rEcIpE nAme'
+        recipe = Recipe(name=mixed_case_name)
+        recipe.save()
+
+        saved_recipe = Recipe.objects.get(name=mixed_case_name.title())
+        self.assertEqual(saved_recipe.name, mixed_case_name.title())
+
+    def test_save_noops_on_duplicate_names(self):
+        recipe_name = 'recipe name'
+        first_recipe = Recipe(name=recipe_name)
+        first_recipe.save()
+        self.assertIsNotNone(first_recipe.pk)
+
+        second_recipe = Recipe(name=recipe_name)
+        second_recipe.save()
+        self.assertIsNone(second_recipe.pk)
