@@ -9,14 +9,12 @@ from recipe_app.models import Recipe
 
 class IngredientModelTests(TestCase):
 
-    # Tests that names are always saved as title case
-    def test_save_name_casing(self):
+    # Tests that names are always title cased
+    def test_name_casing(self):
         mixed_case_name = 'iNgEdIeNt nAme'
         new_ingredient = Ingredient(name=mixed_case_name)
-        new_ingredient.save()
 
-        saved_ingredient = Ingredient.objects.get(name=mixed_case_name.title())
-        self.assertEqual(saved_ingredient.name, mixed_case_name.title())
+        self.assertEqual(new_ingredient.name, mixed_case_name.title())
 
     # Tests that saving a duplicate name is a no-op
     def test_save_duplicates(self):
