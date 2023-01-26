@@ -19,6 +19,7 @@ class Ingredient(models.Model):
 
         models.Model.save(self, *args, **kwargs)
 
+
 class Recipe(models.Model):
     name = models.CharField(null=False, max_length=200, unique=True)
 

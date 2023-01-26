@@ -27,6 +27,7 @@ class IngredientModelTests(TestCase):
         second_ingredient.save()
         self.assertIsNone(second_ingredient.pk)
 
+
 class RecipeModelTests(TestCase):
 
     def test_save_fails_on_too_long_name(self):
