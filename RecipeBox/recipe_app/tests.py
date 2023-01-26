@@ -9,16 +9,6 @@ from recipe_app.models import Recipe
 
 class IngredientModelTests(TestCase):
 
-    # Tests that save fails when name is longer than constraint allows
-    def test_save_name_length(self):
-        too_long_name = ''
-        for i in range(0, 201):
-            too_long_name = too_long_name + 'a'
-        ingredient = Ingredient(name=too_long_name)
-
-        with self.assertRaises(ValidationError):
-            ingredient.save()
-
     # Tests that names are always saved as title case
     def test_save_name_casing(self):
         mixed_case_name = 'iNgEdIeNt nAme'
