@@ -25,10 +25,5 @@ class Recipe(models.Model):
 
     def save(self, *args, **kwargs):
         self.name = self.name.title()
-        self.clean_fields()
-        try:
-            self.validate_unique()
-        except ValidationError:
-            return
 
         models.Model.save(self, *args, **kwargs)

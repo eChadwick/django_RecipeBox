@@ -38,12 +38,3 @@ class RecipeModelTests(TestCase):
         saved_recipe = Recipe.objects.get(name=mixed_case_name.title())
         self.assertEqual(saved_recipe.name, mixed_case_name.title())
 
-    def test_save_noops_on_duplicate_names(self):
-        recipe_name = 'recipe name'
-        first_recipe = Recipe(name=recipe_name)
-        first_recipe.save()
-        self.assertIsNotNone(first_recipe.pk)
-
-        second_recipe = Recipe(name=recipe_name)
-        second_recipe.save()
-        self.assertIsNone(second_recipe.pk)
