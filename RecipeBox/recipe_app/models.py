@@ -23,7 +23,7 @@ class Ingredient(models.Model):
 class Recipe(models.Model):
     name = models.CharField(null=False, max_length=200, unique=True)
 
-    def save(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
         self.name = self.name.title()
 
-        models.Model.save(self, *args, **kwargs)
