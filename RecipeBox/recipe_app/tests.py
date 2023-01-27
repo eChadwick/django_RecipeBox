@@ -30,11 +30,9 @@ class IngredientModelTests(TestCase):
 
 class RecipeModelTests(TestCase):
 
-    def test_save_title_cases_names(self):
+    def test_name_casing(self):
         mixed_case_name = 'rEcIpE nAme'
         recipe = Recipe(name=mixed_case_name)
-        recipe.save()
 
-        saved_recipe = Recipe.objects.get(name=mixed_case_name.title())
-        self.assertEqual(saved_recipe.name, mixed_case_name.title())
+        self.assertEqual(recipe.name, mixed_case_name.title())
 
