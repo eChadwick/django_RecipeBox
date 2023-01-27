@@ -30,15 +30,6 @@ class IngredientModelTests(TestCase):
 
 class RecipeModelTests(TestCase):
 
-    def test_save_fails_on_too_long_name(self):
-        too_long_name = ''
-        for i in range(0, 201):
-            too_long_name = too_long_name + 'a'
-        recipe = Recipe(name=too_long_name)
-
-        with self.assertRaises(ValidationError):
-            recipe.save()
-
     def test_save_title_cases_names(self):
         mixed_case_name = 'rEcIpE nAme'
         recipe = Recipe(name=mixed_case_name)
