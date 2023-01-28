@@ -22,8 +22,13 @@ class Ingredient(models.Model):
 
 class Recipe(models.Model):
     name = models.CharField(null=False, max_length=200, unique=True)
+    ingredients = models.ManyToManyField(Ingredient, through='RecipeIngredient', related_name='ingredients')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.name = self.name.title()
 
+class RecipeIngredient(models.Model):
+    measurement = models.CharField(null=False, max_length=200)
+    recipe = models.ForeignKey(Recipe,on_delete=models.CASCADE)
+    ingredient = models.ForeignKey(Ingredient,on_delete=models.CASCADE)
