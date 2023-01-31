@@ -11,6 +11,9 @@ class Ingredient(models.Model):
         super().__init__(*args, **kwargs)
         self.name = self.name.title()
 
+    def __str__(self):
+        return 'pk: ' + str(self.pk) + ', name: ' + self.name
+
     def save(self, *args, **kwargs):
         try:
             self.validate_unique()
