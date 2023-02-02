@@ -17,10 +17,9 @@ class IngredientModelTests(TestCase):
         self.assertEqual(new_ingredient.name, mixed_case_name.title())
 
     def test__str__(self):
-        new_ingredient = Ingredient(name='Test')
-        new_ingredient.save()
-
+        new_ingredient = Ingredient(pk =1, name='Test')
         expected_string = 'pk: 1, name: Test'
+
         self.assertEqual(expected_string, new_ingredient.__str__())
 
     # Tests that saving a duplicate name is a no-op
