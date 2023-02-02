@@ -43,7 +43,7 @@ class RecipeModelTests(TestCase):
         self.assertEqual(recipe.name, mixed_case_name.title())
 
     def test__str__(self):
-        recipe = Recipe(pk=1, name="Recipe Name")
-        expected_string = 'pk: 1, name: Recipe Name'
+        recipe = Recipe(pk=1, name="Recipe Name", directions="Do stuff")
+        expected_string = 'pk: 1, name: Recipe Name, directions: Do stuff'
 
         self.assertEqual(expected_string,recipe.__str__())

@@ -33,7 +33,7 @@ class Recipe(models.Model):
         self.name = self.name.title()
 
     def __str__(self):
-        return f'pk: {self.pk}, name: {self.name}'
+        return f'pk: {self.pk}, name: {self.name}, directions: {self.directions}'
 
 class RecipeIngredient(models.Model):
     measurement = models.CharField(null=False, max_length=200)
