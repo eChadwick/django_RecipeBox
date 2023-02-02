@@ -26,6 +26,7 @@ class Ingredient(models.Model):
 class Recipe(models.Model):
     name = models.CharField(null=False, max_length=200, unique=True)
     ingredients = models.ManyToManyField(Ingredient, through='RecipeIngredient', related_name='ingredients')
+    directions = models.CharField(null=True, max_length=5000)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
