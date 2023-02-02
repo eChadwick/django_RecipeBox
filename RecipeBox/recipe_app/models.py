@@ -31,6 +31,9 @@ class Recipe(models.Model):
         super().__init__(*args, **kwargs)
         self.name = self.name.title()
 
+    def __str__(self):
+        return f'pk: {self.pk}, name: {self.name}'
+
 class RecipeIngredient(models.Model):
     measurement = models.CharField(null=False, max_length=200)
     recipe = models.ForeignKey(Recipe,on_delete=models.CASCADE)
