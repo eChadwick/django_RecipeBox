@@ -12,7 +12,7 @@ class Ingredient(models.Model):
         self.name = self.name.title()
 
     def __str__(self):
-        return 'pk: ' + str(self.pk) + ', name: ' + self.name
+        return f'pk: {self.pk}, name: {self.name}'
 
     def save(self, *args, **kwargs):
         try:
