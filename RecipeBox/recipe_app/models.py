@@ -38,7 +38,7 @@ class Recipe(models.Model):
 class RecipeIngredient(models.Model):
     measurement = models.CharField(null=False, max_length=200)
     recipe = models.ForeignKey(Recipe,on_delete=models.CASCADE)
-    ingredient = models.ForeignKey(Ingredient,on_delete=models.CASCADE)
+    ingredient = models.ForeignKey(Ingredient,on_delete=models.RESTRICT)
 
     def __str__(self):
         return f'pk: {self.pk}, recipe_primary_key: {self.recipe.pk}, ingredient_primary_key: {self.ingredient.pk}'
