@@ -82,18 +82,20 @@ class RecipeModelTests(TestCase):
 class RecipeIngredientModelTests(TestCase):
     recipe_name = 'Recipe Name'
     ingredient_name = 'Ingredient Name'
+    measurement = 'Some'
 
     def setUp(self):
         recipe = Recipe.objects.create(name=self.recipe_name)
         ingredient = Ingredient.objects.create(name=self.ingredient_name)
         RecipeIngredient.objects.create(
-            recipe=recipe, ingredient=ingredient, measurement='some')
+            recipe=recipe, ingredient=ingredient, measurement=self.measurement)
 
     def test__str__(self):
         recipe_ingredient = RecipeIngredient.objects.get(id=1)
         expected_string = (
             f'pk: 1, recipe_pk: 1, recipe_name: {self.recipe_name}, '
-            f'ingredient_pk: 1, ingredient_name: {self.ingredient_name}'
+            f'ingredient_pk: 1, ingredient_name: {self.ingredient_name}, '
+            f'measurement: {self.measurement}'
         )
         self.assertEqual(expected_string, recipe_ingredient.__str__())
 
