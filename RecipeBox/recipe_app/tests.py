@@ -41,46 +41,39 @@ class IngredientModelTests(TestCase):
 
 
 class RecipeModelTests(TestCase):
+    mixed_case_recipe_name = 'rEcIpE nAme'
+    expected_recipe_display_name = mixed_case_recipe_name.title()
+    ingredient1_name = 'Ingredient1'
+    ingredient2_name = 'Ingredient2'
+
+    def setUp(self):
+        ingredient1 = Ingredient.objects.create(name=self.ingredient1_name)
+        ingredient2 = Ingredient.objects.create(name=self.ingredient2_name)
+        recipe = Recipe.objects.create(name=self.mixed_case_recipe_name)
+        RecipeIngredient.objects.create(
+            recipe=recipe, ingredient=ingredient1, measurement='A bit')
+        RecipeIngredient.objects.create(
+            recipe=recipe, ingredient=ingredient2, measurement='A pinch')
 
     def test_name_casing(self):
-        mixed_case_name = 'rEcIpE nAme'
-        recipe = Recipe(name=mixed_case_name)
+        recipe = Recipe.objects.get(id=1)
 
-        self.assertEqual(recipe.name, mixed_case_name.title())
+        self.assertEqual(recipe.name, self.expected_recipe_display_name)
 
     def test__str__(self):
-        test_recipe_name = 'Recipe Name'
-        test_directions = 'Do stuff'
-        test_pk = 1
-        test_ingredient_name1 = 'Ingredient1'
-        test_ingredient_measurement1 = 'A bit'
-        test_ingredient_name2 = 'Ingredient2'
-        test_ingredient_measurement2 = 'A pinch'
+        recipe = Recipe.objects.get(id=1)
+        expected_string = 'pk: 1, name: Recipe Name, directions: None, ingredients: Ingredient1 - A bit, Ingredient2 - A pinch'
 
-        recipe = Recipe(pk=test_pk, name=test_recipe_name, directions=test_directions)
-        recipe.save()
-        ingredient1 = Ingredient(name=test_ingredient_name1)
-        ingredient1.save()
-        ingredient2 = Ingredient(name=test_ingredient_name2)
-        ingredient2.save()
-        recipe_ingredient1 = RecipeIngredient(recipe=recipe, ingredient=ingredient1, measurement=test_ingredient_measurement1)
-        recipe_ingredient1.save()
-        recipe_ingredient2 = RecipeIngredient(recipe=recipe, ingredient=ingredient2, measurement=test_ingredient_measurement2)
-        recipe_ingredient2.save()
+        self.assertEqual(expected_string, recipe.__str__())
 
-        expected_string = (f'pk: {test_pk}, name: {test_recipe_name}, directions: {test_directions},'
-                           f' ingredients: {test_ingredient_name1} - {test_ingredient_measurement1}, '
-                           f'{test_ingredient_name2} - {test_ingredient_measurement2}'
-        )
-
-        self.assertEqual(expected_string,recipe.__str__())
 
 class RecipeIngredientModelTests(TestCase):
 
     def test__str__(self):
         recipe = Recipe(pk=2, name='Recipe Name')
         ingredient = Ingredient(pk=3, name='Ingredient Name')
-        recipe_ingredient = RecipeIngredient(pk=1, recipe=recipe, ingredient=ingredient)
+        recipe_ingredient = RecipeIngredient(
+            pk=1, recipe=recipe, ingredient=ingredient)
         expected_string = 'pk: 1, recipe_primary_key: 2, ingredient_primary_key: 3'
 
         self.assertEqual(expected_string, recipe_ingredient.__str__())
