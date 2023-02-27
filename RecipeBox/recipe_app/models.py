@@ -35,7 +35,9 @@ class Recipe(models.Model):
 
     def __str__(self):
         return_string = (
-            f'pk: {self.pk}, name: {self.name}, directions: {self.directions}, ingredients: ')
+            f'pk: {self.pk}, name: {self.name}, directions: {self.directions}, '
+            f'ingredients: '
+        )
         for ri in RecipeIngredient.objects.filter(recipe=self).all():
             return_string += f'{ri.ingredient.name} - {ri.measurement}, '
         # remove comma from final entry
