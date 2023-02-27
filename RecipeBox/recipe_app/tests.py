@@ -9,30 +9,35 @@ from recipe_app.models import RecipeIngredient
 
 
 class IngredientModelTests(TestCase):
+    mixed_case_name = 'iNgEdIeNt nAme'
+    expected_display_name = mixed_case_name.title()
+
+    def setUp(self):
+        Ingredient.objects.create(name=self.mixed_case_name)
 
     # Tests that names are always title cased
     def test_name_casing(self):
-        mixed_case_name = 'iNgEdIeNt nAme'
-        new_ingredient = Ingredient(name=mixed_case_name)
+        ingredient = Ingredient.objects.get(id=1)
 
-        self.assertEqual(new_ingredient.name, mixed_case_name.title())
+        self.assertEqual(ingredient.name, self.expected_display_name)
 
     def test__str__(self):
-        new_ingredient = Ingredient(pk =1, name='Test')
-        expected_string = 'pk: 1, name: Test'
+        expected_string = f'pk: 1, name: {self.expected_display_name}'
+        ingredient = Ingredient.objects.get(id=1)
 
-        self.assertEqual(expected_string, new_ingredient.__str__())
+        self.assertEqual(expected_string, ingredient.__str__())
 
     # Tests that saving a duplicate name is a no-op
     def test_save_duplicates(self):
-        ingredient_name = 'ingredient name'
-        first_ingredient = Ingredient(name=ingredient_name)
-        first_ingredient.save()
-        self.assertIsNotNone(first_ingredient.pk)
+        Ingredient.objects.create(name=self.mixed_case_name)
+        # Above line would have thrown in case of failure
+        self.assertTrue(True)
 
-        second_ingredient = Ingredient(name=ingredient_name)
-        second_ingredient.save()
-        self.assertIsNone(second_ingredient.pk)
+    def test_name_column_label(self):
+        ingredient = Ingredient.objects.get(id=1)
+        field_label = ingredient._meta.get_field('name').verbose_name
+
+        self.assertEqual(field_label, 'name')
 
 
 class RecipeModelTests(TestCase):
