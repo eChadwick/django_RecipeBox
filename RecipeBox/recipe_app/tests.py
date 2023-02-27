@@ -96,3 +96,12 @@ class RecipeIngredientModelTests(TestCase):
             f'ingredient_pk: 1, ingredient_name: {self.ingredient_name}'
         )
         self.assertEqual(expected_string, recipe_ingredient.__str__())
+
+    def test_field_labels(self):
+        recipe_ingredient = RecipeIngredient.objects.get(id=1)
+        expected_field_names = {'ingredient', 'id', 'measurement', 'recipe'}
+        actual_field_names = set()
+        for field in recipe_ingredient._meta.fields:
+            actual_field_names.add(field.name)
+
+        self.assertEqual( expected_field_names, actual_field_names )
