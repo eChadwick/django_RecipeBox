@@ -62,7 +62,10 @@ class RecipeModelTests(TestCase):
 
     def test__str__(self):
         recipe = Recipe.objects.get(id=1)
-        expected_string = 'pk: 1, name: Recipe Name, directions: None, ingredients: Ingredient1 - A bit, Ingredient2 - A pinch'
+        expected_string = (
+            'pk: 1, name: Recipe Name, directions: None,'
+            ' ingredients: Ingredient1 - A bit, Ingredient2 - A pinch'
+        )
 
         self.assertEqual(expected_string, recipe.__str__())
 
@@ -75,13 +78,21 @@ class RecipeModelTests(TestCase):
 
         self.assertEqual(expected_field_names, actual_field_names)
 
+
 class RecipeIngredientModelTests(TestCase):
+    recipe_name = 'Recipe Name'
+    ingredient_name = 'Ingredient Name'
+
+    def setUp(self):
+        recipe = Recipe.objects.create(name=self.recipe_name)
+        ingredient = Ingredient.objects.create(name=self.ingredient_name)
+        RecipeIngredient.objects.create(
+            recipe=recipe, ingredient=ingredient, measurement='some')
 
     def test__str__(self):
-        recipe = Recipe(pk=2, name='Recipe Name')
-        ingredient = Ingredient(pk=3, name='Ingredient Name')
-        recipe_ingredient = RecipeIngredient(
-            pk=1, recipe=recipe, ingredient=ingredient)
-        expected_string = 'pk: 1, recipe_primary_key: 2, ingredient_primary_key: 3'
-
+        recipe_ingredient = RecipeIngredient.objects.get(id=1)
+        expected_string = (
+            f'pk: 1, recipe_pk: 1, recipe_name: {self.recipe_name}, '
+            f'ingredient_pk: 1, ingredient_name: {self.ingredient_name}'
+        )
         self.assertEqual(expected_string, recipe_ingredient.__str__())
