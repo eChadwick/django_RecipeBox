@@ -44,16 +44,23 @@ class RecipeModelTests(TestCase):
     mixed_case_recipe_name = 'rEcIpE nAme'
     expected_recipe_display_name = mixed_case_recipe_name.title()
     ingredient1_name = 'Ingredient1'
+    ingredient1_measurement = 'A bit'
     ingredient2_name = 'Ingredient2'
+    ingredient2_measurement = 'A pinch'
+    directions = 'Do stuff'
 
     def setUp(self):
         ingredient1 = Ingredient.objects.create(name=self.ingredient1_name)
         ingredient2 = Ingredient.objects.create(name=self.ingredient2_name)
-        recipe = Recipe.objects.create(name=self.mixed_case_recipe_name)
+        recipe = Recipe.objects.create(
+            name=self.mixed_case_recipe_name,
+            directions=self.directions)
         RecipeIngredient.objects.create(
-            recipe=recipe, ingredient=ingredient1, measurement='A bit')
+            recipe=recipe, ingredient=ingredient1,
+            measurement=self.ingredient1_measurement)
         RecipeIngredient.objects.create(
-            recipe=recipe, ingredient=ingredient2, measurement='A pinch')
+            recipe=recipe, ingredient=ingredient2,
+            measurement=self.ingredient2_measurement)
 
     def test_name_casing(self):
         recipe = Recipe.objects.get(id=1)
@@ -63,8 +70,10 @@ class RecipeModelTests(TestCase):
     def test__str__(self):
         recipe = Recipe.objects.get(id=1)
         expected_string = (
-            'pk: 1, name: Recipe Name, directions: None,'
-            ' ingredients: Ingredient1 - A bit, Ingredient2 - A pinch'
+            f'pk: 1, name: {self.expected_recipe_display_name}, directions: '
+            f'{self.directions}, ingredients: {self.ingredient1_name} - '
+            f'{self.ingredient1_measurement}, {self.ingredient2_name} - '
+            f'{self.ingredient2_measurement}'
         )
 
         self.assertEqual(expected_string, recipe.__str__())
@@ -106,4 +115,4 @@ class RecipeIngredientModelTests(TestCase):
         for field in recipe_ingredient._meta.fields:
             actual_field_names.add(field.name)
 
-        self.assertEqual( expected_field_names, actual_field_names )
+        self.assertEqual(expected_field_names, actual_field_names)
