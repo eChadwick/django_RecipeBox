@@ -5,3 +5,6 @@ from django.http import HttpResponse
 
 def index(request):
     return HttpResponse("Recipe Index Page!!!")
+
+def ingredient_list(request):
+    return HttpResponse('Ingredients List Page')
