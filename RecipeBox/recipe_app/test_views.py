@@ -31,9 +31,9 @@ class IngredientViewTests(TestCase):
 
         self.assertEqual(num_pages, expected_num_pages)
 
-    # def test_ingredients_list_default_pagination(self):
-    #     response = self.client.get(reverse('ingredients'))
-    #     self.assertEqual(
-    #         len(response.context['ingredients_list']),
-    #         DEFAULT_PAGINATION
-    #     )
+    def test_ingredients_list_default_pagination(self):
+        response = self.client.get(reverse('ingredients'))
+        self.assertEqual(
+            len(response.context['ingredients_list']),
+            DEFAULT_PAGINATION
+        )
