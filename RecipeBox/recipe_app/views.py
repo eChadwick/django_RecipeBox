@@ -14,8 +14,9 @@ def index(request):
 def ingredient_list(request):
     ingredients_list = list(Ingredient.objects.all())
     paginator = Paginator(ingredients_list, DEFAULT_PAGINATION)
+    requested_page = request.GET.get('page')
     context = {
-        'ingredients_list': paginator.get_page(1),
+        'ingredients_list': paginator.get_page(requested_page),
         'num_pages': paginator.num_pages
     }
     return render(request, 'recipe_app/ingredient_list.html', context)

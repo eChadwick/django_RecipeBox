@@ -37,3 +37,11 @@ class IngredientViewTests(TestCase):
             len(response.context['ingredients_list']),
             DEFAULT_PAGINATION
         )
+
+        total_ingredients = Ingredient.objects.all().count()
+        last_page_result_number = total_ingredients % DEFAULT_PAGINATION
+        response = self.client.get(reverse('ingredients')+'?page=2')
+        self.assertEqual(
+            len(response.context['ingredients_list']),
+            last_page_result_number
+        )
