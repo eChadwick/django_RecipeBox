@@ -1,4 +1,6 @@
 from django.test import TestCase
+from django.db.models.deletion import RestrictedError
+
 from recipe_app.models import Ingredient
 from recipe_app.models import Recipe
 from recipe_app.models import RecipeIngredient
@@ -114,3 +116,7 @@ class RecipeIngredientModelTests(TestCase):
             actual_field_names.add(field.name)
 
         self.assertEqual(expected_field_names, actual_field_names)
+
+    def test_cant_delete_ingredient_with_recipe_ingredients(self):
+        with self.assertRaises(RestrictedError):
+            Ingredient.objects.filter(id=1).delete()
