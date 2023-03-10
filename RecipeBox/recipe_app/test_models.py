@@ -120,3 +120,8 @@ class RecipeIngredientModelTests(TestCase):
     def test_cant_delete_ingredient_with_recipe_ingredients(self):
         with self.assertRaises(RestrictedError):
             Ingredient.objects.filter(id=1).delete()
+
+    def test_cascading_delete(self):
+        Recipe.objects.filter(id=1).delete()
+        ri_count = RecipeIngredient.objects.all().count()
+        self.assertEqual(ri_count, 0)
