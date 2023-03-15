@@ -13,7 +13,11 @@ def index(request):
 
 def ingredient_list(request):
     ingredients_list = list(Ingredient.objects.all())
-    paginator = Paginator(ingredients_list, DEFAULT_PAGINATION)
+    request_pagination = request.GET.get('pagination')
+    paginator = Paginator(
+        ingredients_list,
+        request_pagination if request_pagination != None else DEFAULT_PAGINATION
+    )
     requested_page = request.GET.get('page')
     context = {
         'ingredients_list': paginator.get_page(requested_page),

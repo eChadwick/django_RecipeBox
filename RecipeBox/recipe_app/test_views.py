@@ -45,3 +45,13 @@ class IngredientViewTests(TestCase):
             len(response.context['ingredients_list']),
             last_page_result_number
         )
+
+    def test_ingredients_parameterized_pagination(self):
+        pagination = 5
+        response = self.client.get(
+            reverse('ingredients')+f'?pagination={pagination}'
+        )
+        self.assertEqual(
+            len(response.context['ingredients_list']),
+            pagination
+        )
