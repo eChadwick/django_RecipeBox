@@ -1,6 +1,6 @@
 import math
 
-from django.test import TestCase
+from django.test import TestCase, Client
 from django.urls import reverse
 
 from recipe_app.models import Recipe, Ingredient, RecipeIngredient
@@ -117,3 +117,30 @@ class RecipeListViewTests(TestCase):
             len(response.context['recipes_list']),
             pagination
         )
+
+class RecipeDeleteViewTestCase(TestCase):
+    def setUp(self):
+        self.recipe_name = 'Spaghetti Carbonara'
+        self.recipe = Recipe.objects.create(name=self.recipe_name, directions='Cook spaghetti, cook pancetta, mix eggs and cheese')
+        self.client = Client()
+
+    def test_recipe_delete_view_with_valid_recipe(self):
+        # Ensure the recipe is deleted successfully with a valid recipe id
+        response = self.client.post(reverse('recipe-delete', args=[self.recipe.id]))
+        self.assertEqual(response.status_code, 302)  # redirect to success url
+        self.assertFalse(Recipe.objects.filter(name=self.recipe_name).exists())
+
+    def test_recipe_delete_view_with_invalid_recipe(self):
+        # Ensure the recipe is not deleted with an invalid recipe id
+        response = self.client.post(reverse('recipe-delete', args=[self.recipe.id + 1]))
+        self.assertEqual(response.status_code, 404)  # recipe not found
+
+    def test_recipe_delete_view_get_request(self):
+        # Ensure GET requests are not allowed
+        response = self.client.get(reverse('recipe-delete', args=[self.recipe.id]))
+        self.assertEqual(response.status_code, 405)  # method not allowed
+
+    def test_recipe_delete_view_url(self):
+        # Ensure the actual url of the recipe-delete route is /recipes/delete/<recipe_pk>/
+        url = reverse('recipe-delete', args=[self.recipe.id])
+        self.assertEqual(url, f'/recipes/delete/{self.recipe.id}/')

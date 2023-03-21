@@ -1,6 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
 from django.core.paginator import Paginator
 from django.http import HttpResponse
+from django.urls import reverse
+from django.views.decorators.http import require_http_methods
 
 from recipe_app.models import Ingredient, Recipe
 
@@ -40,3 +42,8 @@ def recipe_list(request):
         'pagination': pagination
     })
 
+@require_http_methods(['POST'])
+def recipe_delete(request, pk):
+    recipe = get_object_or_404(Recipe, pk=pk)
+    recipe.delete()
+    return redirect(reverse('recipes'))
