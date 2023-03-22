@@ -46,4 +46,4 @@ def recipe_list(request):
 def recipe_delete(request, pk):
     recipe = get_object_or_404(Recipe, pk=pk)
     recipe.delete()
-    return redirect(reverse('recipes'))
+    return redirect(reverse('recipe-list'))

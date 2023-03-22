@@ -81,11 +81,11 @@ class RecipeListViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_recipe_list_route_name(self):
-        response = self.client.get(reverse('recipes'))
+        response = self.client.get(reverse('recipe-list'))
         self.assertEqual(response.status_code, 200)
 
     def test_recipe_list_has_number_of_pages(self):
-        response = self.client.get(reverse('recipes'))
+        response = self.client.get(reverse('recipe-list'))
         num_pages = response.context['num_pages']
 
         total_recipes = Recipe.objects.all().count()
@@ -94,7 +94,7 @@ class RecipeListViewTests(TestCase):
         self.assertEqual(num_pages, expected_num_pages)
 
     def test_recipe_list_default_pagination(self):
-        response = self.client.get(reverse('recipes'))
+        response = self.client.get(reverse('recipe-list'))
         self.assertEqual(
             len(response.context['recipes_list']),
             DEFAULT_PAGINATION
@@ -102,7 +102,7 @@ class RecipeListViewTests(TestCase):
 
         total_recipes = Recipe.objects.all().count()
         last_page_result_number = total_recipes % DEFAULT_PAGINATION
-        response = self.client.get(reverse('recipes')+'?page=2')
+        response = self.client.get(reverse('recipe-list')+'?page=2')
         self.assertEqual(
             len(response.context['recipes_list']),
             last_page_result_number
@@ -111,7 +111,7 @@ class RecipeListViewTests(TestCase):
     def test_recipe_list_parameterized_pagination(self):
         pagination = 5
         response = self.client.get(
-            reverse('recipes')+f'?pagination={pagination}'
+            reverse('recipe-list')+f'?pagination={pagination}'
         )
         self.assertEqual(
             len(response.context['recipes_list']),
