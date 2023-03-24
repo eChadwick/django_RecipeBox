@@ -118,29 +118,77 @@ class RecipeListViewTests(TestCase):
             pagination
         )
 
+
 class RecipeDeleteViewTestCase(TestCase):
     def setUp(self):
         self.recipe_name = 'Spaghetti Carbonara'
-        self.recipe = Recipe.objects.create(name=self.recipe_name, directions='Cook spaghetti, cook pancetta, mix eggs and cheese')
+        self.recipe = Recipe.objects.create(
+            name=self.recipe_name, directions='Cook spaghetti, cook pancetta, mix eggs and cheese')
         self.client = Client()
 
     def test_recipe_delete_view_with_valid_recipe(self):
         # Ensure the recipe is deleted successfully with a valid recipe id
-        response = self.client.post(reverse('recipe-delete', args=[self.recipe.id]))
+        response = self.client.post(
+            reverse('recipe-delete', args=[self.recipe.id]))
         self.assertEqual(response.status_code, 302)  # redirect to success url
         self.assertFalse(Recipe.objects.filter(name=self.recipe_name).exists())
 
     def test_recipe_delete_view_with_invalid_recipe(self):
         # Ensure the recipe is not deleted with an invalid recipe id
-        response = self.client.post(reverse('recipe-delete', args=[self.recipe.id + 1]))
+        response = self.client.post(
+            reverse('recipe-delete', args=[self.recipe.id + 1]))
         self.assertEqual(response.status_code, 404)  # recipe not found
 
     def test_recipe_delete_view_get_request(self):
         # Ensure GET requests are not allowed
-        response = self.client.get(reverse('recipe-delete', args=[self.recipe.id]))
+        response = self.client.get(
+            reverse('recipe-delete', args=[self.recipe.id]))
         self.assertEqual(response.status_code, 405)  # method not allowed
 
     def test_recipe_delete_view_url(self):
         # Ensure the actual url of the recipe-delete route is /recipes/delete/<recipe_pk>/
         url = reverse('recipe-delete', args=[self.recipe.id])
         self.assertEqual(url, f'/recipes/delete/{self.recipe.id}/')
+
+
+class RecipeDetailViewTestCase(TestCase):
+    def setUp(self):
+        self.ingredient1 = Ingredient.objects.create(name='salt')
+        self.ingredient2 = Ingredient.objects.create(name='pepper')
+        self.recipe = Recipe.objects.create(
+            name='Pasta With Salt And Pepper',
+            directions='Cook pasta, add salt and pepper to taste.'
+        )
+        self.recipe_ingredient1 = RecipeIngredient.objects.create(
+            recipe=self.recipe,
+            ingredient=self.ingredient1,
+            measurement='1 tsp'
+        )
+        self.recipe_ingredient2 = RecipeIngredient.objects.create(
+            recipe=self.recipe,
+            ingredient=self.ingredient2,
+            measurement='1 tsp'
+        )
+
+    def test_recipe_detail_view(self):
+        url = reverse('recipe-detail', args=[self.recipe.pk])
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['recipe'].name, self.recipe.name)
+        self.assertEqual(
+            response.context['recipe'].directions, self.recipe.directions)
+        expected_ingredient_list = [
+            {'name': self.ingredient1.name,
+                'measurement': self.recipe_ingredient1.measurement},
+            {'name': self.ingredient2.name,
+                'measurement': self.recipe_ingredient2.measurement}
+        ]
+        self.assertEqual(
+            response.context['ingredients_list'], expected_ingredient_list)
+
+    def test_recipe_detail_view_invalid_recipe(self):
+        url = reverse('recipe-detail', args=[self.recipe.pk + 1])
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, 404)

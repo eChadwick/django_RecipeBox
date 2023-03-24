@@ -42,8 +42,19 @@ def recipe_list(request):
         'pagination': pagination
     })
 
+
 @require_http_methods(['POST'])
 def recipe_delete(request, pk):
     recipe = get_object_or_404(Recipe, pk=pk)
     recipe.delete()
     return redirect(reverse('recipe-list'))
+
+
+def recipe_detail(request, pk):
+    recipe = get_object_or_404(Recipe, pk=pk)
+    recipe_ingredients = recipe.ingredients.through.objects.filter(
+        recipe=recipe).all()
+    ingredients_list = [{'name': ri.ingredient.name,
+                         'measurement': ri.measurement} for ri in recipe_ingredients]
+    context = {'recipe': recipe, 'ingredients_list': ingredients_list}
+    return render(request, 'recipe_app/recipe_detail.html', context)
