@@ -12,3 +12,12 @@ class IngredientForm(forms.Form):
             self.add_error('__all__', 'Ingredient name must be entered when measurement is provided')
         elif not (name and measurement):
             self.add_error('__all__', 'Invalid ingredient format')
+
+class RecipeForm(forms.Form):
+    name = forms.CharField(
+        max_length=255,
+        required=True,
+        error_messages={
+            'required': 'Recipe name is required'
+        }
+    )
