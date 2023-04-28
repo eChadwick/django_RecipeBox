@@ -62,8 +62,9 @@ class IngredientViewTests(TestCase):
 class RecipeListViewTests(TestCase):
     num_test_recipes = DEFAULT_PAGINATION + 5
 
-    def setUp(self):
-        for x in range(self.num_test_recipes):
+    @classmethod
+    def setUp(cls):
+        for x in range(cls.num_test_recipes):
             recipe = Recipe.objects.create(
                 name=f'Recipe {x}',
                 directions=f'These are the directions for Recipe {x}'
