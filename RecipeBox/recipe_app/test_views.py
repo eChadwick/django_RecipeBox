@@ -10,8 +10,10 @@ from recipe_app.views import DEFAULT_PAGINATION
 class IngredientViewTests(TestCase):
     num_test_ingredients = DEFAULT_PAGINATION + 5
 
-    def setUp(self):
-        for x in range(self.num_test_ingredients):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        for x in range(cls.num_test_ingredients):
             Ingredient.objects.create(name=f'Ingredient {x}')
 
     def test_ingredients_list_path(self):
