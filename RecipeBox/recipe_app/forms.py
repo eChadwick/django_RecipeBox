@@ -27,6 +27,7 @@ class RecipeForm(forms.Form):
             'required': 'Recipe name is required'
         }
     )
+    directions = forms.CharField(max_length=10000)
 
     def clean(self):
         cleaned_data = super().clean()

@@ -44,32 +44,41 @@ class RecipeFormTest(TestCase):
         self.assertFalse(form.is_valid())
         self.assertEqual(form.errors['name'], ['Recipe name is required'])
 
-    def test_recipe_form_ingredients_field_is_formset(self):
+    def test_recipe_form_ingredients_field_is_formset_when_provided(self):
         form = RecipeForm(self.complete_recipe_data)
         self.assertTrue(form.is_valid())
         self.assertIsInstance(
             form.fields['ingredients'], IngredientFormSet)
 
+    def test_recipe_form_includes_directions_when_provided(self):
+        form = RecipeForm(self.complete_recipe_data)
+        self.assertTrue(form.is_valid())
+        self.assertTrue('directions' in form.fields)
 
-# def test_recipe_must_have_ingredients_or_directions(self):
-#     def create_and_validate(form_data):
-#         form = RecipeForm(data=form_data)
-#         self.assertFalse(form.is_valid())
-#         self.assertIn('Ingredrients or Directions must be provided',form.non_field_errors())
 
-#     form_data = self.complete_recipe_data
-#     # directions None, ingredients None
-#     form_data['directions'] = None
-#     form_data['ingredients'] = None
-#     create_and_validate(form_data)
+    # def test_recipe_must_have_ingredients_or_directions(self):
+    #     def create_and_validate(form_data):
+    #         form = RecipeForm(data=form_data)
+    #         self.assertFalse(form.is_valid())
+    #         self.assertIn('Ingredrients or Directions must be provided',form.non_field_errors())
 
-#     # directions None, ingredients blank
-#     form_data['ingredients'] = ''
-#     create_and_validate(form_data)
+    #     form_data = self.complete_recipe_data
+    #     # directions None, ingredients None
+    #     form_data['directions'] = None
+    #     form_data['ingredients'] = None
+    #     create_and_validate(form_data)
 
-#     # directions blank, ingredients blank
-#     form_data['directions'] = ''
-#     create_and_validate(form_data)
+    #     # directions None, ingredients blank
+    #     form_data['ingredients'] = ''
+    #     create_and_validate(form_data)
+
+    #     # directions blank, ingredients blank
+    #     form_data['directions'] = ''
+    #     create_and_validate(form_data)
+
+    #     # directions blank, ingredients none
+    #     form_data['ingredients'] = None
+    #     create_and_validate(form_data)
 
 
 # def test_recipe_form_with_blank_ingredients_and_directions_is_invalid(self):
