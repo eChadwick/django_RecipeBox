@@ -31,5 +31,5 @@ class RecipeForm(forms.Form):
 
     def clean(self):
         cleaned_data = super().clean()
-        self.fields['ingredients'] = IngredientFormSet(
+        self.cleaned_data['ingredients'] = IngredientFormSet(
             self.data['ingredients'])

@@ -48,12 +48,12 @@ class RecipeFormTest(TestCase):
         form = RecipeForm(self.complete_recipe_data)
         self.assertTrue(form.is_valid())
         self.assertIsInstance(
-            form.fields['ingredients'], IngredientFormSet)
+            form.cleaned_data['ingredients'], IngredientFormSet)
 
     def test_recipe_form_includes_directions_when_provided(self):
         form = RecipeForm(self.complete_recipe_data)
         self.assertTrue(form.is_valid())
-        self.assertTrue('directions' in form.fields)
+        self.assertTrue('directions' in form.cleaned_data)
 
 
     # def test_recipe_must_have_ingredients_or_directions(self):
