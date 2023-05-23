@@ -8,7 +8,9 @@ class IngredientForm(forms.Form):
     measurement = forms.CharField(max_length=255, required=False)
 
 
-IngredientFormSet = forms.formset_factory(IngredientForm, extra=1)
+extra_ingredient_form_count = 1
+IngredientFormSet = forms.formset_factory(
+    IngredientForm, extra=extra_ingredient_form_count)
 
 
 class RecipeForm(forms.Form):
