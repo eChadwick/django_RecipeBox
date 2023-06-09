@@ -1,0 +1,9 @@
+{{recipe.name}}
+<ul>
+    {% for ingredient in ingredients_list %}
+        <li>
+            {{ingredient.name}}   {{ingredient.measurement}}
+        </li>
+    {% endfor %}
+</ul>
+{{recipe.directions}}
