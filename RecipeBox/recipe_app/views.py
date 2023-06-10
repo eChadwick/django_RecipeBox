@@ -38,6 +38,7 @@ def recipe_list(request):
 
     return render(request, 'recipe_app/recipe_list.html', {
         'recipes_list': page_obj,
+        'current_page': page_num or 1,
         'num_pages': num_pages,
         'pagination': pagination
     })
