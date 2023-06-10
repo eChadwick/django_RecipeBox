@@ -125,6 +125,10 @@ class RecipeListViewTests(TestCase):
         response = self.client.get(reverse('recipe-list'))
         self.assertEqual(response.context['current_page'], 1)
 
+    def test_recipe_list_includes_pagination_value(self):
+        response = self.client.get(reverse('recipe-list'))
+        self.assertEqual(response.context['pagination'], DEFAULT_PAGINATION)
+
 
 class RecipeDeleteViewTestCase(TestCase):
     def setUp(self):
