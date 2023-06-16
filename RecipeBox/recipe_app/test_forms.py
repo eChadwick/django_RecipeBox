@@ -21,8 +21,14 @@ class IngredientFormsetTests(TestCase):
 
 class RecipeFormTests(TestCase):
 
+    def test_form_has_expected_fields(self):
+        form = RecipeForm()
+        self.assertIsNotNone(form.fields.get('name'))
+        self.assertIsNotNone(form.fields.get('directions'))
+        self.assertIsInstance(form.ingredients, IngredientFormSet)
+
+
     def test_recipe_name_is_required(self):
         form = RecipeForm({})
         self.assertFalse(form.is_valid())
         self.assertIn(RecipeForm.name_validation_error,form.errors['name'])
-

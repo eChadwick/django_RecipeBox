@@ -22,4 +22,5 @@ class RecipeForm(forms.Form):
             'required': 'Recipe name is required'
         }
     )
-
+    directions = forms.CharField(max_length=10000)
+    ingredients = IngredientFormSet()
