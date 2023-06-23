@@ -9,7 +9,6 @@ from django.urls import reverse
 
 from recipe_app.models import Recipe, Ingredient, RecipeIngredient
 from recipe_app.views import DEFAULT_PAGINATION
-import recipe_app.views
 
 
 class IngredientViewTests(TestCase):
@@ -209,17 +208,16 @@ class RecipeDetailViewTestCase(TestCase):
 
         self.assertEqual(response.status_code, 404)
 
-@patch('recipe_app.views.render')
+
+@patch('recipe_app.views.render', return_value=HttpResponse())
 class RecipeCreateViewTests(TestCase):
 
-    def test_view_renders_the_correct_html(self, mock_render):
-        mock_render.return_value = HttpResponse()
+    def test_get_renders_the_correct_html(self, mock_render):
         self.client.get(reverse('recipe-create'))
         mock_render.assert_called_with(
             ANY, 'recipe_app/recipe_form.html', ANY
         )
 
-    def test_view_should_return_unbound_form_on_get(self, mock_render):
-        mock_render.return_value = HttpResponse()
+    def test_get_should_return_unbound_form(self, mock_render):
         self.client.get(reverse('recipe-create'))
         self.assertFalse(mock_render.call_args[0][2]['form'].is_bound)
