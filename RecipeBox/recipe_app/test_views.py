@@ -1,10 +1,15 @@
 import math
 
+from unittest.mock import patch, ANY
+
+from django.http import HttpResponse
+from django.shortcuts import render
 from django.test import TestCase, Client
 from django.urls import reverse
 
 from recipe_app.models import Recipe, Ingredient, RecipeIngredient
 from recipe_app.views import DEFAULT_PAGINATION
+import recipe_app.views
 
 
 class IngredientViewTests(TestCase):
@@ -203,3 +208,18 @@ class RecipeDetailViewTestCase(TestCase):
         response = self.client.get(url)
 
         self.assertEqual(response.status_code, 404)
+
+@patch('recipe_app.views.render')
+class RecipeCreateViewTests(TestCase):
+
+    def test_view_renders_the_correct_html(self, mock_render):
+        mock_render.return_value = HttpResponse()
+        self.client.get(reverse('recipe-form'))
+        mock_render.assert_called_with(
+            ANY, 'recipe_app/recipe_form.html', ANY
+        )
+
+    def test_view_should_return_unbound_form_on_get(self, mock_render):
+        mock_render.return_value = HttpResponse()
+        self.client.get(reverse('recipe-form'))
+        self.assertFalse(mock_render.call_args[0][2]['form'].is_bound)

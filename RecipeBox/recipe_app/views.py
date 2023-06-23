@@ -5,6 +5,7 @@ from django.urls import reverse
 from django.views.decorators.http import require_http_methods
 
 from recipe_app.models import Ingredient, Recipe
+from recipe_app.forms import RecipeForm
 
 DEFAULT_PAGINATION = 25
 
@@ -59,3 +60,7 @@ def recipe_detail(request, pk):
                          'measurement': ri.measurement} for ri in recipe_ingredients]
     context = {'recipe': recipe, 'ingredients_list': ingredients_list}
     return render(request, 'recipe_app/recipe_detail.html', context)
+
+def recipe_create(request):
+    context = {'form': RecipeForm()}
+    return render(request, 'recipe_app/recipe_form.html', context)
