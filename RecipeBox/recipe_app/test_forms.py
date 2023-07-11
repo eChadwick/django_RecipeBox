@@ -13,22 +13,35 @@ class IngredientFormTests(TestCase):
         self.assertIn(IngredientForm.name_validation_error,
                       form.errors['name'])
 
+
 class IngredientFormsetTests(TestCase):
 
     def test_formset_has_one_extra(self):
         formset = IngredientFormSet()
-        self.assertEqual(formset.total_form_count(), extra_ingredient_form_count)
+        self.assertEqual(formset.total_form_count(),
+                         extra_ingredient_form_count)
+
 
 class RecipeFormTests(TestCase):
-
-    def test_form_has_expected_fields(self):
-        form = RecipeForm()
-        self.assertIsNotNone(form.fields.get('name'))
-        self.assertIsNotNone(form.fields.get('directions'))
-        self.assertIsInstance(form.ingredients, IngredientFormSet)
-
 
     def test_recipe_name_is_required(self):
         form = RecipeForm({})
         self.assertFalse(form.is_valid())
-        self.assertIn(RecipeForm.name_validation_error,form.errors['name'])
+        self.assertIn(RecipeForm.name_validation_error, form.errors['name'])
+
+    def test_form_instantiates_ingredient_formset(self):
+        ingredients = {
+            'form-TOTAL_FORMS': '1',
+            'form-INITIAL_FORMS': '0',
+            'form-0-name': 'ingredient',
+            'form-0-measurement': 'measurement',
+        }
+        recipe_form = RecipeForm(
+            {'name': 'test name', 'ingredients': ingredients})
+
+        self.assertTrue(recipe_form.ingredients.is_bound)
+        self.assertIsInstance(recipe_form.ingredients, IngredientFormSet)
+        self.assertEqual(
+            recipe_form.ingredients.cleaned_data[0]['name'], ingredients['form-0-name'])
+        self.assertEqual(
+            recipe_form.ingredients.cleaned_data[0]['measurement'], ingredients['form-0-measurement'])

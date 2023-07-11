@@ -23,4 +23,8 @@ class RecipeForm(forms.Form):
         }
     )
     directions = forms.CharField(max_length=10000)
-    ingredients = IngredientFormSet()
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if args and 'ingredients' in args[0]:
+            self.ingredients = IngredientFormSet(args[0]['ingredients'])
