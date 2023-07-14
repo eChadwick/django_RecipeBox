@@ -28,3 +28,5 @@ class RecipeForm(forms.Form):
         super().__init__(*args, **kwargs)
         if args and 'ingredients' in args[0]:
             self.ingredients = IngredientFormSet(args[0]['ingredients'])
+        else:
+            self.ingredients = IngredientFormSet()

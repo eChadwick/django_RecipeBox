@@ -29,7 +29,7 @@ class RecipeFormTests(TestCase):
         self.assertFalse(form.is_valid())
         self.assertIn(RecipeForm.name_validation_error, form.errors['name'])
 
-    def test_form_instantiates_ingredient_formset(self):
+    def test_form_instantiates_bound_formset_when_data_passed(self):
         ingredients = {
             'form-TOTAL_FORMS': '1',
             'form-INITIAL_FORMS': '0',
@@ -45,3 +45,8 @@ class RecipeFormTests(TestCase):
             recipe_form.ingredients.cleaned_data[0]['name'], ingredients['form-0-name'])
         self.assertEqual(
             recipe_form.ingredients.cleaned_data[0]['measurement'], ingredients['form-0-measurement'])
+
+    def test_form_instantiates_unbound_formset_when_no_data_passed(self):
+        form = RecipeForm()
+        self.assertFalse(form.ingredients.is_bound)
+        self.assertIsInstance(form.ingredients, IngredientFormSet)
