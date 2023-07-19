@@ -30,3 +30,6 @@ class RecipeForm(forms.Form):
             self.ingredients = IngredientFormSet(args[0]['ingredients'])
         else:
             self.ingredients = IngredientFormSet()
+
+    def clean(self):
+        self.ingredients.is_valid()

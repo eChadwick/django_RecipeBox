@@ -1,3 +1,5 @@
+from unittest.mock import MagicMock
+
 from django.forms import formset_factory
 from django.test import TestCase
 
@@ -50,3 +52,9 @@ class RecipeFormTests(TestCase):
         form = RecipeForm()
         self.assertFalse(form.ingredients.is_bound)
         self.assertIsInstance(form.ingredients, IngredientFormSet)
+
+    def test_form_validates_ingredients_on_clean(self):
+        form = RecipeForm({})
+        form.ingredients.is_valid = MagicMock()
+        form.is_valid()
+        form.ingredients.is_valid.assert_called()
