@@ -58,3 +58,9 @@ class RecipeFormTests(TestCase):
         form.ingredients.is_valid = MagicMock()
         form.is_valid()
         form.ingredients.is_valid.assert_called()
+
+    def test_form_invalid_when_ingredients_invalid(self):
+        form = RecipeForm({})
+        form.ingredients.is_valid = MagicMock(return_value=False)
+        self.assertFalse(form.is_valid())
+        self.assertIn(RecipeForm.ingredient_error, form.non_field_errors())

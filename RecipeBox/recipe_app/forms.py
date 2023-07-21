@@ -15,6 +15,7 @@ IngredientFormSet = forms.formset_factory(
 
 class RecipeForm(forms.Form):
     name_validation_error = 'Recipe name is required'
+    ingredient_error = 'Ingredient errors are present'
     name = forms.CharField(
         max_length=255,
         required=True,
@@ -32,4 +33,6 @@ class RecipeForm(forms.Form):
             self.ingredients = IngredientFormSet()
 
     def clean(self):
-        self.ingredients.is_valid()
+        super().clean()
+        if(not self.ingredients.is_valid()):
+            self.add_error(None, self.ingredient_error)
