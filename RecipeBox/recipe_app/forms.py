@@ -16,6 +16,7 @@ IngredientFormSet = forms.formset_factory(
 class RecipeForm(forms.Form):
     name_validation_error = 'Recipe name is required'
     ingredient_error = 'Ingredient errors are present'
+    content_validation_error = 'Ingredients or directions must be provided'
     name = forms.CharField(
         max_length=255,
         required=True,
@@ -23,7 +24,7 @@ class RecipeForm(forms.Form):
             'required': 'Recipe name is required'
         }
     )
-    directions = forms.CharField(max_length=10000)
+    directions = forms.CharField(max_length=10000, required=False)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -34,5 +35,9 @@ class RecipeForm(forms.Form):
 
     def clean(self):
         super().clean()
-        if(not self.ingredients.is_valid()):
+        ingredients_valid = self.ingredients.is_valid()
+        if (self.ingredients.is_bound and not ingredients_valid):
             self.add_error(None, self.ingredient_error)
+
+        if (not self.ingredients.is_bound and not self.cleaned_data['directions']):
+            self.add_error(None, self.content_validation_error)

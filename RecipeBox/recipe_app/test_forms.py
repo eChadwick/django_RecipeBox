@@ -62,5 +62,30 @@ class RecipeFormTests(TestCase):
     def test_form_invalid_when_ingredients_invalid(self):
         form = RecipeForm({})
         form.ingredients.is_valid = MagicMock(return_value=False)
+        form.ingredients.is_bound = True
         self.assertFalse(form.is_valid())
         self.assertIn(RecipeForm.ingredient_error, form.non_field_errors())
+
+    def test_directions_or_ingredients_required(self):
+        ingredients = {
+            'form-TOTAL_FORMS': '1',
+            'form-INITIAL_FORMS': '0',
+            'form-0-name': 'ingredient',
+            'form-0-measurement': 'measurement',
+        }
+
+        form = RecipeForm({'name': 'test name',
+                           'directions': 'test directions', 'ingredients': ingredients})
+        self.assertTrue(form.is_valid())
+
+        form = RecipeForm(
+            {'name': 'test name', 'directions': 'test directions'})
+        self.assertTrue(form.is_valid())
+
+        form = RecipeForm({'name': 'test name', 'ingredients': ingredients})
+        self.assertTrue(form.is_valid())
+
+        form = RecipeForm({'name': 'test name'})
+        self.assertFalse(form.is_valid())
+        self.assertIn(RecipeForm.content_validation_error,
+                      form.errors['__all__'])
