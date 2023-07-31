@@ -36,10 +36,3 @@ class RecipeIngredient(models.Model):
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
     ingredient = models.ForeignKey(Ingredient, on_delete=models.RESTRICT)
 
-    def __str__(self):
-        return (
-            f'pk: {self.pk}, recipe_pk: {self.recipe.pk}, recipe_name: '
-            f'{self.recipe.name}, ingredient_pk: {self.ingredient.pk}, '
-            f'ingredient_name: {self.ingredient.name}, measurement: '
-            f'{self.measurement}'
-        )

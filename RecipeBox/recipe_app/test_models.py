@@ -1,5 +1,6 @@
 from django.test import TestCase
-from django.db.models.deletion import RestrictedError
+from django.db.models import ForeignKey, CASCADE, RESTRICT
+from django.db.models.fields import CharField
 
 from recipe_app.models import Ingredient
 from recipe_app.models import Recipe
@@ -36,45 +37,51 @@ class RecipeModelTests(TestCase):
         self.assertEqual(recipe.name, self.tile_case_name)
 
     def test_field_labels(self):
-        recipe = Recipe(ga)
+        recipe = Recipe()
         self.assertTrue(recipe._meta.get_field('name'))
         self.assertTrue(recipe._meta.get_field('directions'))
-        self.assertEqual(recipe._meta.related_objects[0].name, 'recipeingredient')
+        self.assertEqual(
+            recipe._meta.related_objects[0].name, 'recipeingredient')
+
 
 class RecipeIngredientModelTests(TestCase):
-    recipe_name = 'Recipe Name'
-    ingredient_name = 'Ingredient Name'
-    measurement = 'Some'
 
-    def setUp(self):
-        recipe = Recipe.objects.create(name=self.recipe_name)
-        ingredient = Ingredient.objects.create(name=self.ingredient_name)
-        RecipeIngredient.objects.create(
-            recipe=recipe, ingredient=ingredient, measurement=self.measurement)
+    def test_fields(self):
+        recipe_ingredient = RecipeIngredient()
 
-    def test__str__(self):
-        recipe_ingredient = RecipeIngredient.objects.get(id=1)
-        expected_string = (
-            f'pk: 1, recipe_pk: 1, recipe_name: {self.recipe_name}, '
-            f'ingredient_pk: 1, ingredient_name: {self.ingredient_name}, '
-            f'measurement: {self.measurement}'
+        measurement_field = recipe_ingredient._meta.get_field('measurement')
+        self.assertIsInstance(
+            measurement_field,
+            CharField
         )
-        self.assertEqual(expected_string, recipe_ingredient.__str__())
+        self.assertFalse(
+            measurement_field.null
+        )
 
-    def test_field_labels(self):
-        recipe_ingredient = RecipeIngredient.objects.get(id=1)
-        expected_field_names = {'ingredient', 'id', 'measurement', 'recipe'}
-        actual_field_names = set()
-        for field in recipe_ingredient._meta.fields:
-            actual_field_names.add(field.name)
+        ingredient_field = recipe_ingredient._meta.get_field('ingredient')
+        self.assertIsInstance(
+            ingredient_field,
+            ForeignKey
+        )
+        self.assertEqual(
+            ingredient_field.remote_field.field.name,
+            'ingredient'
+        )
+        self.assertEqual(
+            ingredient_field.remote_field.on_delete,
+            RESTRICT
+        )
 
-        self.assertEqual(expected_field_names, actual_field_names)
-
-    def test_cant_delete_ingredient_with_recipe_ingredients(self):
-        with self.assertRaises(RestrictedError):
-            Ingredient.objects.filter(id=1).delete()
-
-    def test_cascading_delete(self):
-        Recipe.objects.filter(id=1).delete()
-        ri_count = RecipeIngredient.objects.all().count()
-        self.assertEqual(ri_count, 0)
+        recipe_field = recipe_ingredient._meta.get_field('recipe')
+        self.assertIsInstance(
+            recipe_field,
+            ForeignKey
+        )
+        self.assertEqual(
+            recipe_field.remote_field.field.name,
+            'recipe'
+        )
+        self.assertEqual(
+            recipe_field.remote_field.on_delete,
+            CASCADE
+        )
