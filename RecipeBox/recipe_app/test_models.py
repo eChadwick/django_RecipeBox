@@ -1,12 +1,10 @@
 from django.test import TestCase
-from django.db.models import ForeignKey, CASCADE, RESTRICT
+from django.db.models import ForeignKey, ManyToManyField, CASCADE, RESTRICT
 from django.db.models.fields import CharField
 
 from recipe_app.models import Ingredient
 from recipe_app.models import Recipe
 from recipe_app.models import RecipeIngredient
-
-# Create your tests here.
 
 
 class IngredientModelTests(TestCase):
@@ -36,12 +34,30 @@ class RecipeModelTests(TestCase):
         recipe = Recipe(name=self.mixed_case_name)
         self.assertEqual(recipe.name, self.tile_case_name)
 
-    def test_field_labels(self):
+    def test_fields(self):
         recipe = Recipe()
-        self.assertTrue(recipe._meta.get_field('name'))
-        self.assertTrue(recipe._meta.get_field('directions'))
+
+        name_field = recipe._meta.get_field('name')
+        self.assertIsInstance(name_field, CharField)
+        self.assertFalse(name_field.null)
+        self.assertTrue(name_field.unique)
+        self.assertEqual(200, name_field.max_length)
+
+        directions_field = recipe._meta.get_field('directions')
+        self.assertIsInstance(directions_field, CharField)
+        self.assertTrue(directions_field.null)
+        self.assertEqual(5000, directions_field.max_length)
+
+        ingredient_field = recipe._meta.get_field('ingredients')
+        self.assertIsInstance(ingredient_field, ManyToManyField)
+        self.assertIs(
+            ingredient_field.remote_field.through,
+            RecipeIngredient
+        )
         self.assertEqual(
-            recipe._meta.related_objects[0].name, 'recipeingredient')
+            ingredient_field.remote_field.related_name,
+            'ingredients'
+        )
 
 
 class RecipeIngredientModelTests(TestCase):
@@ -56,6 +72,10 @@ class RecipeIngredientModelTests(TestCase):
         )
         self.assertFalse(
             measurement_field.null
+        )
+        self.assertEqual(
+            measurement_field.max_length,
+            200
         )
 
         ingredient_field = recipe_ingredient._meta.get_field('ingredient')
