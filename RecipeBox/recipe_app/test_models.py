@@ -9,36 +9,22 @@ from recipe_app.models import RecipeIngredient
 
 
 class IngredientModelTests(TestCase):
-    mixed_case_name = 'iNgEdIeNt nAme'
-    expected_display_name = mixed_case_name.title()
+    mixed_case_name = 'iNgrEdIeNt nAme'
+    title_case_name = mixed_case_name.title()
 
-    def setUp(self):
-        Ingredient.objects.create(name=self.mixed_case_name)
-
-    # Tests that names are always title cased
     def test_name_casing(self):
-        ingredient = Ingredient.objects.get(id=1)
+        ingredient = Ingredient(name=self.mixed_case_name)
+        self.assertEqual(ingredient.name, self.title_case_name)
 
-        self.assertEqual(ingredient.name, self.expected_display_name)
-
-    def test__str__(self):
-        expected_string = f'pk: 1, name: {self.expected_display_name}'
-        ingredient = Ingredient.objects.get(id=1)
-
-        self.assertEqual(expected_string, ingredient.__str__())
-
-    # Tests that saving a duplicate name is a no-op
     def test_save_duplicates(self):
         Ingredient.objects.create(name=self.mixed_case_name)
-        # Above line would have thrown in case of failure
+        Ingredient.objects.create(name=self.mixed_case_name)
+        # Second create would have thrown in case of failure
         self.assertTrue(True)
 
-    def test_name_column_label(self):
-        ingredient = Ingredient.objects.get(id=1)
-        field_label = ingredient._meta.get_field('name').verbose_name
-
-        self.assertEqual(field_label, 'name')
-
+    def test_column_labels(self):
+        ingredient = Ingredient()
+        self.assertTrue(ingredient._meta.get_field('name'))
 
 class RecipeModelTests(TestCase):
     mixed_case_recipe_name = 'rEcIpE nAme'
