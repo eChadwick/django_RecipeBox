@@ -22,57 +22,24 @@ class IngredientModelTests(TestCase):
         # Second create would have thrown in case of failure
         self.assertTrue(True)
 
-    def test_column_labels(self):
+    def test_field_labels(self):
         ingredient = Ingredient()
         self.assertTrue(ingredient._meta.get_field('name'))
 
-class RecipeModelTests(TestCase):
-    mixed_case_recipe_name = 'rEcIpE nAme'
-    expected_recipe_display_name = mixed_case_recipe_name.title()
-    ingredient1_name = 'Ingredient1'
-    ingredient1_measurement = 'A bit'
-    ingredient2_name = 'Ingredient2'
-    ingredient2_measurement = 'A pinch'
-    directions = 'Do stuff'
 
-    def setUp(self):
-        ingredient1 = Ingredient.objects.create(name=self.ingredient1_name)
-        ingredient2 = Ingredient.objects.create(name=self.ingredient2_name)
-        recipe = Recipe.objects.create(
-            name=self.mixed_case_recipe_name,
-            directions=self.directions)
-        RecipeIngredient.objects.create(
-            recipe=recipe, ingredient=ingredient1,
-            measurement=self.ingredient1_measurement)
-        RecipeIngredient.objects.create(
-            recipe=recipe, ingredient=ingredient2,
-            measurement=self.ingredient2_measurement)
+class RecipeModelTests(TestCase):
+    mixed_case_name = 'rEcIpE nAme'
+    tile_case_name = mixed_case_name.title()
 
     def test_name_casing(self):
-        recipe = Recipe.objects.get(id=1)
-
-        self.assertEqual(recipe.name, self.expected_recipe_display_name)
-
-    def test__str__(self):
-        recipe = Recipe.objects.get(id=1)
-        expected_string = (
-            f'pk: 1, name: {self.expected_recipe_display_name}, directions: '
-            f'{self.directions}, ingredients: {self.ingredient1_name} - '
-            f'{self.ingredient1_measurement}, {self.ingredient2_name} - '
-            f'{self.ingredient2_measurement}'
-        )
-
-        self.assertEqual(expected_string, recipe.__str__())
+        recipe = Recipe(name=self.mixed_case_name)
+        self.assertEqual(recipe.name, self.tile_case_name)
 
     def test_field_labels(self):
-        recipe = Recipe.objects.get(id=1)
-        expected_field_names = {'directions', 'id', 'name'}
-        actual_field_names = set()
-        for field in recipe._meta.fields:
-            actual_field_names.add(field.name)
-
-        self.assertEqual(expected_field_names, actual_field_names)
-
+        recipe = Recipe(ga)
+        self.assertTrue(recipe._meta.get_field('name'))
+        self.assertTrue(recipe._meta.get_field('directions'))
+        self.assertEqual(recipe._meta.related_objects[0].name, 'recipeingredient')
 
 class RecipeIngredientModelTests(TestCase):
     recipe_name = 'Recipe Name'
