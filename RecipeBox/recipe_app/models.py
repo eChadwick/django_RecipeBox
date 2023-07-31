@@ -1,8 +1,6 @@
 from django.core.exceptions import ValidationError
 from django.db import models
 
-# Create your models here.
-
 
 class Ingredient(models.Model):
     name = models.CharField(null=False, max_length=200, unique=True)
@@ -35,4 +33,3 @@ class RecipeIngredient(models.Model):
     measurement = models.CharField(null=False, max_length=200)
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
     ingredient = models.ForeignKey(Ingredient, on_delete=models.RESTRICT)
-

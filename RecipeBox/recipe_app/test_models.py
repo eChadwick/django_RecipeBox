@@ -2,9 +2,7 @@ from django.test import TestCase
 from django.db.models import ForeignKey, ManyToManyField, CASCADE, RESTRICT
 from django.db.models.fields import CharField
 
-from recipe_app.models import Ingredient
-from recipe_app.models import Recipe
-from recipe_app.models import RecipeIngredient
+from recipe_app.models import Ingredient, Recipe, RecipeIngredient
 
 
 class IngredientModelTests(TestCase):
@@ -21,9 +19,14 @@ class IngredientModelTests(TestCase):
         # Second create would have thrown in case of failure
         self.assertTrue(True)
 
-    def test_field_labels(self):
+    def test_fields(self):
         ingredient = Ingredient()
-        self.assertTrue(ingredient._meta.get_field('name'))
+
+        name_field = ingredient._meta.get_field('name')
+        self.assertIsInstance(name_field, CharField)
+        self.assertFalse(name_field.null)
+        self.assertTrue(name_field.unique)
+        self.assertEqual(200, name_field.max_length)
 
 
 class RecipeModelTests(TestCase):
