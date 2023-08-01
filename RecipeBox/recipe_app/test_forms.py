@@ -1,28 +1,33 @@
-from unittest.mock import MagicMock
-
-from django.forms import formset_factory
+from django.forms import CharField
 from django.test import TestCase
 
 from recipe_app.forms import IngredientForm, RecipeForm, IngredientFormSet, extra_ingredient_form_count
-from recipe_app.models import Recipe
+from recipe_app.models import Recipe, Ingredient
 
 
 class IngredientFormTests(TestCase):
+    def test_fields(self):
+        form = IngredientForm()
+        self.assertIs(
+            type(form.instance),
+            Ingredient
+        )
+        self.assertIn('name', form.fields)
 
-    def test_ingredient_name_required(self):
-
-        form = IngredientForm({})
-        self.assertFalse(form.is_valid())
-        self.assertIn(IngredientForm.name_validation_error,
-                      form.errors['name'])
+        measurement_field = form.fields['measurement']
+        self.assertIsInstance(measurement_field, CharField)
+        self.assertFalse(measurement_field.required)
+        self.assertEqual(measurement_field.max_length, 255)
 
 
 class IngredientFormsetTests(TestCase):
 
-    def test_formset_has_one_extra(self):
+    def test_extra_formset_count(self):
         formset = IngredientFormSet()
-        self.assertEqual(formset.total_form_count(),
-                         extra_ingredient_form_count)
+        self.assertEqual(
+            formset.total_form_count(),
+            extra_ingredient_form_count
+        )
 
 
 class RecipeFormTests(TestCase):

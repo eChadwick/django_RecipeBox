@@ -1,13 +1,14 @@
-from django.forms import Form, ModelForm, CharField, formset_factory
+from django.forms import ModelForm, CharField, formset_factory
 
-from recipe_app.models import Recipe
+from recipe_app.models import Recipe, Ingredient
 
 
-class IngredientForm(Form):
-    name_validation_error = 'Ingredient name is required'
-    name = CharField(max_length=255, required=True, error_messages={
-        'required': name_validation_error})
+class IngredientForm(ModelForm):
     measurement = CharField(max_length=255, required=False)
+
+    class Meta:
+        model = Ingredient
+        fields = ['name']
 
 
 extra_ingredient_form_count = 1
