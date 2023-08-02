@@ -218,6 +218,8 @@ class RecipeCreateViewTests(TestCase):
             ANY, 'recipe_app/recipe_form.html', ANY
         )
 
-    def test_get_should_return_unbound_form(self, mock_render):
+    def test_get_should_return_unbound_forms(self, mock_render):
         self.client.get(reverse('recipe-create'))
-        self.assertFalse(mock_render.call_args[0][2]['form'].is_bound)
+        rendered_context = mock_render.call_args[0][2]
+        self.assertFalse(rendered_context['recipe'].is_bound)
+        self.assertFalse(rendered_context['ingredients'].is_bound)
