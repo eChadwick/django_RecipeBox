@@ -1,3 +1,5 @@
+from unittest.mock import patch
+
 from django.forms import CharField
 from django.test import TestCase
 
@@ -35,6 +37,12 @@ class IngredientFormsetTests(TestCase):
             extra_ingredient_form_count
         )
 
+    @patch('recipe_app.forms.IngredientForm.__eq__', return_value=True)
+    def test_equality_operator(self, mock_eq):
+        IngredientFormSet1 = IngredientFormSet({})
+        IngredientFormSet2 = IngredientFormSet({})
+        self.assertEqual(IngredientFormSet1, IngredientFormSet2)
+
 
 class RecipeFormTests(TestCase):
 
@@ -46,3 +54,9 @@ class RecipeFormTests(TestCase):
         )
         self.assertIn('name', form.fields)
         self.assertIn('directions', form.fields)
+
+    def test_equality_operator(self):
+        form_data = {'name': 'test name', 'directions': 'do stuff'}
+        form1 = RecipeForm(form_data)
+        form2 = RecipeForm(form_data)
+        self.assertEqual(form1, form2)

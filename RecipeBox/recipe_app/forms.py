@@ -15,11 +15,23 @@ class IngredientForm(ModelForm):
 
 
 extra_ingredient_form_count = 1
-IngredientFormSet = formset_factory(
+IngredientFormSetBase = formset_factory(
     IngredientForm, extra=extra_ingredient_form_count)
+
+
+class IngredientFormSet(IngredientFormSetBase):
+
+    def __eq__(self, other):
+        for form in self.forms:
+            if not form.is_valid:
+                return False
+        return True
 
 
 class RecipeForm(ModelForm):
     class Meta:
         model = Recipe
         fields = ['name', 'directions']
+
+    def __eq__(self, other):
+        return type(self) == type(other) and self.data == other.data
