@@ -19,6 +19,12 @@ class IngredientFormTests(TestCase):
         self.assertFalse(measurement_field.required)
         self.assertEqual(measurement_field.max_length, 255)
 
+    def test_equality_operator(self):
+        form_data = {'name': 'test name', 'measurement': 'a bit'}
+        form1 = IngredientForm(form_data)
+        form2 = IngredientForm(form_data)
+        self.assertEqual(form1, form2)
+
 
 class IngredientFormsetTests(TestCase):
 

@@ -10,6 +10,9 @@ class IngredientForm(ModelForm):
         model = Ingredient
         fields = ['name']
 
+    def __eq__(self, other):
+        return type(self) == type(other) and self.data == other.data
+
 
 extra_ingredient_form_count = 1
 IngredientFormSet = formset_factory(
