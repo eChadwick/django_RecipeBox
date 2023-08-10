@@ -38,11 +38,20 @@ class IngredientFormsetTests(TestCase):
         )
 
     @patch('recipe_app.forms.IngredientForm.__eq__', return_value=True)
-    def test_equality_operator(self, mock_eq):
+    def test_equal(self, mock_eq):
         IngredientFormSet1 = IngredientFormSet({})
         IngredientFormSet2 = IngredientFormSet({})
         self.assertEqual(IngredientFormSet1, IngredientFormSet2)
 
+    @patch('recipe_app.forms.IngredientForm.__eq__', return_value=True)
+    def test_not_equal(self, mock_eq):
+        IngredientFormSet1 = IngredientFormSet({})
+        IngredientFormSet2 = IngredientFormSet({
+            'form-TOTAL_FORMS': '1',
+            'form-INITIAL_FORMS': '0',
+            'form-0-name': 'name'
+        })
+        self.assertNotEqual(IngredientFormSet1, IngredientFormSet2)
 
 class RecipeFormTests(TestCase):
 

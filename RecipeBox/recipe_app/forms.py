@@ -22,11 +22,14 @@ IngredientFormSetBase = formset_factory(
 class IngredientFormSet(IngredientFormSetBase):
 
     def __eq__(self, other):
-        for form in self.forms:
-            if not form.is_valid:
-                return False
-        return True
+        if(len(self.forms) != len(other.forms)):
+            return False
 
+        for i in range(0, len(self.forms)):
+            if(self.forms[i] != other.forms[i]):
+                return False
+
+        return True
 
 class RecipeForm(ModelForm):
     class Meta:
