@@ -9,6 +9,7 @@ class IngredientForm(ModelForm):
     class Meta:
         model = Ingredient
         fields = ['name']
+        labels = {'name': 'Recipe Name'}
 
     def __eq__(self, other):
         return type(self) == type(other) and self.data == other.data
@@ -22,19 +23,21 @@ IngredientFormSetBase = formset_factory(
 class IngredientFormSet(IngredientFormSetBase):
 
     def __eq__(self, other):
-        if(len(self.forms) != len(other.forms)):
+        if (len(self.forms) != len(other.forms)):
             return False
 
         for i in range(0, len(self.forms)):
-            if(self.forms[i] != other.forms[i]):
+            if (self.forms[i] != other.forms[i]):
                 return False
 
         return True
+
 
 class RecipeForm(ModelForm):
     class Meta:
         model = Recipe
         fields = ['name', 'directions']
+        labels = {'name': 'Recipe Name'}
 
     def __eq__(self, other):
         return type(self) == type(other) and self.data == other.data

@@ -15,6 +15,7 @@ class IngredientFormTests(TestCase):
             Ingredient
         )
         self.assertIn('name', form.fields)
+        self.assertEqual('Recipe Name', form.fields['name'].label)
 
         measurement_field = form.fields['measurement']
         self.assertIsInstance(measurement_field, CharField)
@@ -53,6 +54,7 @@ class IngredientFormsetTests(TestCase):
         })
         self.assertNotEqual(IngredientFormSet1, IngredientFormSet2)
 
+
 class RecipeFormTests(TestCase):
 
     def test_fields(self):
@@ -62,6 +64,7 @@ class RecipeFormTests(TestCase):
             Recipe
         )
         self.assertIn('name', form.fields)
+        self.assertEqual('Recipe Name', form.fields['name'].label)
         self.assertIn('directions', form.fields)
 
     def test_equality_operator(self):
