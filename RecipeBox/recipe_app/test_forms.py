@@ -15,7 +15,7 @@ class IngredientFormTests(TestCase):
             Ingredient
         )
         self.assertIn('name', form.fields)
-        self.assertEqual('Recipe Name', form.fields['name'].label)
+        self.assertEqual('Ingredient Name', form.fields['name'].label)
 
         measurement_field = form.fields['measurement']
         self.assertIsInstance(measurement_field, CharField)

@@ -9,7 +9,7 @@ class IngredientForm(ModelForm):
     class Meta:
         model = Ingredient
         fields = ['name']
-        labels = {'name': 'Recipe Name'}
+        labels = {'name': 'Ingredient Name'}
 
     def __eq__(self, other):
         return type(self) == type(other) and self.data == other.data
