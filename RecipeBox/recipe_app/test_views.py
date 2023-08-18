@@ -7,6 +7,7 @@ from django.shortcuts import render
 from django.test import TestCase, Client
 from django.urls import reverse
 
+from recipe_app.forms import RecipeForm, IngredientFormSet
 from recipe_app.models import Recipe, Ingredient, RecipeIngredient
 from recipe_app.views import DEFAULT_PAGINATION
 
@@ -211,6 +212,14 @@ class RecipeDetailViewTestCase(TestCase):
 
 @patch('recipe_app.views.render', return_value=HttpResponse())
 class RecipeCreateViewTests(TestCase):
+    form_data = {
+            'name': 'recipe name',
+            'directions': 'do stuff',
+            'form-TOTAL_FORMS': '1',
+            'form-INITIAL_FORMS': '0',
+            'form-0-name': 'ingredient name',
+            'form-0-measurement': 'a pinch'
+        }
 
     def test_get_renders_the_correct_html(self, mock_render):
         self.client.get(reverse('recipe-create'))
@@ -223,3 +232,29 @@ class RecipeCreateViewTests(TestCase):
         rendered_context = mock_render.call_args[0][2]
         self.assertFalse(rendered_context['recipe'].is_bound)
         self.assertFalse(rendered_context['ingredients'].is_bound)
+
+    @patch('recipe_app.forms.RecipeForm.is_valid', return_value=False)
+    def test_post_should_rerender_form_on_recipe_errors(self, mock_is_valid, mock_render):
+        self.client.post(reverse('recipe-create'), self.form_data)
+
+        rendered_template = mock_render.call_args[0][1]
+        self.assertEqual(rendered_template, 'recipe_app/recipe_form.html')
+
+        rendered_recipe = mock_render.call_args[0][2]['recipe']
+        self.assertEqual = (rendered_recipe, RecipeForm(self.form_data))
+
+        rendered_ingredients = mock_render.call_args[0][2]['ingredients']
+        self.assertEqual = (rendered_ingredients, IngredientFormSet(self.form_data))
+
+    @patch('recipe_app.forms.IngredientFormSet.is_valid', return_value=False)
+    def test_post_should_rerender_form_on_ingredient_errors(self, mock_is_valid, mock_render):
+        self.client.post(reverse('recipe-create'), self.form_data)
+
+        rendered_template = mock_render.call_args[0][1]
+        self.assertEqual(rendered_template, 'recipe_app/recipe_form.html')
+
+        rendered_recipe = mock_render.call_args[0][2]['recipe']
+        self.assertEqual = (rendered_recipe, RecipeForm(self.form_data))
+
+        rendered_ingredients = mock_render.call_args[0][2]['ingredients']
+        self.assertEqual = (rendered_ingredients, IngredientFormSet(self.form_data))

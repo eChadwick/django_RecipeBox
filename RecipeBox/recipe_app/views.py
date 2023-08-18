@@ -62,5 +62,13 @@ def recipe_detail(request, pk):
     return render(request, 'recipe_app/recipe_detail.html', context)
 
 def recipe_create(request):
-    context = {'recipe': RecipeForm(), 'ingredients': IngredientFormSet()}
-    return render(request, 'recipe_app/recipe_form.html', context)
+    if('POST' == request.method):
+        recipe = RecipeForm(request.POST)
+        ingredients = IngredientFormSet(request.POST)
+        if(not recipe.is_valid() or not ingredients.is_valid()):
+            context = {'recipe': recipe, 'ingredients': ingredients}
+            return render(request, 'recipe_app/recipe_form.html', context)
+
+    else:
+        context = {'recipe': RecipeForm(), 'ingredients': IngredientFormSet()}
+        return render(request, 'recipe_app/recipe_form.html', context)
