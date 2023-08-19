@@ -27,6 +27,7 @@ class IngredientModelTests(TestCase):
         self.assertFalse(name_field.null)
         self.assertTrue(name_field.unique)
         self.assertEqual(200, name_field.max_length)
+        self.assertTrue(name_field.blank)
 
 
 class RecipeModelTests(TestCase):
@@ -45,11 +46,13 @@ class RecipeModelTests(TestCase):
         self.assertFalse(name_field.null)
         self.assertTrue(name_field.unique)
         self.assertEqual(200, name_field.max_length)
+        self.assertTrue(name_field.blank)
 
         directions_field = recipe._meta.get_field('directions')
         self.assertIsInstance(directions_field, CharField)
         self.assertTrue(directions_field.null)
         self.assertEqual(5000, directions_field.max_length)
+        self.assertTrue(directions_field.blank)
 
         ingredient_field = recipe._meta.get_field('ingredients')
         self.assertIsInstance(ingredient_field, ManyToManyField)
