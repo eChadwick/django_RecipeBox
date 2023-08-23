@@ -251,11 +251,12 @@ class RecipeCreateViewTests(TestCase):
         self.assertEqual(rendered_template, 'recipe_app/recipe_form.html')
 
         rendered_recipe = mock_render.call_args[0][2]['recipe']
-        self.assertEqual = (rendered_recipe, RecipeForm(self.form_data))
+        self.assertEqual(rendered_recipe.data,
+                         RecipeForm(self.recipe_data).data)
 
         rendered_ingredients = mock_render.call_args[0][2]['ingredients']
-        self.assertEqual = (rendered_ingredients,
-                            IngredientFormSet(self.form_data))
+        self.assertEqual(rendered_ingredients.data,
+                         IngredientFormSet(self.ingredients_data).data)
 
     @patch('recipe_app.forms.IngredientFormSet.is_valid', return_value=False)
     def test_post_should_rerender_form_on_ingredient_errors(self, mock_is_valid, mock_render):
@@ -265,8 +266,9 @@ class RecipeCreateViewTests(TestCase):
         self.assertEqual(rendered_template, 'recipe_app/recipe_form.html')
 
         rendered_recipe = mock_render.call_args[0][2]['recipe']
-        self.assertEqual = (rendered_recipe, RecipeForm(self.form_data))
+        self.assertEqual(rendered_recipe.data,
+                         RecipeForm(self.recipe_data).data)
 
         rendered_ingredients = mock_render.call_args[0][2]['ingredients']
-        self.assertEqual = (rendered_ingredients,
-                            IngredientFormSet(self.form_data))
+        self.assertEqual(rendered_ingredients.data,
+                         IngredientFormSet(self.ingredients_data).data)
