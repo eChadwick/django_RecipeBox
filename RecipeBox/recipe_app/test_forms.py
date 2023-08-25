@@ -54,6 +54,18 @@ class IngredientFormsetTests(TestCase):
         })
         self.assertNotEqual(IngredientFormSet1, IngredientFormSet2)
 
+    def test_not_empty(self):
+        formset = IngredientFormSet({
+            'form-TOTAL_FORMS': '1',
+            'form-INITIAL_FORMS': '0',
+            'form-0-name': 'name'
+        })
+        self.assertFalse(formset.is_empty())
+
+    def test_empty(self):
+        formset = IngredientFormSet({})
+        self.assertTrue(formset.is_empty())
+
 
 class RecipeFormTests(TestCase):
 

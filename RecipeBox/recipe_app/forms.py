@@ -32,6 +32,13 @@ class IngredientFormSet(IngredientFormSetBase):
 
         return True
 
+    def is_empty(self):
+        for form in self.forms:
+            if form.is_valid():
+                return False
+
+        return True
+
 
 class RecipeForm(ModelForm):
     class Meta:
