@@ -1,15 +1,11 @@
-from django.forms import ModelForm, CharField, formset_factory
+from django.forms import ModelForm, CharField, formset_factory, Form
 
-from recipe_app.models import Recipe, Ingredient
+from recipe_app.models import Recipe
 
 
-class IngredientForm(ModelForm):
+class IngredientForm(Form):
+    name = CharField(max_length=255, required=False, label='Ingredient Name')
     measurement = CharField(max_length=255, required=False)
-
-    class Meta:
-        model = Ingredient
-        fields = ['name']
-        labels = {'name': 'Ingredient Name'}
 
     def __eq__(self, other):
         return type(self) == type(other) and self.data == other.data

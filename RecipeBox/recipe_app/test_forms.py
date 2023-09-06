@@ -4,17 +4,17 @@ from django.forms import CharField
 from django.test import TestCase
 
 from recipe_app.forms import IngredientForm, RecipeForm, IngredientFormSet, extra_ingredient_form_count
-from recipe_app.models import Recipe, Ingredient
+from recipe_app.models import Recipe
 
 
 class IngredientFormTests(TestCase):
     def test_fields(self):
         form = IngredientForm()
-        self.assertIs(
-            type(form.instance),
-            Ingredient
-        )
-        self.assertIn('name', form.fields)
+
+        name_field = form.fields['name']
+        self.assertIsInstance(name_field, CharField)
+        self.assertFalse(name_field.required)
+        self.assertEqual(name_field.max_length, 255)
         self.assertEqual('Ingredient Name', form.fields['name'].label)
 
         measurement_field = form.fields['measurement']
