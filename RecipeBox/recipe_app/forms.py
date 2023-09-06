@@ -16,6 +16,7 @@ class IngredientForm(Form):
         if self.cleaned_data['measurement'] and not self.cleaned_data['name']:
             self.add_error('name', self.name_error)
 
+
 extra_ingredient_form_count = 1
 IngredientFormSetBase = formset_factory(
     IngredientForm, extra=extra_ingredient_form_count)
@@ -41,11 +42,9 @@ class IngredientFormSet(IngredientFormSetBase):
         return True
 
 
-class RecipeForm(ModelForm):
-    class Meta:
-        model = Recipe
-        fields = ['name', 'directions']
-        labels = {'name': 'Recipe Name'}
+class RecipeForm(Form):
+    name = CharField(max_length=255, required=False, label='Recipe Name')
+    directions = CharField(max_length=10000, required=False)
 
     def __eq__(self, other):
         return type(self) == type(other) and self.data == other.data

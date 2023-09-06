@@ -77,13 +77,17 @@ class RecipeFormTests(TestCase):
 
     def test_fields(self):
         form = RecipeForm()
-        self.assertIs(
-            type(form.instance),
-            Recipe
-        )
-        self.assertIn('name', form.fields)
-        self.assertEqual('Recipe Name', form.fields['name'].label)
-        self.assertIn('directions', form.fields)
+
+        name_field = form.fields['name']
+        self.assertIsInstance(name_field, CharField)
+        self.assertEqual(name_field.max_length, 255)
+        self.assertFalse(name_field.required)
+        self.assertEqual('Recipe Name', name_field.label)
+
+        directions_field = form.fields['directions']
+        self.assertIsInstance(directions_field, CharField)
+        self.assertEqual(directions_field.max_length, 10000)
+        self.assertFalse(directions_field.required)
 
     def test_equality_operator(self):
         form_data = {'name': 'test name', 'directions': 'do stuff'}
