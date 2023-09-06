@@ -28,6 +28,12 @@ class IngredientFormTests(TestCase):
         form2 = IngredientForm(form_data)
         self.assertEqual(form1, form2)
 
+    def test_has_error_when_name_missing_and_measurement_entered(self):
+        form = IngredientForm({'measurement': 'a bit'})
+
+        self.assertFalse(form.is_valid())
+        self.assertIn(IngredientForm.name_error, form.errors['name'])
+
 
 class IngredientFormsetTests(TestCase):
 

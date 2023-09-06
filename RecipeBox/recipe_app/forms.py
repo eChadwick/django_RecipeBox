@@ -7,9 +7,14 @@ class IngredientForm(Form):
     name = CharField(max_length=255, required=False, label='Ingredient Name')
     measurement = CharField(max_length=255, required=False)
 
+    name_error = 'Ingredient name is required when measurement is entered'
+
     def __eq__(self, other):
         return type(self) == type(other) and self.data == other.data
 
+    def clean(self):
+        if self.cleaned_data['measurement'] and not self.cleaned_data['name']:
+            self.add_error('name', self.name_error)
 
 extra_ingredient_form_count = 1
 IngredientFormSetBase = formset_factory(
