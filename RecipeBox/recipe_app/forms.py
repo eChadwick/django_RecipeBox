@@ -46,5 +46,11 @@ class RecipeForm(Form):
     name = CharField(max_length=255, required=False, label='Recipe Name')
     directions = CharField(max_length=10000, required=False)
 
+    name_error = 'Recipe name is required'
+
     def __eq__(self, other):
         return type(self) == type(other) and self.data == other.data
+
+    def clean(self):
+        if not self.cleaned_data['name']:
+            self.add_error('name', self.name_error)

@@ -94,3 +94,9 @@ class RecipeFormTests(TestCase):
         form1 = RecipeForm(form_data)
         form2 = RecipeForm(form_data)
         self.assertEqual(form1, form2)
+
+    def test_form_has_error_when_name_missing(self):
+        form = RecipeForm({})
+
+        self.assertFalse(form.is_valid())
+        self.assertIn(RecipeForm.name_error, form.errors['name'])
