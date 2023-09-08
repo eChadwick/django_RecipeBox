@@ -79,6 +79,11 @@ def recipe_create(request):
             context = {'recipe': recipe, 'ingredients': ingredients}
             return render(request, 'recipe_app/recipe_form.html', context)
 
+        if not recipe.cleaned_data['directions'] or ingredients.is_empty():
+            recipe.add_error('name', RecipeForm.content_error)
+            context = {'recipe': recipe, 'ingredients': ingredients}
+            return render(request, 'recipe_app/recipe_form.html', context)
+
     else:
         context = {'recipe': RecipeForm(), 'ingredients': IngredientFormSet()}
         return render(request, 'recipe_app/recipe_form.html', context)
