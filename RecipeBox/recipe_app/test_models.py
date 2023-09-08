@@ -14,10 +14,9 @@ class IngredientModelTests(TestCase):
         self.assertEqual(ingredient.name, self.title_case_name)
 
     def test_save_duplicates(self):
-        Ingredient.objects.create(name=self.mixed_case_name)
-        Ingredient.objects.create(name=self.mixed_case_name)
-        # Second create would have thrown in case of failure
-        self.assertTrue(True)
+        ingredient1 = Ingredient.objects.create(name=self.mixed_case_name)
+        ingredient2 = Ingredient.objects.create(name=self.mixed_case_name)
+        self.assertEqual(ingredient1.pk, ingredient2.pk)
 
     def test_fields(self):
         ingredient = Ingredient()

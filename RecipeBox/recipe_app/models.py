@@ -3,7 +3,8 @@ from django.db import models
 
 
 class Ingredient(models.Model):
-    name = models.CharField(null=False, max_length=200, unique=True, blank=True)
+    name = models.CharField(null=False, max_length=200,
+                            unique=True, blank=True)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -13,13 +14,15 @@ class Ingredient(models.Model):
         try:
             self.validate_unique()
         except ValidationError:
+            self.pk = Ingredient.objects.get(name=self.name).pk
             return
 
         models.Model.save(self, *args, **kwargs)
 
 
 class Recipe(models.Model):
-    name = models.CharField(null=False, max_length=200, unique=True, blank=True)
+    name = models.CharField(null=False, max_length=200,
+                            unique=True, blank=True)
     ingredients = models.ManyToManyField(
         Ingredient, through='RecipeIngredient', related_name='ingredients')
     directions = models.CharField(null=True, max_length=5000, blank=True)
