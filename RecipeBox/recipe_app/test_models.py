@@ -9,7 +9,7 @@ class IngredientModelTests(TestCase):
     mixed_case_name = 'iNgrEdIeNt nAme'
     title_case_name = mixed_case_name.title()
 
-    def test_name_casing(self):
+    def test_name_casing_on_save(self):
         ingredient = Ingredient(name=self.mixed_case_name)
         self.assertEqual(ingredient.name, self.title_case_name)
 
@@ -33,7 +33,7 @@ class RecipeModelTests(TestCase):
     mixed_case_name = 'rEcIpE nAme'
     tile_case_name = mixed_case_name.title()
 
-    def test_name_casing(self):
+    def test_name_casing_on_save(self):
         recipe = Recipe(name=self.mixed_case_name)
         self.assertEqual(recipe.name, self.tile_case_name)
 
