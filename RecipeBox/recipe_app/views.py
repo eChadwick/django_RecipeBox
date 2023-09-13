@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from django.urls import reverse
 from django.views.decorators.http import require_http_methods
 
-from recipe_app.models import Ingredient, Recipe
+from recipe_app.models import Ingredient, Recipe, RecipeIngredient
 from recipe_app.forms import RecipeForm, IngredientFormSet
 
 DEFAULT_PAGINATION = 25
@@ -71,7 +71,8 @@ def recipe_create(request):
         recipe = RecipeForm(recipe_data)
         recipe.is_valid()
 
-        ingredients_data = {k: v for (k, v) in request.POST.items() if 'form-' in k}
+        ingredients_data = {
+            k: v for (k, v) in request.POST.items() if 'form-' in k}
         ingredients = IngredientFormSet(ingredients_data)
         ingredients.is_valid()
 
@@ -81,6 +82,26 @@ def recipe_create(request):
         if (not recipe.is_valid() or not ingredients.is_valid()):
             context = {'recipe': recipe, 'ingredients': ingredients}
             return render(request, 'recipe_app/recipe_form.html', context)
+
+        recipe_model = Recipe(
+            name=recipe.cleaned_data['name'],
+            directions=recipe.cleaned_data['directions']
+        )
+        recipe_model.save()
+
+        ingredients_models = []
+        for form in ingredients.forms:
+            temp_ingredient = Ingredient(name=form.cleaned_data['name'])
+            temp_ingredient.save()
+            ingredients_models.append(temp_ingredient)
+
+        for ingredient in ingredients_models:
+            RecipeIngredient(
+                recipe=recipe_model,
+                ingredient=ingredient
+            ).save()
+
+        return redirect(reverse('recipe-list'))
     else:
         context = {'recipe': RecipeForm(), 'ingredients': IngredientFormSet()}
         return render(request, 'recipe_app/recipe_form.html', context)

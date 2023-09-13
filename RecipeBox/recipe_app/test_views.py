@@ -3,7 +3,7 @@ import math
 from unittest.mock import patch, ANY
 
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.test import TestCase, Client
 from django.urls import reverse
 
@@ -275,8 +275,8 @@ class RecipeCreateViewTests(TestCase):
 
     def test_recipe_form_has_error_when_no_directions_or_ingredients(self, mock_render):
         recipe_data = {
-        'name': 'recipe name',
-        'directions': ''
+            'name': 'recipe name',
+            'directions': ''
         }
         ingredients_data = {
             'form-TOTAL_FORMS': '1',
@@ -305,3 +305,43 @@ class RecipeCreateViewTests(TestCase):
         rendered_ingredients = mock_render.call_args[0][2]['ingredients']
         self.assertEqual(rendered_ingredients.data,
                          IngredientFormSet(ingredients_data).data)
+
+    @patch('recipe_app.views.redirect', wraps=redirect)
+    def test_success(self, mock_redirect, mock_render):
+        form_data = {
+            'name': 'Recipe Name',
+            'directions': 'directions',
+            'form-TOTAL_FORMS': '2',
+            'form-INITIAL_FORMS': '1',
+            'form-0-name': 'form-0-name',
+            'form-0-measurement': 'form-0-measurement',
+            'form-1-name': 'form-1-name',
+            'form-1-measurement': 'form-1-measurement'
+        }
+
+        self.client.post(reverse('recipe-create'), form_data)
+
+        mock_redirect.assert_called_with(reverse('recipe-list'))
+
+        recipe = Recipe.objects.filter(name__iexact=form_data['name'])
+        self.assertTrue(recipe)
+        self.assertEqual(recipe[0].name, form_data['name'])
+        self.assertEqual(recipe[0].directions, form_data['directions'])
+
+        ingredient1 = Ingredient.objects.filter(
+            name__iexact=form_data['form-0-name'])
+        self.assertTrue(ingredient1)
+
+        ingredient2 = Ingredient.objects.filter(
+            name__iexact=form_data['form-1-name'])
+        self.assertTrue(ingredient2)
+
+        self.assertTrue(RecipeIngredient.objects.filter(
+            recipe=recipe[0],
+            ingredient=ingredient1[0]
+        ))
+
+        self.assertTrue(RecipeIngredient.objects.filter(
+            recipe=recipe[0],
+            ingredient=ingredient2[0]
+        ))
