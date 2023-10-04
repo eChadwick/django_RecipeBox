@@ -1,7 +1,12 @@
 {% extends "base.html" %}
 
 {% block body %}
-    {{recipe.name}}
+    <body class='outer-flex'>
+        <div class='card-title'>
+            <h1>{{recipe.name}}</h1>
+        </div>
+    </body>
+    {% comment %} {{recipe.name}}
     <ul>
         {% for ingredient in ingredients_list %}
             <li>
@@ -9,5 +14,5 @@
             </li>
         {% endfor %}
     </ul>
-    {{recipe.directions}}
+    {{recipe.directions}} {% endcomment %}
 {% endblock %}

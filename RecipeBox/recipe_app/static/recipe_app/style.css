@@ -1,0 +1,16 @@
+.outer-flex {
+    direction: flex;
+    flex-direction: column;
+    width: 90%;
+    margin: auto;
+}
+
+.card-title {
+    text-align: center;
+    background-color: coral;
+}
+
+/* #horizontal-flex {
+    direction: flex;
+    flex-direction: row;
+} */
