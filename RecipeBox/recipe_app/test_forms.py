@@ -16,11 +16,19 @@ class IngredientFormTests(TestCase):
         self.assertFalse(name_field.required)
         self.assertEqual(name_field.max_length, 255)
         self.assertEqual('Ingredient Name', form.fields['name'].label)
+        self.assertEqual(
+            name_field.widget.attrs['placeholder'],
+            IngredientForm.name_field_placeholder
+        )
 
         measurement_field = form.fields['measurement']
         self.assertIsInstance(measurement_field, CharField)
         self.assertFalse(measurement_field.required)
         self.assertEqual(measurement_field.max_length, 255)
+        self.assertEqual(
+            measurement_field.widget.attrs['placeholder'],
+            IngredientForm.measurement_field_placeholder
+        )
 
     def test_equality_operator(self):
         form_data = {'name': 'test name', 'measurement': 'a bit'}
@@ -82,12 +90,19 @@ class RecipeFormTests(TestCase):
         self.assertIsInstance(name_field, CharField)
         self.assertEqual(name_field.max_length, 255)
         self.assertFalse(name_field.required)
-        self.assertEqual('Recipe Name', name_field.label)
+        self.assertEqual(
+            name_field.widget.attrs['placeholder'],
+            RecipeForm.name_field_placeholder
+        )
 
         directions_field = form.fields['directions']
         self.assertIsInstance(directions_field, CharField)
         self.assertEqual(directions_field.max_length, 10000)
         self.assertFalse(directions_field.required)
+        self.assertEqual(
+            directions_field.widget.attrs['placeholder'],
+            RecipeForm.directions_field_placeholder
+        )
 
     def test_equality_operator(self):
         form_data = {'name': 'test name', 'directions': 'do stuff'}

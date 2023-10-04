@@ -1,13 +1,22 @@
-from django.forms import ModelForm, CharField, formset_factory, Form
-
-from recipe_app.models import Recipe
+from django.forms import CharField, formset_factory, Form, TextInput
 
 
 class IngredientForm(Form):
-    name = CharField(max_length=255, required=False, label='Ingredient Name')
-    measurement = CharField(max_length=255, required=False)
-
     name_error = 'Ingredient name is required when measurement is entered'
+    name_field_placeholder = 'Ingredient'
+    measurement_field_placeholder = 'Amount'
+
+    name = CharField(
+        max_length=255,
+        required=False,
+        label='Ingredient Name',
+        widget=TextInput(attrs={'placeholder': name_field_placeholder})
+    )
+    measurement = CharField(
+        max_length=255,
+        required=False,
+        widget=TextInput(attrs={'placeholder': measurement_field_placeholder})
+    )
 
     def __eq__(self, other):
         return type(self) == type(other) and self.data == other.data
@@ -43,11 +52,21 @@ class IngredientFormSet(IngredientFormSetBase):
 
 
 class RecipeForm(Form):
-    name = CharField(max_length=255, required=False, label='Recipe Name')
-    directions = CharField(max_length=10000, required=False)
-
     name_error = 'Recipe name is required'
+    name_field_placeholder = 'Recipe Name'
     content_error = 'Ingredients or directions must be provided'
+    directions_field_placeholder = 'Directions'
+
+    name = CharField(
+        max_length=255,
+        required=False,
+        widget=TextInput(attrs={'placeholder': name_field_placeholder})
+    )
+    directions = CharField(
+        max_length=10000,
+        required=False,
+        widget=TextInput(attrs={'placeholder': directions_field_placeholder})
+    )
 
     def __eq__(self, other):
         return type(self) == type(other) and self.data == other.data
