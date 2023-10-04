@@ -1,16 +1,43 @@
-.outer-flex {
-    direction: flex;
-    flex-direction: column;
-    width: 90%;
+body {
+    white-space: nowrap;
+    width: 95%;
     margin: auto;
 }
 
 .card-title {
-    text-align: center;
-    background-color: coral;
+    text-align: left;
 }
 
-/* #horizontal-flex {
-    direction: flex;
-    flex-direction: row;
-} */
+.card-title h1 {
+    margin-bottom: 0;
+}
+
+@media (orientation: portrait) {
+    .content-flex {
+        display: flex;
+        flex-direction: column;
+    }
+
+}
+
+@media (orientation: landscape) {
+    .content-flex {
+        display: flex;
+        column-gap: 20px;
+        flex-direction: row;
+    }
+}
+
+.ingredients-pane {
+    flex: 0 0 auto;
+}
+
+.ingredients-pane ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0 0 0 0;
+}
+
+.directions-pane {
+    flex: 1 1 auto;
+}

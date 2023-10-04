@@ -1,18 +1,25 @@
 {% extends "base.html" %}
 
 {% block body %}
-    <body class='outer-flex'>
+    <body>
         <div class='card-title'>
             <h1>{{recipe.name}}</h1>
         </div>
+        <div class='content-flex'>
+            <div class='ingredients-pane'>
+                <h2>Ingredients</h2>
+                <ul>
+                    {% for ingredient in ingredients_list %}
+                        <li>
+                            {{ingredient.name}}  -- {{ingredient.measurement}}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class='directions-pane'>
+                <h2>Directions</h2>
+                <p>{{recipe.directions}}</p>
+            </div>
+        </div>
     </body>
-    {% comment %} {{recipe.name}}
-    <ul>
-        {% for ingredient in ingredients_list %}
-            <li>
-                {{ingredient.name}}   {{ingredient.measurement}}
-            </li>
-        {% endfor %}
-    </ul>
-    {{recipe.directions}} {% endcomment %}
 {% endblock %}
