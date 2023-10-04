@@ -241,7 +241,7 @@ class RecipeCreateViewTests(TestCase):
         self.client.get(reverse('recipe-create'))
         rendered_context = mock_render.call_args[0][2]
         self.assertFalse(rendered_context['recipe'].is_bound)
-        self.assertFalse(rendered_context['ingredients'].is_bound)
+        self.assertFalse(rendered_context['ingredients_list'].is_bound)
 
     @patch('recipe_app.forms.RecipeForm.is_valid', return_value=False)
     def test_post_should_rerender_form_on_recipe_errors(self, mock_is_valid, mock_render):
@@ -254,7 +254,7 @@ class RecipeCreateViewTests(TestCase):
         self.assertEqual(rendered_recipe.data,
                          RecipeForm(self.recipe_data).data)
 
-        rendered_ingredients = mock_render.call_args[0][2]['ingredients']
+        rendered_ingredients = mock_render.call_args[0][2]['ingredients_list']
         self.assertEqual(rendered_ingredients.data,
                          IngredientFormSet(self.ingredients_data).data)
 
@@ -269,7 +269,7 @@ class RecipeCreateViewTests(TestCase):
         self.assertEqual(rendered_recipe.data,
                          RecipeForm(self.recipe_data).data)
 
-        rendered_ingredients = mock_render.call_args[0][2]['ingredients']
+        rendered_ingredients = mock_render.call_args[0][2]['ingredients_list']
         self.assertEqual(rendered_ingredients.data,
                          IngredientFormSet(self.ingredients_data).data)
 
@@ -302,7 +302,7 @@ class RecipeCreateViewTests(TestCase):
                          RecipeForm(recipe_data).data)
         self.assertIn(RecipeForm.content_error, rendered_recipe.errors['name'])
 
-        rendered_ingredients = mock_render.call_args[0][2]['ingredients']
+        rendered_ingredients = mock_render.call_args[0][2]['ingredients_list']
         self.assertEqual(rendered_ingredients.data,
                          IngredientFormSet(ingredients_data).data)
 

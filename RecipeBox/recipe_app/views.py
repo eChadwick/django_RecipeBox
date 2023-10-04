@@ -80,7 +80,7 @@ def recipe_create(request):
             recipe.add_error('name', RecipeForm.content_error)
 
         if (not recipe.is_valid() or not ingredients.is_valid()):
-            context = {'recipe': recipe, 'ingredients': ingredients}
+            context = {'recipe': recipe, 'ingredients_list': ingredients}
             return render(request, 'recipe_app/recipe_form.html', context)
 
         recipe_model = Recipe(
@@ -103,5 +103,5 @@ def recipe_create(request):
 
         return redirect(reverse('recipe-list'))
     else:
-        context = {'recipe': RecipeForm(), 'ingredients': IngredientFormSet()}
+        context = {'recipe': RecipeForm(), 'ingredients_list': IngredientFormSet()}
         return render(request, 'recipe_app/recipe_form.html', context)
