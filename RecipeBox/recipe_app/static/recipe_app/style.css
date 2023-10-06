@@ -2,6 +2,7 @@ body {
     white-space: nowrap;
     width: 95%;
     margin: auto;
+    font-family: sans-serif;
 }
 
 .card-title {
@@ -11,6 +12,14 @@ body {
 .card-title h1 {
     margin-bottom: 0;
 }
+
+.card-title input[type=text] {
+    display: block;
+    font-size: xx-large;
+    font-weight: bold;
+    width: 100%;
+}
+
 
 @media (orientation: portrait) {
     .content-flex {
