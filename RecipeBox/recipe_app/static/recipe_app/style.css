@@ -28,16 +28,8 @@ body {
     }
 }
 
-.ingredients-pane {
-    flex: 0 0 auto;
-}
-
 .ingredients-pane ul {
     list-style-type: none;
     padding: 0;
     margin: 0 0 0 0;
-}
-
-.directions-pane {
-    flex: 1 1 auto;
 }
