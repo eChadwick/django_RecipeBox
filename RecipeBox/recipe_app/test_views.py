@@ -245,52 +245,11 @@ class RecipeCreateViewTests(TestCase):
 
     @patch('recipe_app.forms.RecipeForm.is_valid', return_value=False)
     def test_post_should_rerender_form_on_recipe_errors(self, mock_is_valid, mock_render):
-        self.client.post(reverse('recipe-create'), self.form_data)
-
-        rendered_template = mock_render.call_args[0][1]
-        self.assertEqual(rendered_template, 'recipe_app/recipe_form.html')
-
-        rendered_recipe = mock_render.call_args[0][2]['recipe']
-        self.assertEqual(rendered_recipe.data,
-                         RecipeForm(self.recipe_data).data)
-
-        rendered_ingredients = mock_render.call_args[0][2]['ingredients_list']
-        self.assertEqual(rendered_ingredients.data,
-                         IngredientFormSet(self.ingredients_data).data)
-
-    @patch('recipe_app.forms.IngredientFormSet.is_valid', return_value=False)
-    def test_post_should_rerender_form_on_ingredient_errors(self, mock_is_valid, mock_render):
-        self.client.post(reverse('recipe-create'), self.form_data)
-
-        rendered_template = mock_render.call_args[0][1]
-        self.assertEqual(rendered_template, 'recipe_app/recipe_form.html')
-
-        rendered_recipe = mock_render.call_args[0][2]['recipe']
-        self.assertEqual(rendered_recipe.data,
-                         RecipeForm(self.recipe_data).data)
-
-        rendered_ingredients = mock_render.call_args[0][2]['ingredients_list']
-        self.assertEqual(rendered_ingredients.data,
-                         IngredientFormSet(self.ingredients_data).data)
-
-    def test_recipe_form_has_error_when_no_directions_or_ingredients(self, mock_render):
-        recipe_data = {
-            'name': 'recipe name',
-            'directions': ''
-        }
-        ingredients_data = {
-            'form-TOTAL_FORMS': '1',
-            'form-INITIAL_FORMS': '0',
-            'form-0-name': '',
-            'form-0-measurement': ''
-        }
         form_data = {
-            'name': recipe_data['name'],
-            'directions': recipe_data['directions'],
-            'form-TOTAL_FORMS': ingredients_data['form-TOTAL_FORMS'],
-            'form-INITIAL_FORMS': ingredients_data['form-INITIAL_FORMS'],
-            'form-0-name': ingredients_data['form-0-name'],
-            'form-0-measurement': ingredients_data['form-0-measurement']
+            'name': 'Test Name',
+            'form-0-name': 'Ingredient 1',
+            'form-0-measurement': 'Amount 1',
+            'directions': 'Do things'
         }
         self.client.post(reverse('recipe-create'), form_data)
 
@@ -298,13 +257,75 @@ class RecipeCreateViewTests(TestCase):
         self.assertEqual(rendered_template, 'recipe_app/recipe_form.html')
 
         rendered_recipe = mock_render.call_args[0][2]['recipe']
-        self.assertEqual(rendered_recipe.data,
-                         RecipeForm(recipe_data).data)
+        self.assertEqual(
+            rendered_recipe.data,
+            {'name': form_data['name'], 'directions': form_data['directions']}
+        )
+
+        rendered_ingredients = mock_render.call_args[0][2]['ingredients_list']
+        self.assertEqual(
+            rendered_ingredients.data,
+            {
+                'form-0-name': form_data['form-0-name'],
+                'form-0-measurement': form_data['form-0-measurement']
+            }
+        )
+
+    @patch('recipe_app.forms.IngredientFormSet.is_valid', return_value=False)
+    def test_post_should_rerender_form_on_ingredient_errors(self, mock_is_valid, mock_render):
+        form_data = {
+            'name': 'Test Name',
+            'form-0-name': 'Ingredient 1',
+            'form-0-measurement': 'Amount 1',
+            'directions': 'Do things'
+        }
+        self.client.post(reverse('recipe-create'), form_data)
+
+        rendered_template = mock_render.call_args[0][1]
+        self.assertEqual(rendered_template, 'recipe_app/recipe_form.html')
+
+        rendered_recipe = mock_render.call_args[0][2]['recipe']
+        self.assertEqual(
+            rendered_recipe.data,
+            {'name': form_data['name'], 'directions': form_data['directions']}
+        )
+
+        rendered_ingredients = mock_render.call_args[0][2]['ingredients_list']
+        self.assertEqual(
+            rendered_ingredients.data,
+            {
+                'form-0-name': form_data['form-0-name'],
+                'form-0-measurement': form_data['form-0-measurement']
+            }
+        )
+
+    def test_recipe_form_has_error_when_no_directions_or_ingredients(self, mock_render):
+        form_data = {
+            'name': 'Test Name',
+            'form-0-name': '',
+            'form-0-measurement': '',
+            'directions': ''
+        }
+        self.client.post(reverse('recipe-create'), form_data)
+
+        rendered_template = mock_render.call_args[0][1]
+        self.assertEqual(rendered_template, 'recipe_app/recipe_form.html')
+
+        rendered_recipe = mock_render.call_args[0][2]['recipe']
+        self.assertEqual(
+            rendered_recipe.data,
+            {'name': form_data['name'], 'directions': form_data['directions']}
+        )
         self.assertIn(RecipeForm.content_error, rendered_recipe.errors['name'])
 
         rendered_ingredients = mock_render.call_args[0][2]['ingredients_list']
-        self.assertEqual(rendered_ingredients.data,
-                         IngredientFormSet(ingredients_data).data)
+        self.assertEqual(
+            rendered_ingredients.data,
+            {
+                'form-0-name': form_data['form-0-name'],
+                'form-0-measurement': form_data['form-0-measurement']
+            }
+        )
 
     @patch('recipe_app.views.redirect', wraps=redirect)
     def test_success(self, mock_redirect, mock_render):

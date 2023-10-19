@@ -10,13 +10,7 @@
             <div class='content-flex'>
                 <div class='ingredients-pane'>
                     <h2>Ingredients</h2>
-                    <ul>
-                        {% for ingredient in ingredients_list %}
-                            <li>
-                                {{ingredient.name}}  -- {{ingredient.measurement}}
-                            </li>
-                        {% endfor %}
-                    </ul>
+                    {{ingredients_list}}
                 </div>
                 <div class='directions-pane'>
                     <h2>Directions</h2>
