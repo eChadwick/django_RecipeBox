@@ -212,24 +212,6 @@ class RecipeDetailViewTestCase(TestCase):
 
 @patch('recipe_app.views.render', return_value=HttpResponse())
 class RecipeCreateViewTests(TestCase):
-    recipe_data = {
-        'name': 'recipe name',
-        'directions': 'do stuff'
-    }
-    ingredients_data = {
-        'form-TOTAL_FORMS': '1',
-        'form-INITIAL_FORMS': '0',
-        'form-0-name': 'ingredient name',
-        'form-0-measurement': 'a pinch'
-    }
-    form_data = {
-        'name': recipe_data['name'],
-        'directions': recipe_data['directions'],
-        'form-TOTAL_FORMS': ingredients_data['form-TOTAL_FORMS'],
-        'form-INITIAL_FORMS': ingredients_data['form-INITIAL_FORMS'],
-        'form-0-name': ingredients_data['form-0-name'],
-        'form-0-measurement': ingredients_data['form-0-measurement']
-    }
 
     def test_get_renders_the_correct_html(self, mock_render):
         self.client.get(reverse('recipe-create'))
