@@ -350,3 +350,31 @@ class RecipeCreateViewTests(TestCase):
             ingredient=ingredient2[0],
             measurement=form_data['form-1-measurement']
         ))
+
+
+@patch('recipe_app.views.render', return_value=HttpResponse())
+class RecipeUpdateViewTests(TestCase):
+
+    def setUp(self):
+        self.ingredient1 = Ingredient.objects.create(name='Test Ingredient 1')
+        self.ingredient2 = Ingredient.objects.create(name='Test Ingredient 2')
+        self.recipe = Recipe.objects.create(
+            name='Test Recipe',
+            directions='Test Directions'
+        )
+        self.recipe_ingredient1 = RecipeIngredient.objects.create(
+            recipe=self.recipe,
+            ingredient=self.ingredient1,
+            measurement='a bunch'
+        )
+        self.recipe_ingredient2 = RecipeIngredient.objects.create(
+            recipe=self.recipe,
+            ingredient=self.ingredient2,
+            measurement='a bunch'
+        )
+
+    def test_get_renders_the_correct_html(self, mock_render):
+        self.client.get(reverse('recipe-update', args=[self.recipe.pk]))
+        mock_render.assert_called_with(
+            ANY, 'recipe_app/recipe_form.html', ANY
+        )

@@ -106,3 +106,10 @@ def recipe_create(request):
             'ingredients_list': IngredientFormSet()
         }
         return render(request, 'recipe_app/recipe_form.html', context)
+
+
+def recipe_update(request, pk):
+    if 'POST' == request.method:
+        pass
+    else:
+        return render(request, 'recipe_app/recipe_form.html', '')
