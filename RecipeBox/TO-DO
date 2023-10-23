@@ -1,0 +1,12 @@
+* recipe update view
+
+* Nav bar
+
+* recipe list filtering
+
+* recipe tags
+
+* safer recipe delete
+** Double check before actually deleting
+** Logical delete?
+*** Have to handle name conflicts
