@@ -359,10 +359,12 @@ class RecipeCreateViewTests(TestCase):
 
         self.assertTrue(RecipeIngredient.objects.filter(
             recipe=recipe[0],
-            ingredient=ingredient1[0]
+            ingredient=ingredient1[0],
+            measurement=form_data['form-0-measurement']
         ))
 
         self.assertTrue(RecipeIngredient.objects.filter(
             recipe=recipe[0],
-            ingredient=ingredient2[0]
+            ingredient=ingredient2[0],
+            measurement=form_data['form-1-measurement']
         ))

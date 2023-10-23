@@ -89,19 +89,20 @@ def recipe_create(request):
         )
         recipe_model.save()
 
-        ingredients_models = []
         for form in ingredients.forms:
             temp_ingredient = Ingredient(name=form.cleaned_data['name'])
             temp_ingredient.save()
-            ingredients_models.append(temp_ingredient)
 
-        for ingredient in ingredients_models:
             RecipeIngredient(
                 recipe=recipe_model,
-                ingredient=ingredient
+                ingredient=temp_ingredient,
+                measurement=form.cleaned_data['measurement']
             ).save()
 
         return redirect(reverse('recipe-list'))
     else:
-        context = {'recipe': RecipeForm(), 'ingredients_list': IngredientFormSet()}
+        context = {
+            'recipe': RecipeForm(),
+            'ingredients_list': IngredientFormSet()
+        }
         return render(request, 'recipe_app/recipe_form.html', context)
