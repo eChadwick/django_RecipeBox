@@ -68,28 +68,28 @@ def recipe_create(request):
             'name': request.POST['name'],
             'directions': request.POST['directions']
         }
-        recipe = RecipeForm(recipe_data)
-        recipe.is_valid()
+        recipe_form = RecipeForm(recipe_data)
+        recipe_form.is_valid()
 
         ingredients_data = {
             k: v for (k, v) in request.POST.items() if 'form-' in k}
-        ingredients = IngredientFormSet(ingredients_data)
-        ingredients.is_valid()
+        ingredients_formset = IngredientFormSet(ingredients_data)
+        ingredients_formset.is_valid()
 
-        if not recipe.data['directions'] or ingredients.is_empty():
-            recipe.add_error('name', RecipeForm.content_error)
+        if not recipe_form.data['directions'] or ingredients_formset.is_empty():
+            recipe_form.add_error('name', RecipeForm.content_error)
 
-        if (not recipe.is_valid() or not ingredients.is_valid()):
-            context = {'recipe': recipe, 'ingredients_list': ingredients}
+        if (not recipe_form.is_valid() or not ingredients_formset.is_valid()):
+            context = {'recipe': recipe_form, 'ingredients_list': ingredients_formset}
             return render(request, 'recipe_app/recipe_form.html', context)
 
         recipe_model = Recipe(
-            name=recipe.cleaned_data['name'],
-            directions=recipe.cleaned_data['directions']
+            name=recipe_form.cleaned_data['name'],
+            directions=recipe_form.cleaned_data['directions']
         )
         recipe_model.save()
 
-        for form in ingredients.forms:
+        for form in ingredients_formset.forms:
             temp_ingredient = Ingredient(name=form.cleaned_data['name'])
             temp_ingredient.save()
 
