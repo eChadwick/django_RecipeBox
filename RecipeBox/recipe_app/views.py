@@ -112,4 +112,24 @@ def recipe_update(request, pk):
     if 'POST' == request.method:
         pass
     else:
-        return render(request, 'recipe_app/recipe_form.html', '')
+        recipe = get_object_or_404(Recipe, pk=pk)
+        recipe_form = RecipeForm({
+            'name': recipe.name,
+            'directions': recipe.directions
+        })
+
+        ingredients_list_data = {}
+        form_count = 0
+        for i, ri in zip(recipe.ingredients.all(), recipe.recipeingredient_set.all()):
+            ingredients_list_data[f'form-{form_count}-name'] = i.name
+            ingredients_list_data[f'form-{form_count}-measurement'] = ri.measurement
+            form_count += 1
+        ingredients_list_data['form-TOTAL_FORMS'] = str(form_count)
+        ingredients_list_data['form-INITIAL_FORMS'] = str(form_count)
+
+        ingredients_formset = IngredientFormSet(ingredients_list_data)
+        context = {
+            'recipe': recipe_form,
+            'ingredients_list': ingredients_formset
+        }
+        return render(request, 'recipe_app/recipe_form.html', context)

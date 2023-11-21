@@ -370,11 +370,34 @@ class RecipeUpdateViewTests(TestCase):
         self.recipe_ingredient2 = RecipeIngredient.objects.create(
             recipe=self.recipe,
             ingredient=self.ingredient2,
-            measurement='a bunch'
+            measurement='a bit'
         )
 
     def test_get_renders_the_correct_html(self, mock_render):
         self.client.get(reverse('recipe-update', args=[self.recipe.pk]))
         mock_render.assert_called_with(
             ANY, 'recipe_app/recipe_form.html', ANY
+        )
+
+    def test_get_fetches_right_form(self, mock_render):
+        self.client.get(reverse('recipe-update', args=[self.recipe.pk]))
+
+        rendered_recipe = mock_render.call_args[0][2]['recipe']
+        self.assertEqual(
+            rendered_recipe.data,
+            {'name': self.recipe.name, 'directions': self.recipe.directions}
+        )
+
+        rendered_ingredients_list = mock_render.call_args[0][2]['ingredients_list']
+        self.assertIsInstance(rendered_ingredients_list, IngredientFormSet)
+        self.assertEqual(
+            rendered_ingredients_list.data,
+            {
+                'form-TOTAL_FORMS': '2',
+                'form-INITIAL_FORMS': '2',
+                'form-0-name': self.ingredient1.name,
+                'form-0-measurement': self.recipe_ingredient1.measurement,
+                'form-1-name': self.ingredient2.name,
+                'form-1-measurement': self.recipe_ingredient2.measurement
+            }
         )
