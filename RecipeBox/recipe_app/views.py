@@ -62,25 +62,32 @@ def recipe_detail(request, pk):
     return render(request, 'recipe_app/recipe_detail.html', context)
 
 
+def validate_recipe_form_data(request):
+    recipe_data = {
+        'name': request.POST['name'],
+        'directions': request.POST['directions']
+    }
+    recipe_form = RecipeForm(recipe_data)
+    recipe_form.is_valid()
+
+    ingredients_data = {
+        k: v for (k, v) in request.POST.items() if 'form-' in k}
+    ingredients_formset = IngredientFormSet(ingredients_data)
+    ingredients_formset.is_valid()
+
+    if not recipe_form.data['directions'] or ingredients_formset.is_empty():
+        recipe_form.add_error('name', RecipeForm.content_error)
+
+    return recipe_form, ingredients_formset
+
+
 def recipe_create(request):
     if ('POST' == request.method):
-        recipe_data = {
-            'name': request.POST['name'],
-            'directions': request.POST['directions']
-        }
-        recipe_form = RecipeForm(recipe_data)
-        recipe_form.is_valid()
-
-        ingredients_data = {
-            k: v for (k, v) in request.POST.items() if 'form-' in k}
-        ingredients_formset = IngredientFormSet(ingredients_data)
-        ingredients_formset.is_valid()
-
-        if not recipe_form.data['directions'] or ingredients_formset.is_empty():
-            recipe_form.add_error('name', RecipeForm.content_error)
+        recipe_form, ingredients_formset = validate_recipe_form_data(request)
 
         if (not recipe_form.is_valid() or not ingredients_formset.is_valid()):
-            context = {'recipe': recipe_form, 'ingredients_list': ingredients_formset}
+            context = {'recipe': recipe_form,
+                       'ingredients_list': ingredients_formset}
             return render(request, 'recipe_app/recipe_form.html', context)
 
         recipe_model = Recipe(
