@@ -117,7 +117,12 @@ def recipe_create(request):
 
 def recipe_update(request, pk):
     if 'POST' == request.method:
-        pass
+        recipe_form, ingredients_formset = validate_recipe_form_data(request)
+
+        if (not recipe_form.is_valid() or not ingredients_formset.is_valid()):
+            context = {'recipe': recipe_form,
+                       'ingredients_list': ingredients_formset}
+            return render(request, 'recipe_app/recipe_form.html', context)
     else:
         recipe = get_object_or_404(Recipe, pk=pk)
         recipe_form = RecipeForm({
