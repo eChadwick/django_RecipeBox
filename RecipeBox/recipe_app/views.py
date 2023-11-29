@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.paginator import Paginator
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseNotFound
 from django.urls import reverse
 from django.views.decorators.http import require_http_methods
 
@@ -8,6 +8,8 @@ from recipe_app.models import Ingredient, Recipe, RecipeIngredient
 from recipe_app.forms import RecipeForm, IngredientFormSet
 
 DEFAULT_PAGINATION = 25
+
+RECIPE_NOT_FOUND_ERROR = 'Recipe not found'
 
 
 def index(request):
@@ -123,6 +125,16 @@ def recipe_update(request, pk):
             context = {'recipe': recipe_form,
                        'ingredients_list': ingredients_formset}
             return render(request, 'recipe_app/recipe_form.html', context)
+
+        if not Recipe.objects.filter(pk=pk).exists():
+            return HttpResponseNotFound(RECIPE_NOT_FOUND_ERROR)
+        # Recipe.objects.update(
+        #     pk=pk,
+        #     name=recip
+        # )
+
+        return HttpResponse()
+
     else:
         recipe = get_object_or_404(Recipe, pk=pk)
         recipe_form = RecipeForm({
