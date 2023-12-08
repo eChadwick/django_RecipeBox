@@ -148,7 +148,16 @@ def recipe_update(request, pk):
                     measurement=entry['measurement']
                 )
 
-        return HttpResponse()
+        for entry in ingredients_formset.cleaned_data:
+            ingredient = Ingredient.objects.get_or_create(name=entry['name'])
+            if not entry['DELETE']:
+                RecipeIngredient.objects.create(
+                    recipe=recipe_model[0],
+                    ingredient=ingredient[0],
+                    measurement=entry['measurement']
+                )
+
+        return redirect(reverse('recipe-detail', args=[pk]))
 
     else:
         recipe = get_object_or_404(Recipe, pk=pk)

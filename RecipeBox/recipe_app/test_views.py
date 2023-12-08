@@ -509,7 +509,8 @@ class RecipeUpdateViewTests(TestCase):
         self.assertEqual(response.status_code, 404)
         self.assertEqual(response.content.decode(), RECIPE_NOT_FOUND_ERROR)
 
-    def test_success(self, _):
+    @patch('recipe_app.views.redirect', wraps=redirect)
+    def test_success(self, mock_redirect, _):
         updated_form_data = {
             'name': 'New Name',
             'directions': 'new directions',
@@ -568,3 +569,21 @@ class RecipeUpdateViewTests(TestCase):
                 measurement=updated_form_data['form-2-measurement']
             ).exists()
         )
+
+        self.assertFalse(
+            RecipeIngredient.objects.filter(
+                recipe=self.recipe.pk,
+                ingredient=self.recipe_ingredient2.ingredient.pk
+            ).exists()
+        )
+
+        self.assertTrue(
+            RecipeIngredient.objects.filter(
+                recipe=self.recipe.pk,
+                ingredient=new_ingredient[0].pk,
+                measurement=updated_form_data['form-2-measurement']
+            ).exists()
+        )
+
+        mock_redirect.assert_called_with(
+            reverse('recipe-detail', args=[self.recipe.pk]))
