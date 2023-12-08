@@ -80,6 +80,10 @@ class IngredientFormsetTests(TestCase):
         formset = IngredientFormSet({})
         self.assertTrue(formset.is_empty())
 
+    def test_can_delete_property_is_set(self):
+        formset = IngredientFormSet()
+        self.assertTrue(formset.can_delete)
+
 
 class RecipeFormTests(TestCase):
 

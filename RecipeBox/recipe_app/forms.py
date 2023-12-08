@@ -28,7 +28,7 @@ class IngredientForm(Form):
 
 extra_ingredient_form_count = 1
 IngredientFormSetBase = formset_factory(
-    IngredientForm, extra=extra_ingredient_form_count)
+    IngredientForm, extra=extra_ingredient_form_count, can_delete=True)
 
 
 class IngredientFormSet(IngredientFormSetBase):
