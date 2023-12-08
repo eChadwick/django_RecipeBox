@@ -14,3 +14,5 @@
 *** Have to handle name conflicts
 
 * recipe update 404
+
+* redirect to recipe on create

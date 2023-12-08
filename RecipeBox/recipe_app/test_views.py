@@ -517,11 +517,13 @@ class RecipeUpdateViewTests(TestCase):
             'form-INITIAL_FORMS': '2',
             'form-0-name': self.ingredient1.name,
             'form-0-measurement': 'updated measurgdement',
+            'form-0-DELETE': '',
             'form-1-name': self.ingredient2.name,
             'form-1-measurement': 'deleted measurement',
-            'form-1-delete': '',
+            'form-1-DELETE': 'on',
             'form-2-name': 'New Ingredient Name',
-            'form-2-measurement': 'new ingredient measurement'
+            'form-2-measurement': 'new ingredient measurement',
+            'form-2-DELETE': ''
         }
 
         self.client.post(
@@ -539,7 +541,30 @@ class RecipeUpdateViewTests(TestCase):
         self.assertTrue(
             Ingredient.objects.filter(pk=self.ingredient2.pk).exists()
         )
+
+        new_ingredient = Ingredient.objects.filter(
+            name=updated_form_data['form-2-name'])
+        self.assertTrue(new_ingredient.exists())
+
         self.assertTrue(
-            Ingredient.objects.filter(
-                name=updated_form_data['form-2-name']).exists()
+            RecipeIngredient.objects.filter(
+                recipe=self.recipe.pk,
+                ingredient=self.recipe_ingredient1.ingredient.pk,
+                measurement=updated_form_data['form-0-measurement']
+            ).exists()
+        )
+
+        self.assertFalse(
+            RecipeIngredient.objects.filter(
+                recipe=self.recipe.pk,
+                ingredient=self.recipe_ingredient2.ingredient.pk
+            ).exists()
+        )
+
+        self.assertTrue(
+            RecipeIngredient.objects.filter(
+                recipe=self.recipe.pk,
+                ingredient=new_ingredient[0].pk,
+                measurement=updated_form_data['form-2-measurement']
+            ).exists()
         )

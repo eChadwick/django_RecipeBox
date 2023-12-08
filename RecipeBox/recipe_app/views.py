@@ -136,8 +136,17 @@ def recipe_update(request, pk):
             directions=recipe_form.cleaned_data['directions']
         )
 
-        for ingredient in ingredients_formset.cleaned_data:
-            Ingredient.objects.get_or_create(name=ingredient['name'])
+        for ri in RecipeIngredient.objects.filter(recipe=pk).all():
+            ri.delete()
+
+        for entry in ingredients_formset.cleaned_data:
+            ingredient = Ingredient.objects.get_or_create(name=entry['name'])
+            if not entry['DELETE']:
+                RecipeIngredient.objects.create(
+                    recipe=recipe_model[0],
+                    ingredient=ingredient[0],
+                    measurement=entry['measurement']
+                )
 
         return HttpResponse()
 
