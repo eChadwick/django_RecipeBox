@@ -126,12 +126,18 @@ def recipe_update(request, pk):
                        'ingredients_list': ingredients_formset}
             return render(request, 'recipe_app/recipe_form.html', context)
 
-        if not Recipe.objects.filter(pk=pk).exists():
+        recipe_model = Recipe.objects.filter(pk=pk)
+
+        if not recipe_model.exists():
             return HttpResponseNotFound(RECIPE_NOT_FOUND_ERROR)
-        # Recipe.objects.update(
-        #     pk=pk,
-        #     name=recip
-        # )
+
+        recipe_model.update(
+            name=recipe_form.cleaned_data['name'],
+            directions=recipe_form.cleaned_data['directions']
+        )
+
+        for ingredient in ingredients_formset.cleaned_data:
+            Ingredient.objects.get_or_create(name=ingredient['name'])
 
         return HttpResponse()
 

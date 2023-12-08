@@ -509,22 +509,37 @@ class RecipeUpdateViewTests(TestCase):
         self.assertEqual(response.status_code, 404)
         self.assertEqual(response.content.decode(), RECIPE_NOT_FOUND_ERROR)
 
-    # def test_success(self, _):
-    #     updated_form_data = {
-    #         'name': 'new name',
-    #         'directions': 'new directions',
-    #         'form-TOTAL_FORMS': '2',
-    #         'form-INITIAL_FORMS': '2',
-    #         'form-0-name': self.ingredient1.name,
-    #         'form-0-measurement': 'updated measurement',
-    #         'form-2-name': 'new ingredient name',
-    #         'form-2-measurement': 'new ingredient measurement'
-    #     }
+    def test_success(self, _):
+        updated_form_data = {
+            'name': 'New Name',
+            'directions': 'new directions',
+            'form-TOTAL_FORMS': '3',
+            'form-INITIAL_FORMS': '2',
+            'form-0-name': self.ingredient1.name,
+            'form-0-measurement': 'updated measurgdement',
+            'form-1-name': self.ingredient2.name,
+            'form-1-measurement': 'deleted measurement',
+            'form-1-delete': '',
+            'form-2-name': 'New Ingredient Name',
+            'form-2-measurement': 'new ingredient measurement'
+        }
 
-    #     self.client.post(
-    #         reverse('recipe-update', args=[self.recipe.pk]), updated_form_data
-    #     )
+        self.client.post(
+            reverse('recipe-update', args=[self.recipe.pk]), updated_form_data
+        )
+        self.recipe = Recipe.objects.get(pk=self.recipe.pk)
 
-    #     self.assertEqual(self.recipe.name, updated_form_data['name'])
-    #     self.assertEqual(self.recipe.directions,
-    #                      updated_form_data['directions'])
+        self.assertEqual(self.recipe.name, updated_form_data['name'])
+        self.assertEqual(self.recipe.directions,
+                         updated_form_data['directions'])
+
+        self.assertTrue(
+            Ingredient.objects.filter(pk=self.ingredient1.pk).exists()
+        )
+        self.assertTrue(
+            Ingredient.objects.filter(pk=self.ingredient2.pk).exists()
+        )
+        self.assertTrue(
+            Ingredient.objects.filter(
+                name=updated_form_data['form-2-name']).exists()
+        )
