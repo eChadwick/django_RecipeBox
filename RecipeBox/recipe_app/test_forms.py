@@ -34,6 +34,10 @@ class IngredientFormTests(TestCase):
         delete_field = form.fields['DELETE']
         self.assertIsInstance(delete_field, BooleanField)
         self.assertEqual('', delete_field.label)
+        self.assertEqual(
+            delete_field.widget.attrs['onclick'],
+            'hideParent(this)'
+        )
 
     def test_equality_operator(self):
         form_data = {'name': 'test name', 'measurement': 'a bit'}

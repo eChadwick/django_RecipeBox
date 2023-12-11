@@ -1,4 +1,4 @@
-from django.forms import CharField, formset_factory, Form, TextInput, BooleanField
+from django.forms import CharField, formset_factory, Form, TextInput, BooleanField, CheckboxInput
 
 
 class IngredientForm(Form):
@@ -20,7 +20,8 @@ class IngredientForm(Form):
     )
     DELETE = BooleanField(
         required=False,
-        label=''
+        label='',
+        widget=CheckboxInput(attrs={'onclick': 'hideParent(this)'})
     )
 
     def __eq__(self, other):
