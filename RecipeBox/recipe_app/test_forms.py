@@ -1,6 +1,6 @@
 from unittest.mock import patch
 
-from django.forms import CharField
+from django.forms import CharField, BooleanField
 from django.test import TestCase
 
 from recipe_app.forms import IngredientForm, RecipeForm, IngredientFormSet, extra_ingredient_form_count
@@ -30,6 +30,10 @@ class IngredientFormTests(TestCase):
             measurement_field.widget.attrs['placeholder'],
             IngredientForm.measurement_field_placeholder
         )
+
+        delete_field = form.fields['DELETE']
+        self.assertIsInstance(delete_field, BooleanField)
+        self.assertEqual('', delete_field.label)
 
     def test_equality_operator(self):
         form_data = {'name': 'test name', 'measurement': 'a bit'}
@@ -80,10 +84,6 @@ class IngredientFormsetTests(TestCase):
     def test_empty(self):
         formset = IngredientFormSet({})
         self.assertTrue(formset.is_empty())
-
-    def test_can_delete_property_is_set(self):
-        formset = IngredientFormSet()
-        self.assertTrue(formset.can_delete)
 
 
 class RecipeFormTests(TestCase):

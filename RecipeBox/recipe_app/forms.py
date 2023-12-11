@@ -1,4 +1,4 @@
-from django.forms import CharField, formset_factory, Form, TextInput
+from django.forms import CharField, formset_factory, Form, TextInput, BooleanField
 
 
 class IngredientForm(Form):
@@ -18,6 +18,10 @@ class IngredientForm(Form):
         label='',
         widget=TextInput(attrs={'placeholder': measurement_field_placeholder})
     )
+    DELETE = BooleanField(
+        required=False,
+        label=''
+    )
 
     def __eq__(self, other):
         return type(self) == type(other) and self.data == other.data
@@ -29,7 +33,7 @@ class IngredientForm(Form):
 
 extra_ingredient_form_count = 1
 IngredientFormSetBase = formset_factory(
-    IngredientForm, extra=extra_ingredient_form_count, can_delete=True)
+    IngredientForm, extra=extra_ingredient_form_count)
 
 
 class IngredientFormSet(IngredientFormSetBase):
