@@ -90,7 +90,7 @@ def recipe_create(request):
         if (not recipe_form.is_valid() or not ingredients_formset.is_valid()):
             context = {'recipe': recipe_form,
                        'ingredients_list': ingredients_formset}
-            return render(request, 'recipe_app/recipe_create_form.html', context)
+            return render(request, 'recipe_app/recipe_form.html', context)
 
         recipe_model = Recipe(
             name=recipe_form.cleaned_data['name'],
@@ -114,7 +114,7 @@ def recipe_create(request):
             'recipe': RecipeForm(),
             'ingredients_list': IngredientFormSet()
         }
-        return render(request, 'recipe_app/recipe_create_form.html', context)
+        return render(request, 'recipe_app/recipe_form.html', context)
 
 
 def recipe_update(request, pk):
@@ -124,7 +124,7 @@ def recipe_update(request, pk):
         if (not recipe_form.is_valid() or not ingredients_formset.is_valid()):
             context = {'recipe': recipe_form,
                        'ingredients_list': ingredients_formset}
-            return render(request, 'recipe_app/recipe_update_form.html', context)
+            return render(request, 'recipe_app/recipe_form.html', context)
 
         recipe_model = Recipe.objects.filter(pk=pk)
 
@@ -180,4 +180,4 @@ def recipe_update(request, pk):
             'recipe': recipe_form,
             'ingredients_list': ingredients_formset
         }
-        return render(request, 'recipe_app/recipe_update_form.html', context)
+        return render(request, 'recipe_app/recipe_form.html', context)

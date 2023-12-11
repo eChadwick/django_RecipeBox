@@ -216,7 +216,7 @@ class RecipeCreateViewTests(TestCase):
     def test_get_renders_the_correct_html(self, mock_render):
         self.client.get(reverse('recipe-create'))
         mock_render.assert_called_with(
-            ANY, 'recipe_app/recipe_create_form.html', ANY
+            ANY, 'recipe_app/recipe_form.html', ANY
         )
 
     def test_get_should_return_unbound_forms(self, mock_render):
@@ -236,7 +236,7 @@ class RecipeCreateViewTests(TestCase):
         self.client.post(reverse('recipe-create'), form_data)
 
         rendered_template = mock_render.call_args[0][1]
-        self.assertEqual(rendered_template, 'recipe_app/recipe_create_form.html')
+        self.assertEqual(rendered_template, 'recipe_app/recipe_form.html')
 
         rendered_recipe = mock_render.call_args[0][2]['recipe']
         self.assertEqual(
@@ -264,7 +264,7 @@ class RecipeCreateViewTests(TestCase):
         self.client.post(reverse('recipe-create'), form_data)
 
         rendered_template = mock_render.call_args[0][1]
-        self.assertEqual(rendered_template, 'recipe_app/recipe_create_form.html')
+        self.assertEqual(rendered_template, 'recipe_app/recipe_form.html')
 
         rendered_recipe = mock_render.call_args[0][2]['recipe']
         self.assertEqual(
@@ -291,7 +291,7 @@ class RecipeCreateViewTests(TestCase):
         self.client.post(reverse('recipe-create'), form_data)
 
         rendered_template = mock_render.call_args[0][1]
-        self.assertEqual(rendered_template, 'recipe_app/recipe_create_form.html')
+        self.assertEqual(rendered_template, 'recipe_app/recipe_form.html')
 
         rendered_recipe = mock_render.call_args[0][2]['recipe']
         self.assertEqual(
@@ -376,7 +376,7 @@ class RecipeUpdateViewTests(TestCase):
     def test_get_renders_the_correct_html(self, mock_render):
         self.client.get(reverse('recipe-update', args=[self.recipe.pk]))
         mock_render.assert_called_with(
-            ANY, 'recipe_app/recipe_update_form.html', ANY
+            ANY, 'recipe_app/recipe_form.html', ANY
         )
 
     def test_get_fetches_right_form(self, mock_render):
@@ -414,7 +414,7 @@ class RecipeUpdateViewTests(TestCase):
             reverse('recipe-update', args=[self.recipe.pk]), form_data)
 
         rendered_template = mock_render.call_args[0][1]
-        self.assertEqual(rendered_template, 'recipe_app/recipe_update_form.html')
+        self.assertEqual(rendered_template, 'recipe_app/recipe_form.html')
 
         rendered_recipe = mock_render.call_args[0][2]['recipe']
         self.assertEqual(
@@ -443,7 +443,7 @@ class RecipeUpdateViewTests(TestCase):
             reverse('recipe-update', args=[self.recipe.pk]), form_data)
 
         rendered_template = mock_render.call_args[0][1]
-        self.assertEqual(rendered_template, 'recipe_app/recipe_update_form.html')
+        self.assertEqual(rendered_template, 'recipe_app/recipe_form.html')
 
         rendered_recipe = mock_render.call_args[0][2]['recipe']
         self.assertEqual(
@@ -471,7 +471,7 @@ class RecipeUpdateViewTests(TestCase):
             reverse('recipe-update', args=[self.recipe.pk]), form_data)
 
         rendered_template = mock_render.call_args[0][1]
-        self.assertEqual(rendered_template, 'recipe_app/recipe_update_form.html')
+        self.assertEqual(rendered_template, 'recipe_app/recipe_form.html')
 
         rendered_recipe = mock_render.call_args[0][2]['recipe']
         self.assertEqual(
