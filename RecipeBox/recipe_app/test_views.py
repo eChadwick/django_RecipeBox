@@ -318,8 +318,13 @@ class RecipeCreateViewTests(TestCase):
             'form-INITIAL_FORMS': '1',
             'form-0-name': 'form-0-name',
             'form-0-measurement': 'form-0-measurement',
+            'form-0-DELETE': '',
             'form-1-name': 'form-1-name',
-            'form-1-measurement': 'form-1-measurement'
+            'form-1-measurement': 'form-1-measurement',
+            'form-1-DELETE': '',
+            'form-2-name': 'dont create this',
+            'form-2-measurement': 'doesnt matter',
+            'form-2-DELETE': 'on'
         }
 
         self.client.post(reverse('recipe-create'), form_data)
@@ -343,13 +348,19 @@ class RecipeCreateViewTests(TestCase):
             measurement=form_data['form-0-measurement']
         ))
 
+        self.assertFalse(
+            Ingredient.objects.filter(
+                name__iexact=form_data['form-2-name']).exists()
+        )
+
         self.assertTrue(RecipeIngredient.objects.filter(
             recipe=recipe[0],
             ingredient=ingredient2[0],
             measurement=form_data['form-1-measurement']
         ))
 
-        mock_redirect.assert_called_with(reverse('recipe-detail', args=[recipe[0].pk]))
+        mock_redirect.assert_called_with(
+            reverse('recipe-detail', args=[recipe[0].pk]))
 
 
 @patch('recipe_app.views.render', return_value=HttpResponse())
