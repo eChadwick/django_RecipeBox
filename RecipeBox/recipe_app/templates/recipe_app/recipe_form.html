@@ -3,6 +3,7 @@
 
 {% block scripts %}
     <script src={% static 'recipe_app/delete_ingredient.js' %}></script>
+    <script src={% static 'recipe_app/add_ingredient.js' %}></script>
 {% endblock %}
 
 {% block body %}
@@ -14,7 +15,10 @@
             </div>
             <div class='content-flex'>
                 <div class='ingredients-pane'>
-                    <h2>Ingredients</h2>
+                    <h2>
+                        Ingredients
+                        <button type="button" onclick="addIngredient()">Add Ingredient</button>
+                    </h2>
                     {{ ingredients_list.management_form }}
                     {% for i in ingredients_list %}
                         <div>
