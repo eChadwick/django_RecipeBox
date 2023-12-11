@@ -10,7 +10,12 @@
             <div class='content-flex'>
                 <div class='ingredients-pane'>
                     <h2>Ingredients</h2>
-                    {{ingredients_list}}
+                    {{ ingredients_list.management_form }}
+                    {% for i in ingredients_list %}
+                        <div>
+                            {{i}}
+                        </div>
+                    {% endfor %}
                 </div>
                 <div class='directions-pane'>
                     <h2>Directions</h2>
