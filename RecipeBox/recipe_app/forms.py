@@ -9,12 +9,13 @@ class IngredientForm(Form):
     name = CharField(
         max_length=255,
         required=False,
-        label='Ingredient Name',
+        label='',
         widget=TextInput(attrs={'placeholder': name_field_placeholder})
     )
     measurement = CharField(
         max_length=255,
         required=False,
+        label='',
         widget=TextInput(attrs={'placeholder': measurement_field_placeholder})
     )
 

@@ -15,7 +15,7 @@ class IngredientFormTests(TestCase):
         self.assertIsInstance(name_field, CharField)
         self.assertFalse(name_field.required)
         self.assertEqual(name_field.max_length, 255)
-        self.assertEqual('Ingredient Name', form.fields['name'].label)
+        self.assertEqual('', name_field.label)
         self.assertEqual(
             name_field.widget.attrs['placeholder'],
             IngredientForm.name_field_placeholder
@@ -25,6 +25,7 @@ class IngredientFormTests(TestCase):
         self.assertIsInstance(measurement_field, CharField)
         self.assertFalse(measurement_field.required)
         self.assertEqual(measurement_field.max_length, 255)
+        self.assertEqual('', measurement_field.label)
         self.assertEqual(
             measurement_field.widget.attrs['placeholder'],
             IngredientForm.measurement_field_placeholder
