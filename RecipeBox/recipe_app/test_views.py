@@ -324,8 +324,6 @@ class RecipeCreateViewTests(TestCase):
 
         self.client.post(reverse('recipe-create'), form_data)
 
-        mock_redirect.assert_called_with(reverse('recipe-list'))
-
         recipe = Recipe.objects.filter(name__iexact=form_data['name'])
         self.assertTrue(recipe)
         self.assertEqual(recipe[0].name, form_data['name'])
@@ -350,6 +348,8 @@ class RecipeCreateViewTests(TestCase):
             ingredient=ingredient2[0],
             measurement=form_data['form-1-measurement']
         ))
+
+        mock_redirect.assert_called_with(reverse('recipe-detail', args=[recipe[0].pk]))
 
 
 @patch('recipe_app.views.render', return_value=HttpResponse())

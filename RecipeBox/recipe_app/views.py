@@ -108,7 +108,7 @@ def recipe_create(request):
                 measurement=form.cleaned_data['measurement']
             ).save()
 
-        return redirect(reverse('recipe-list'))
+        return redirect(reverse('recipe-detail', args=[recipe_model.pk]))
     else:
         context = {
             'recipe': RecipeForm(),
