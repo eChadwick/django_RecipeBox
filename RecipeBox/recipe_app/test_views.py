@@ -314,7 +314,7 @@ class RecipeCreateViewTests(TestCase):
         form_data = {
             'name': 'Recipe Name',
             'directions': 'directions',
-            'form-TOTAL_FORMS': '2',
+            'form-TOTAL_FORMS': '3',
             'form-INITIAL_FORMS': '1',
             'form-0-name': 'form-0-name',
             'form-0-measurement': 'form-0-measurement',

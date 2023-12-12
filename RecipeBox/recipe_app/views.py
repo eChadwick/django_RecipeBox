@@ -99,14 +99,15 @@ def recipe_create(request):
         recipe_model.save()
 
         for form in ingredients_formset.cleaned_data:
-            temp_ingredient = Ingredient(name=form['name'])
-            temp_ingredient.save()
+            if not form['DELETE']:
+                temp_ingredient = Ingredient(name=form['name'])
+                temp_ingredient.save()
 
-            RecipeIngredient(
-                recipe=recipe_model,
-                ingredient=temp_ingredient,
-                measurement=form['measurement']
-            ).save()
+                RecipeIngredient(
+                    recipe=recipe_model,
+                    ingredient=temp_ingredient,
+                    measurement=form['measurement']
+                ).save()
 
         return redirect(reverse('recipe-detail', args=[recipe_model.pk]))
     else:
