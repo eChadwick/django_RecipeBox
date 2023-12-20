@@ -149,15 +149,6 @@ def recipe_update(request, pk):
                     measurement=entry['measurement']
                 )
 
-        for entry in ingredients_formset.cleaned_data:
-            ingredient = Ingredient.objects.get_or_create(name=entry['name'])
-            if not entry['DELETE']:
-                RecipeIngredient.objects.create(
-                    recipe=recipe_model[0],
-                    ingredient=ingredient[0],
-                    measurement=entry['measurement']
-                )
-
         return redirect(reverse('recipe-detail', args=[pk]))
 
     else:

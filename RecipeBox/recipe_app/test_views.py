@@ -558,12 +558,13 @@ class RecipeUpdateViewTests(TestCase):
             name=updated_form_data['form-2-name'])
         self.assertTrue(new_ingredient.exists())
 
-        self.assertTrue(
+        self.assertEqual(
             RecipeIngredient.objects.filter(
                 recipe=self.recipe.pk,
                 ingredient=self.recipe_ingredient1.ingredient.pk,
                 measurement=updated_form_data['form-0-measurement']
-            ).exists()
+            ).count(),
+            1
         )
 
         self.assertFalse(
@@ -573,27 +574,13 @@ class RecipeUpdateViewTests(TestCase):
             ).exists()
         )
 
-        self.assertTrue(
+        self.assertEqual(
             RecipeIngredient.objects.filter(
                 recipe=self.recipe.pk,
                 ingredient=new_ingredient[0].pk,
                 measurement=updated_form_data['form-2-measurement']
-            ).exists()
-        )
-
-        self.assertFalse(
-            RecipeIngredient.objects.filter(
-                recipe=self.recipe.pk,
-                ingredient=self.recipe_ingredient2.ingredient.pk
-            ).exists()
-        )
-
-        self.assertTrue(
-            RecipeIngredient.objects.filter(
-                recipe=self.recipe.pk,
-                ingredient=new_ingredient[0].pk,
-                measurement=updated_form_data['form-2-measurement']
-            ).exists()
+            ).count(),
+            1
         )
 
         mock_redirect.assert_called_with(
