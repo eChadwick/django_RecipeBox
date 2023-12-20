@@ -342,22 +342,24 @@ class RecipeCreateViewTests(TestCase):
             name__iexact=form_data['form-1-name'])
         self.assertTrue(ingredient2)
 
-        self.assertTrue(RecipeIngredient.objects.filter(
+        self.assertEqual(RecipeIngredient.objects.filter(
             recipe=recipe[0],
             ingredient=ingredient1[0],
-            measurement=form_data['form-0-measurement']
-        ))
+            measurement=form_data['form-0-measurement']).count(),
+            1
+        )
 
         self.assertFalse(
             Ingredient.objects.filter(
                 name__iexact=form_data['form-2-name']).exists()
         )
 
-        self.assertTrue(RecipeIngredient.objects.filter(
+        self.assertEqual(RecipeIngredient.objects.filter(
             recipe=recipe[0],
             ingredient=ingredient2[0],
-            measurement=form_data['form-1-measurement']
-        ))
+            measurement=form_data['form-1-measurement']).count(),
+            1
+        )
 
         mock_redirect.assert_called_with(
             reverse('recipe-detail', args=[recipe[0].pk]))
