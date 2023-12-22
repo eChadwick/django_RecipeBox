@@ -1,7 +1,6 @@
-* separate recipe create and edit templates
-** ingredient name not editable on edit template
+* recipe update ugly errors on empty ingredient name
 
-* add/remove recipe ingredients on forms
+* ingredient name not editable on edit template
 
 * constants for form field names
 

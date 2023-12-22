@@ -6,32 +6,33 @@
     <script src={% static 'recipe_app/add_ingredient.js' %}></script>
 {% endblock %}
 
-{% block body %}
+{% block nav-bar-links %}
+{% endblock %}
+
+{% block body-content %}
     <form method="post">
-        {% csrf_token %}
-        <body>
-            <div class='card-title'>
-                <h1>{{recipe.name}}</h1>
+            {% csrf_token %}
+        <div class='card-title'>
+            <h1>{{recipe.name}}</h1>
+        </div>
+        <div class='content-flex'>
+            <div class='ingredients-pane'>
+                <h2>
+                    Ingredients
+                    <button type="button" onclick="addIngredient()">+</button>
+                </h2>
+                {{ ingredients_list.management_form }}
+                {% for i in ingredients_list %}
+                    <div>
+                        {{i}}
+                    </div>
+                {% endfor %}
             </div>
-            <div class='content-flex'>
-                <div class='ingredients-pane'>
-                    <h2>
-                        Ingredients
-                        <button type="button" onclick="addIngredient()">+</button>
-                    </h2>
-                    {{ ingredients_list.management_form }}
-                    {% for i in ingredients_list %}
-                        <div>
-                            {{i}}
-                        </div>
-                    {% endfor %}
-                </div>
-                <div class='directions-pane'>
-                    <h2>Directions</h2>
-                    <p>{{recipe.directions}}</p>
-                </div>
+            <div class='directions-pane'>
+                <h2>Directions</h2>
+                <p>{{recipe.directions}}</p>
             </div>
-        </body>
+        </div>
         <button type="submit">Submit</button>
     </form>
 {% endblock %}

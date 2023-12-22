@@ -9,7 +9,12 @@
         {% block scripts %}
         {% endblock %}
     </head>
-    {% block body %}
-        <body></body>
-    {% endblock %}
+    <body>
+        <div id='nav-bar'>
+            {% block nav-bar-links %}
+            {% endblock %}
+        </div>
+        {% block body-content %}
+        {% endblock %}
+    </body>
 </html>

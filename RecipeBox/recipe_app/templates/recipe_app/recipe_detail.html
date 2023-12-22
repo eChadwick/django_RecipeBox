@@ -1,25 +1,29 @@
 {% extends "base.html" %}
 
-{% block body %}
-    <body>
-        <div class='card-title'>
-            <h1>{{recipe.name}}</h1>
+{% block nav-bar-links %}
+    <a href="{% url 'recipe-list' %}">Recipe List</a>
+    <a href="{% url 'recipe-create' %}">New Recipe</a>
+    <a href="{% url 'recipe-update' recipe.pk %}">Update Recipe</a>
+{% endblock %}
+
+{% block body-content %}
+    <div class='card-title'>
+        <h1>{{recipe.name}}</h1>
+    </div>
+    <div class='content-flex'>
+        <div class='ingredients-pane'>
+            <h2>Ingredients</h2>
+            <ul>
+                {% for ingredient in ingredients_list %}
+                    <li>
+                        {{ingredient.name}} - {{ingredient.measurement}}
+                    </li>
+                {% endfor %}
+            </ul>
         </div>
-        <div class='content-flex'>
-            <div class='ingredients-pane'>
-                <h2>Ingredients</h2>
-                <ul>
-                    {% for ingredient in ingredients_list %}
-                        <li>
-                            {{ingredient.name}} - {{ingredient.measurement}}
-                        </li>
-                    {% endfor %}
-                </ul>
-            </div>
-            <div class='directions-pane'>
-                <h2>Directions</h2>
-                <p>{{recipe.directions}}</p>
-            </div>
+        <div class='directions-pane'>
+            <h2>Directions</h2>
+            <p>{{recipe.directions}}</p>
         </div>
-    </body>
+    </div>
 {% endblock %}
