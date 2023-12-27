@@ -8,10 +8,6 @@
     <h1>Recipes</h1>
     {% for recipe in recipes_list %}
         <a href="{% url 'recipe-detail' recipe.pk %}">{{recipe.name}}</a>
-        <form action="{% url 'recipe-delete' recipe.pk %}" method="post">
-            {% csrf_token %}
-            <button type="submit">Delete</button>
-        </form>
         <br>
     {% endfor %}
     <p>Page {{current_page}} of {{num_pages}}</p>

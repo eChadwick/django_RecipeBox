@@ -3,6 +3,7 @@
 {% block nav-bar-links %}
     <a href="{% url 'recipe-list' %}">Recipe List</a>
     <a href="{% url 'recipe-update' recipe.pk %}">Update Recipe</a>
+    <a href="{% url 'recipe-delete' recipe.pk %}">Delete Recipe</a>
 {% endblock %}
 
 {% block body-content %}
