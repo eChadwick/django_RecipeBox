@@ -62,7 +62,7 @@ def validate_recipe_form_data(request):
     ingredients_formset = IngredientFormSet(ingredients_data)
     ingredients_formset.is_valid()
 
-    if not recipe_form.data['directions'] or ingredients_formset.is_empty():
+    if not recipe_form.data['directions'] and ingredients_formset.is_empty():
         recipe_form.add_error('name', RecipeForm.content_error)
 
     return recipe_form, ingredients_formset

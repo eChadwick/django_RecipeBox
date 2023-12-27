@@ -263,6 +263,35 @@ class RecipeCreateViewTests(TestCase):
         )
 
     @patch('recipe_app.views.redirect', wraps=redirect)
+    def test_recipe_form_has_no_error_with_name_and_directions(self, mock_redirect, mock_render):
+        form_data = {
+            'name': 'Test Name',
+            'form-TOTAL_FORMS': '0',
+            'form-INITIAL_FORMS': '0',
+            'form-0-name': '',
+            'form-0-measurement': '',
+            'form-0-DELETE': '',
+            'directions': 'do stuff'
+        }
+        self.client.post(reverse('recipe-create'), form_data)
+        mock_redirect.assert_called()
+
+    @patch('recipe_app.views.redirect', wraps=redirect)
+    def test_recipe_form_has_no_error_with_name_and_ingredients(self, mock_redirect, mock_render):
+        form_data = {
+            'name': 'Test Name',
+            'form-TOTAL_FORMS': '1',
+            'form-INITIAL_FORMS': '0',
+            'form-0-name': 'ingredient',
+            'form-0-measurement': 'some',
+            'form-0-DELETE': '',
+            'directions': ''
+        }
+        self.client.post(reverse('recipe-create'), form_data)
+        mock_redirect.assert_called()
+
+
+    @patch('recipe_app.views.redirect', wraps=redirect)
     def test_success(self, mock_redirect, mock_render):
         form_data = {
             'name': 'Recipe Name',
