@@ -1,9 +1,12 @@
+* render errors in recipe form
 * recipe search
-* recipe update ugly errors on empty ingredient name
-* ingredient name not editable on edit template
-* recipe tags
 * safer recipe delete
     ** Double check before actually deleting
     ** Logical delete?
         *** Have to handle name conflicts
-* recipe update 404
+* recipe tags
+
+----MVP LINE------------------------------------------
+
+* recipe update ugly errors on empty ingredient name
+* ingredient name not editable on edit template
