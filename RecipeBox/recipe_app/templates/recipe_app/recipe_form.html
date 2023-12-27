@@ -7,6 +7,11 @@
 {% endblock %}
 
 {% block nav-bar-links %}
+    {% if action == 'create' %}
+        <a href="{% url 'recipe-list' %}">Cancel</a>
+    {% elif action == 'update' %}
+        <a href="{% url 'recipe-detail' recipe.pk %}">Cancel</a>
+    {% endif %}
 {% endblock %}
 
 {% block body-content %}
