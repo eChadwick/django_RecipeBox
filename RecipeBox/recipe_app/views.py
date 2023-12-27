@@ -113,7 +113,8 @@ def recipe_create(request):
     else:
         context = {
             'recipe': RecipeForm(),
-            'ingredients_list': IngredientFormSet()
+            'ingredients_list': IngredientFormSet(),
+            'action': 'create'
         }
         return render(request, 'recipe_app/recipe_form.html', context)
 
@@ -170,6 +171,7 @@ def recipe_update(request, pk):
         ingredients_formset = IngredientFormSet(ingredients_list_data)
         context = {
             'recipe': recipe_form,
-            'ingredients_list': ingredients_formset
+            'ingredients_list': ingredients_formset,
+            'action': 'update'
         }
         return render(request, 'recipe_app/recipe_form.html', context)

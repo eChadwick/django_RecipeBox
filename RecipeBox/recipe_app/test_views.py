@@ -225,6 +225,11 @@ class RecipeCreateViewTests(TestCase):
         self.assertFalse(rendered_context['recipe'].is_bound)
         self.assertFalse(rendered_context['ingredients_list'].is_bound)
 
+    def test_get_should_pass_request_action(self, mock_render):
+        self.client.get(reverse('recipe-create'))
+        rendered_context = mock_render.call_args[0][2]
+        self.assertEqual(rendered_context['action'], 'create')
+
     @patch('recipe_app.forms.RecipeForm.is_valid', return_value=False)
     def test_post_should_rerender_form_on_recipe_errors(self, mock_is_valid, mock_render):
         form_data = {
@@ -391,6 +396,11 @@ class RecipeUpdateViewTests(TestCase):
         mock_render.assert_called_with(
             ANY, 'recipe_app/recipe_form.html', ANY
         )
+
+    def test_get_should_pass_request_action(self, mock_render):
+        self.client.get(reverse('recipe-update', args=[self.recipe.pk]))
+        rendered_context = mock_render.call_args[0][2]
+        self.assertEqual(rendered_context['action'], 'update')
 
     def test_get_fetches_right_form(self, mock_render):
         self.client.get(reverse('recipe-update', args=[self.recipe.pk]))
