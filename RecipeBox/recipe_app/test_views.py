@@ -397,10 +397,15 @@ class RecipeUpdateViewTests(TestCase):
             ANY, 'recipe_app/recipe_form.html', ANY
         )
 
-    def test_get_should_pass_request_action(self, mock_render):
+    def test_get_passes_request_action(self, mock_render):
         self.client.get(reverse('recipe-update', args=[self.recipe.pk]))
         rendered_context = mock_render.call_args[0][2]
         self.assertEqual(rendered_context['action'], 'update')
+
+    def test_get_passes_recipe_pk(self, mock_render):
+        self.client.get(reverse('recipe-update', args=[self.recipe.pk]))
+        rendered_context = mock_render.call_args[0][2]
+        self.assertEqual(rendered_context['recipe_pk'], self.recipe.pk)
 
     def test_get_fetches_right_form(self, mock_render):
         self.client.get(reverse('recipe-update', args=[self.recipe.pk]))

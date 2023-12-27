@@ -172,6 +172,7 @@ def recipe_update(request, pk):
         context = {
             'recipe': recipe_form,
             'ingredients_list': ingredients_formset,
-            'action': 'update'
+            'action': 'update',
+            'recipe_pk': recipe.pk
         }
         return render(request, 'recipe_app/recipe_form.html', context)
