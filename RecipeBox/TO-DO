@@ -1,4 +1,5 @@
-* render errors in recipe form
+* use browser generated post data in recipe create and update tests
+    ** fix discovered bugs
 * recipe search
 * safer recipe delete
     ** Double check before actually deleting
