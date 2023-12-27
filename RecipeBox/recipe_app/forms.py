@@ -2,7 +2,7 @@ from django.forms import CharField, formset_factory, Form, TextInput, BooleanFie
 
 
 class IngredientForm(Form):
-    name_error = 'Ingredient name is required when measurement is entered'
+    name_error = "Can't have Amount without Ingredient"
     name_field_placeholder = 'Ingredient'
     measurement_field_placeholder = 'Amount'
 

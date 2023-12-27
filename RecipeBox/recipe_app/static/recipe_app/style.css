@@ -46,3 +46,9 @@ body {
 #recipe-delete-form {
     display: none;
 }
+
+.errorlist {
+    color: red;
+    list-style: none;
+    padding-left: 0;
+}
