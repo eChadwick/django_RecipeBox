@@ -1,9 +1,19 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
 {% block nav-bar-links %}
     <a href="{% url 'recipe-list' %}">Recipe List</a>
     <a href="{% url 'recipe-update' recipe.pk %}">Update Recipe</a>
-    <a href="{% url 'recipe-delete' recipe.pk %}">Delete Recipe</a>
+    {% comment %} display delete link {% endcomment %}
+    <a href='' onClick='
+        form = document.getElementById("recipe-delete-form");
+        form.submit();
+        return false;
+    '>Delete Recipe</a>
+    {% comment %} hidden delete form {% endcomment %}
+    <form id ='recipe-delete-form' action="{% url 'recipe-delete' recipe.pk %}" method='post'>
+        <button type='submit'>Delete</button>
+        {% csrf_token %}
+    </form>
 {% endblock %}
 
 {% block body-content %}
