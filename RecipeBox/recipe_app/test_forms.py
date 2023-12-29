@@ -86,7 +86,14 @@ class IngredientFormsetTests(TestCase):
         self.assertFalse(formset.is_empty())
 
     def test_empty(self):
-        formset = IngredientFormSet({})
+        formset = IngredientFormSet({
+            'form-TOTAL_FORMS': '1',
+            'form-INITIAL_FORMS': '0',
+            'form-MIN_NUM_FORMS': '0',
+            'form-MAX_NUM_FORMS': '1000',
+            'form-0-name': '',
+            'form-0-measurement': ''
+        })
         self.assertTrue(formset.is_empty())
 
 

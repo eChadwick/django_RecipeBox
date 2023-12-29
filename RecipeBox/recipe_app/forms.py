@@ -50,11 +50,10 @@ class IngredientFormSet(IngredientFormSetBase):
         return True
 
     def is_empty(self):
-        for form in self.forms:
-            if form.is_valid():
-                return False
-
-        return True
+        if self.is_valid() and self.cleaned_data != [{}]:
+            return False
+        else:
+            return True
 
 
 class RecipeForm(Form):
