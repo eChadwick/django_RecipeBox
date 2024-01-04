@@ -6,6 +6,7 @@
     ** Logical delete?
         *** Have to handle name conflicts
 * recipe tags
+* add "-" in between ingredient name and amount for dynamically added forms
 
 ----MVP LINE------------------------------------------
 
