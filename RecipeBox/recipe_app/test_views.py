@@ -263,7 +263,7 @@ class RecipeCreateViewTests(TestCase):
         )
 
     @patch('recipe_app.views.redirect', wraps=redirect)
-    def test_recipe_form_success_with_name_and_directions(self, mock_redirect, mock_render):
+    def test_recipe_post_success_with_name_and_directions(self, mock_redirect, mock_render):
         form_data = {'csrfmiddlewaretoken': 'irrelevant',
                      'name': 'oooppp',
                      'form-TOTAL_FORMS': '1',
@@ -277,14 +277,16 @@ class RecipeCreateViewTests(TestCase):
         mock_redirect.assert_called()
 
     @patch('recipe_app.views.redirect', wraps=redirect)
-    def test_recipe_form_has_no_error_with_name_and_ingredients(self, mock_redirect, mock_render):
+    def test_recipe_post_success_with_name_and_ingredients(self, mock_redirect, mock_render):
         form_data = {
-            'name': 'Test Name',
+            'csrfmiddlewaretoken': 'irrelevant',
+            'name': 'Test name',
             'form-TOTAL_FORMS': '1',
             'form-INITIAL_FORMS': '0',
-            'form-0-name': 'ingredient',
-            'form-0-measurement': 'some',
-            'form-0-DELETE': '',
+            'form-MIN_NUM_FORMS': '0',
+            'form-MAX_NUM_FORMS': '1000',
+            'form-0-name': 'Ingredient 1',
+            'form-0-measurement': 'a bit',
             'directions': ''
         }
         self.client.post(reverse('recipe-create'), form_data)
