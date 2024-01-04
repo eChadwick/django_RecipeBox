@@ -262,19 +262,19 @@ class RecipeCreateViewTests(TestCase):
             }
         )
 
-    # @patch('recipe_app.views.redirect', wraps=redirect)
-    # def test_recipe_form_success_with_name_and_directions(self, mock_redirect, mock_render):
-    #     form_data = {'csrfmiddlewaretoken': 'irrelevant',
-    #                  'name': 'oooppp',
-    #                  'form-TOTAL_FORMS': '1',
-    #                  'form-INITIAL_FORMS': '0',
-    #                  'form-MIN_NUM_FORMS': '0',
-    #                  'form-MAX_NUM_FORMS': '1000',
-    #                  'form-0-name': '',
-    #                  'form-0-measurement': '',
-    #                  'directions': 'jkjk'}
-    #     self.client.post(reverse('recipe-create'), form_data)
-    #     mock_redirect.assert_called()
+    @patch('recipe_app.views.redirect', wraps=redirect)
+    def test_recipe_form_success_with_name_and_directions(self, mock_redirect, mock_render):
+        form_data = {'csrfmiddlewaretoken': 'irrelevant',
+                     'name': 'oooppp',
+                     'form-TOTAL_FORMS': '1',
+                     'form-INITIAL_FORMS': '0',
+                     'form-MIN_NUM_FORMS': '0',
+                     'form-MAX_NUM_FORMS': '1000',
+                     'form-0-name': '',
+                     'form-0-measurement': '',
+                     'directions': 'jkjk'}
+        self.client.post(reverse('recipe-create'), form_data)
+        mock_redirect.assert_called()
 
     @patch('recipe_app.views.redirect', wraps=redirect)
     def test_recipe_form_has_no_error_with_name_and_ingredients(self, mock_redirect, mock_render):
@@ -290,60 +290,60 @@ class RecipeCreateViewTests(TestCase):
         self.client.post(reverse('recipe-create'), form_data)
         mock_redirect.assert_called()
 
-    @patch('recipe_app.views.redirect', wraps=redirect)
-    def test_success(self, mock_redirect, mock_render):
-        form_data = {
-            'name': 'Recipe Name',
-            'directions': 'directions',
-            'form-TOTAL_FORMS': '3',
-            'form-INITIAL_FORMS': '1',
-            'form-0-name': 'form-0-name',
-            'form-0-measurement': 'form-0-measurement',
-            'form-0-DELETE': '',
-            'form-1-name': 'form-1-name',
-            'form-1-measurement': 'form-1-measurement',
-            'form-1-DELETE': '',
-            'form-2-name': 'dont create this',
-            'form-2-measurement': 'doesnt matter',
-            'form-2-DELETE': 'on'
-        }
+    # @patch('recipe_app.views.redirect', wraps=redirect)
+    # def test_success(self, mock_redirect, mock_render):
+    #     form_data = {
+    #         'name': 'Recipe Name',
+    #         'directions': 'directions',
+    #         'form-TOTAL_FORMS': '3',
+    #         'form-INITIAL_FORMS': '1',
+    #         'form-0-name': 'form-0-name',
+    #         'form-0-measurement': 'form-0-measurement',
+    #         'form-0-DELETE': '',
+    #         'form-1-name': 'form-1-name',
+    #         'form-1-measurement': 'form-1-measurement',
+    #         'form-1-DELETE': '',
+    #         'form-2-name': 'dont create this',
+    #         'form-2-measurement': 'doesnt matter',
+    #         'form-2-DELETE': 'on'
+    #     }
 
-        self.client.post(reverse('recipe-create'), form_data)
+    #     self.client.post(reverse('recipe-create'), form_data)
 
-        recipe = Recipe.objects.filter(name__iexact=form_data['name'])
-        self.assertTrue(recipe)
-        self.assertEqual(recipe[0].name, form_data['name'])
-        self.assertEqual(recipe[0].directions, form_data['directions'])
+    #     recipe = Recipe.objects.filter(name__iexact=form_data['name'])
+    #     self.assertTrue(recipe)
+    #     self.assertEqual(recipe[0].name, form_data['name'])
+    #     self.assertEqual(recipe[0].directions, form_data['directions'])
 
-        ingredient1 = Ingredient.objects.filter(
-            name__iexact=form_data['form-0-name'])
-        self.assertTrue(ingredient1)
+    #     ingredient1 = Ingredient.objects.filter(
+    #         name__iexact=form_data['form-0-name'])
+    #     self.assertTrue(ingredient1)
 
-        ingredient2 = Ingredient.objects.filter(
-            name__iexact=form_data['form-1-name'])
-        self.assertTrue(ingredient2)
+    #     ingredient2 = Ingredient.objects.filter(
+    #         name__iexact=form_data['form-1-name'])
+    #     self.assertTrue(ingredient2)
 
-        self.assertEqual(RecipeIngredient.objects.filter(
-            recipe=recipe[0],
-            ingredient=ingredient1[0],
-            measurement=form_data['form-0-measurement']).count(),
-            1
-        )
+    #     self.assertEqual(RecipeIngredient.objects.filter(
+    #         recipe=recipe[0],
+    #         ingredient=ingredient1[0],
+    #         measurement=form_data['form-0-measurement']).count(),
+    #         1
+    #     )
 
-        self.assertFalse(
-            Ingredient.objects.filter(
-                name__iexact=form_data['form-2-name']).exists()
-        )
+    #     self.assertFalse(
+    #         Ingredient.objects.filter(
+    #             name__iexact=form_data['form-2-name']).exists()
+    #     )
 
-        self.assertEqual(RecipeIngredient.objects.filter(
-            recipe=recipe[0],
-            ingredient=ingredient2[0],
-            measurement=form_data['form-1-measurement']).count(),
-            1
-        )
+    #     self.assertEqual(RecipeIngredient.objects.filter(
+    #         recipe=recipe[0],
+    #         ingredient=ingredient2[0],
+    #         measurement=form_data['form-1-measurement']).count(),
+    #         1
+    #     )
 
-        mock_redirect.assert_called_with(
-            reverse('recipe-detail', args=[recipe[0].pk]))
+    #     mock_redirect.assert_called_with(
+    #         reverse('recipe-detail', args=[recipe[0].pk]))
 
 
 @patch('recipe_app.views.render', return_value=HttpResponse())

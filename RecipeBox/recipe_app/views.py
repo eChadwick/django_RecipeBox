@@ -84,7 +84,7 @@ def recipe_create(request):
         recipe_model.save()
 
         for form in ingredients_formset.cleaned_data:
-            if not form['DELETE']:
+            if not 'DELETE' not in form:
                 temp_ingredient = Ingredient(name=form['name'])
                 temp_ingredient.save()
 
