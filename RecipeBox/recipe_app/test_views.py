@@ -429,7 +429,7 @@ class RecipeUpdateViewTests(TestCase):
         )
 
     @patch('recipe_app.forms.RecipeForm.is_valid', return_value=False)
-    def test_post_should_rerender_form_on_recipe_errors(self, mock_is_valid, mock_render):
+    def test_post_should_rerender_form_on_recipe_errors(self, _, mock_render):
         form_data = {
             'name': 'Test Name',
             'form-0-name': 'Ingredient 1',
@@ -458,7 +458,7 @@ class RecipeUpdateViewTests(TestCase):
         )
 
     @patch('recipe_app.forms.IngredientFormSet.is_valid', return_value=False)
-    def test_post_should_rerender_form_on_ingredient_errors(self, mock_is_valid, mock_render):
+    def test_post_should_rerender_form_on_ingredient_errors(self, _, mock_render):
         form_data = {
             'name': 'Test Name',
             'form-0-name': 'Ingredient 1',
