@@ -292,8 +292,7 @@ class RecipeCreateViewTests(TestCase):
         self.client.post(reverse('recipe-create'), form_data)
         mock_redirect.assert_called()
 
-    @patch('recipe_app.views.redirect', wraps=redirect)
-    def test_recipe_post_success_ingores_empty_ingredients(self, mock_redirect, _):
+    def test_recipe_post_success_ingores_empty_ingredients(self, _):
         form_data = {
             'csrfmiddlewaretoken': 'irrelevant',
             'name': 'Test ',
@@ -312,7 +311,13 @@ class RecipeCreateViewTests(TestCase):
 
         self.assertFalse(
             RecipeIngredient.objects.filter(
-                measurement='ignored'
+                measurement=form_data['form-0-measurement']
+            ).exists()
+        )
+
+        self.assertFalse(
+            Ingredient.objects.filter(
+                name__iexact=form_data['form-0-name']
             ).exists()
         )
 
