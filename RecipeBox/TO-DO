@@ -1,10 +1,7 @@
 * use browser generated post data in recipe create and update tests
     ** fix discovered bugs
 * recipe search
-* safer recipe delete
-    ** Double check before actually deleting
-    ** Logical delete?
-        *** Have to handle name conflicts
+* deletes only available in admin
 * recipe tags
 * add "-" in between ingredient name and amount for dynamically added forms
 
