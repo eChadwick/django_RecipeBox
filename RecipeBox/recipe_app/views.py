@@ -49,7 +49,7 @@ def recipe_detail(request, pk):
     return render(request, 'recipe_app/recipe_detail.html', context)
 
 
-def validate_recipe_form_data(request):
+def _validate_recipe_form_data(request):
     recipe_data = {
         'name': request.POST['name'],
         'directions': request.POST['directions']
@@ -70,7 +70,7 @@ def validate_recipe_form_data(request):
 
 def recipe_create(request):
     if ('POST' == request.method):
-        recipe_form, ingredients_formset = validate_recipe_form_data(request)
+        recipe_form, ingredients_formset = _validate_recipe_form_data(request)
 
         if (not recipe_form.is_valid() or not ingredients_formset.is_valid()):
             context = {'recipe': recipe_form,
@@ -84,15 +84,14 @@ def recipe_create(request):
         recipe_model.save()
 
         for form in ingredients_formset.cleaned_data:
-            if not form.get('DELETE') and 'name' in form:
-                temp_ingredient = Ingredient(name=form['name'])
-                temp_ingredient.save()
+            temp_ingredient = Ingredient(name=form['name'])
+            temp_ingredient.save()
 
-                RecipeIngredient(
-                    recipe=recipe_model,
-                    ingredient=temp_ingredient,
-                    measurement=form['measurement']
-                ).save()
+            RecipeIngredient(
+                recipe=recipe_model,
+                ingredient=temp_ingredient,
+                measurement=form['measurement']
+            ).save()
 
         return redirect(reverse('recipe-detail', args=[recipe_model.pk]))
     else:
@@ -106,7 +105,7 @@ def recipe_create(request):
 
 def recipe_update(request, pk):
     if 'POST' == request.method:
-        recipe_form, ingredients_formset = validate_recipe_form_data(request)
+        recipe_form, ingredients_formset = _validate_recipe_form_data(request)
 
         if (not recipe_form.is_valid() or not ingredients_formset.is_valid()):
             context = {'recipe': recipe_form,

@@ -305,6 +305,8 @@ class RecipeCreateViewTests(TestCase):
             'form-0-DELETE': 'on',
             'form-1-name': 'Keep this',
             'form-1-measurement': 'a bit',
+            'form-2-name': '',
+            'form-2-measurement': '',
             'directions': ''
         }
         self.client.post(reverse('recipe-create'), form_data)
@@ -318,6 +320,18 @@ class RecipeCreateViewTests(TestCase):
         self.assertFalse(
             Ingredient.objects.filter(
                 name__iexact=form_data['form-0-name']
+            ).exists()
+        )
+
+        self.assertFalse(
+            RecipeIngredient.objects.filter(
+                measurement=form_data['form-2-measurement']
+            ).exists()
+        )
+
+        self.assertFalse(
+            Ingredient.objects.filter(
+                name__iexact=form_data['form-2-name']
             ).exists()
         )
 
