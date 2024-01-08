@@ -471,12 +471,17 @@ class RecipeUpdateViewTests(TestCase):
             }
         )
 
-    @patch('recipe_app.forms.RecipeForm.is_valid', return_value=False)
-    def test_post_should_rerender_form_on_recipe_errors(self, _, mock_render):
+    def test_post_should_rerender_form_on_recipe_errors(self, mock_render):
+        # Empty recipe name is error
         form_data = {
-            'name': 'Test Name',
-            'form-0-name': 'Ingredient 1',
-            'form-0-measurement': 'Amount 1',
+            'csrfmiddlewaretoken': 'irrelevant',
+            'name': '',
+            'form-TOTAL_FORMS': '1',
+            'form-INITIAL_FORMS': '1',
+            'form-MIN_NUM_FORMS': '',
+            'form-MAX_NUM_FORMS': '',
+            'form-0-name': 'Ingredient',
+            'form-0-measurement': 'Amount',
             'directions': 'Do things'
         }
         self.client.post(
@@ -495,6 +500,10 @@ class RecipeUpdateViewTests(TestCase):
         self.assertEqual(
             rendered_ingredients.data,
             {
+                'form-TOTAL_FORMS': form_data['form-TOTAL_FORMS'],
+                'form-INITIAL_FORMS': form_data['form-INITIAL_FORMS'],
+                'form-MIN_NUM_FORMS': form_data['form-MIN_NUM_FORMS'],
+                'form-MAX_NUM_FORMS': form_data['form-MAX_NUM_FORMS'],
                 'form-0-name': form_data['form-0-name'],
                 'form-0-measurement': form_data['form-0-measurement']
             }
