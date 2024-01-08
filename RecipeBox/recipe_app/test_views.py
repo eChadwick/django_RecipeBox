@@ -260,7 +260,12 @@ class RecipeCreateViewTests(TestCase):
 
     def test_recipe_form_has_error_when_no_directions_or_ingredients(self, mock_render):
         form_data = {
-            'name': 'Test Name',
+            'csrfmiddlewaretoken': 'irrelevant',
+            'name': 'Recipe Name',
+            'form-TOTAL_FORMS': '1',
+            'form-INITIAL_FORMS': '0',
+            'form-MIN_NUM_FORMS': '0',
+            'form-MAX_NUM_FORMS': '1000',
             'form-0-name': '',
             'form-0-measurement': '',
             'directions': ''
@@ -273,7 +278,10 @@ class RecipeCreateViewTests(TestCase):
         rendered_recipe = mock_render.call_args[0][2]['recipe']
         self.assertEqual(
             rendered_recipe.data,
-            {'name': form_data['name'], 'directions': form_data['directions']}
+            {
+                'name': form_data['name'],
+                'directions': form_data['directions']
+            }
         )
         self.assertIn(RecipeForm.content_error, rendered_recipe.errors['name'])
 
@@ -281,6 +289,10 @@ class RecipeCreateViewTests(TestCase):
         self.assertEqual(
             rendered_ingredients.data,
             {
+                'form-TOTAL_FORMS': form_data['form-TOTAL_FORMS'],
+                'form-INITIAL_FORMS': form_data['form-INITIAL_FORMS'],
+                'form-MIN_NUM_FORMS': form_data['form-MIN_NUM_FORMS'],
+                'form-MAX_NUM_FORMS': form_data['form-MAX_NUM_FORMS'],
                 'form-0-name': form_data['form-0-name'],
                 'form-0-measurement': form_data['form-0-measurement']
             }
