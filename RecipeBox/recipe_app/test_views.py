@@ -546,7 +546,7 @@ class RecipeUpdateViewTests(TestCase):
             }
         )
 
-    def q(self, mock_render):
+    def test_recipe_form_has_error_when_no_directions_or_ingredients(self, mock_render):
         form_data = {
             'csrfmiddlewaretoken': 'irrelevant',
             'name': 'Test Recipe',
@@ -593,6 +593,7 @@ class RecipeUpdateViewTests(TestCase):
 
     def test_post_should_404_on_recipe_not_found(self, _):
         updated_form_data = {
+            'csrfmiddlewaretoken': 'irrelevant',
             'name': 'new name',
             'directions': 'new directions',
             'form-TOTAL_FORMS': '2',
