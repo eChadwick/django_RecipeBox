@@ -50,9 +50,14 @@ class IngredientFormSet(IngredientFormSetBase):
         return True
 
     def is_empty(self):
-        if self.is_valid() and self.cleaned_data != [{}]:
-            return False
+        self.is_valid()
+        if not self.cleaned_data:
+            return True
         else:
+            for entry in self.cleaned_data:
+                if 'name' in entry and not entry.get('DELETE'):
+                    return False
+
             return True
 
 
