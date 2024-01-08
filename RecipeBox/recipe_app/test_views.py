@@ -178,12 +178,17 @@ class RecipeCreateViewTests(TestCase):
         rendered_context = mock_render.call_args[0][2]
         self.assertEqual(rendered_context['action'], 'create')
 
-    @patch('recipe_app.forms.RecipeForm.is_valid', return_value=False)
-    def test_post_should_rerender_form_on_recipe_errors(self, mock_is_valid, mock_render):
+    def test_post_should_rerender_form_on_recipe_errors(self, mock_render):
+        # Empty name constitues error
         form_data = {
-            'name': 'Test Name',
-            'form-0-name': 'Ingredient 1',
-            'form-0-measurement': 'Amount 1',
+            'csrfmiddlewaretoken': 'irrelevant',
+            'name': '',
+            'form-TOTAL_FORMS': '1',
+            'form-INITIAL_FORMS': '0',
+            'form-MIN_NUM_FORMS': '0',
+            'form-MAX_NUM_FORMS': '1000',
+            'form-0-name': 'Ingredient ',
+            'form-0-measurement': 'Amount',
             'directions': 'Do things'
         }
         self.client.post(reverse('recipe-create'), form_data)
@@ -194,13 +199,20 @@ class RecipeCreateViewTests(TestCase):
         rendered_recipe = mock_render.call_args[0][2]['recipe']
         self.assertEqual(
             rendered_recipe.data,
-            {'name': form_data['name'], 'directions': form_data['directions']}
+            {
+                'name': form_data['name'],
+                'directions': form_data['directions']
+            }
         )
 
         rendered_ingredients = mock_render.call_args[0][2]['ingredients_list']
         self.assertEqual(
             rendered_ingredients.data,
             {
+                'form-TOTAL_FORMS': form_data['form-TOTAL_FORMS'],
+                'form-INITIAL_FORMS': form_data['form-INITIAL_FORMS'],
+                'form-MIN_NUM_FORMS': form_data['form-MIN_NUM_FORMS'],
+                'form-MAX_NUM_FORMS': form_data['form-MAX_NUM_FORMS'],
                 'form-0-name': form_data['form-0-name'],
                 'form-0-measurement': form_data['form-0-measurement']
             }
