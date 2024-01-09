@@ -612,68 +612,41 @@ class RecipeUpdateViewTests(TestCase):
         self.assertEqual(response.status_code, 404)
         self.assertEqual(response.content.decode(), RECIPE_NOT_FOUND_ERROR)
 
-    # @patch('recipe_app.views.redirect', wraps=redirect)
-    # def test_success(self, mock_redirect, _):
-    #     updated_form_data = {
-    #         'name': 'New Name',
-    #         'directions': 'new directions',
-    #         'form-TOTAL_FORMS': '3',
-    #         'form-INITIAL_FORMS': '2',
-    #         'form-0-name': self.ingredient1.name,
-    #         'form-0-measurement': 'updated measurgdement',
-    #         'form-0-DELETE': '',
-    #         'form-1-name': self.ingredient2.name,
-    #         'form-1-measurement': 'deleted measurement',
-    #         'form-1-DELETE': 'on',
-    #         'form-2-name': 'New Ingredient Name',
-    #         'form-2-measurement': 'new ingredient measurement',
-    #         'form-2-DELETE': ''
-    #     }
+    @patch('recipe_app.views.redirect', wraps=redirect)
+    def test_success_updates_recipe_name_and_directions(self, mock_redirect, _):
+        updated_form_data = {
+            'csrfmiddlewaretoken': 'irrelevant',
+            'name': 'New Recipe Name',
+            'form-TOTAL_FORMS': '1',
+            'form-INITIAL_FORMS': '1',
+            'form-MIN_NUM_FORMS': '',
+            'form-MAX_NUM_FORMS': '',
+            'form-0-name': 'Test Ingredient',
+            'form-0-measurement': 'a bunch',
+            'directions': 'New Directions'
+        }
 
-    #     self.client.post(
-    #         reverse('recipe-update', args=[self.recipe.pk]), updated_form_data
-    #     )
-    #     self.recipe = Recipe.objects.get(pk=self.recipe.pk)
+        self.client.post(
+            reverse('recipe-update', args=[self.recipe.pk]), updated_form_data
+        )
+        self.recipe = Recipe.objects.get(pk=self.recipe.pk)
 
-    #     self.assertEqual(self.recipe.name, updated_form_data['name'])
-    #     self.assertEqual(self.recipe.directions,
-    #                      updated_form_data['directions'])
+        self.assertEqual(self.recipe.name, updated_form_data['name'])
+        self.assertEqual(self.recipe.directions,
+                         updated_form_data['directions'])
 
-    #     self.assertTrue(
-    #         Ingredient.objects.filter(pk=self.ingredient1.pk).exists()
-    #     )
-    #     self.assertTrue(
-    #         Ingredient.objects.filter(pk=self.ingredient2.pk).exists()
-    #     )
+        self.assertTrue(
+            Ingredient.objects.filter(pk=self.ingredient.pk).exists()
+        )
 
-    #     new_ingredient = Ingredient.objects.filter(
-    #         name=updated_form_data['form-2-name'])
-    #     self.assertTrue(new_ingredient.exists())
+        self.assertEqual(
+            RecipeIngredient.objects.filter(
+                recipe=self.recipe.pk,
+                ingredient=self.recipe_ingredient.ingredient.pk,
+                measurement=updated_form_data['form-0-measurement']
+            ).count(),
+            1
+        )
 
-    #     self.assertEqual(
-    #         RecipeIngredient.objects.filter(
-    #             recipe=self.recipe.pk,
-    #             ingredient=self.recipe_ingredient1.ingredient.pk,
-    #             measurement=updated_form_data['form-0-measurement']
-    #         ).count(),
-    #         1
-    #     )
-
-    #     self.assertFalse(
-    #         RecipeIngredient.objects.filter(
-    #             recipe=self.recipe.pk,
-    #             ingredient=self.recipe_ingredient2.ingredient.pk
-    #         ).exists()
-    #     )
-
-    #     self.assertEqual(
-    #         RecipeIngredient.objects.filter(
-    #             recipe=self.recipe.pk,
-    #             ingredient=new_ingredient[0].pk,
-    #             measurement=updated_form_data['form-2-measurement']
-    #         ).count(),
-    #         1
-    #     )
-
-    #     mock_redirect.assert_called_with(
-    #         reverse('recipe-detail', args=[self.recipe.pk]))
+        mock_redirect.assert_called_with(
+            reverse('recipe-detail', args=[self.recipe.pk]))
