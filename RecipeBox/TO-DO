@@ -1,5 +1,3 @@
-* use browser generated post data in recipe create and update tests
-    ** fix discovered bugs
 * recipe search
 * deletes only available in admin
 * recipe tags
