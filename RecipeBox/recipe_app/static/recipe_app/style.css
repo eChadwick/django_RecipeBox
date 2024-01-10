@@ -43,10 +43,6 @@ body {
     margin: 0 0 0 0;
 }
 
-#recipe-delete-form {
-    display: none;
-}
-
 .errorlist {
     color: red;
     list-style: none;

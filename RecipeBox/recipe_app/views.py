@@ -32,13 +32,6 @@ def recipe_list(request):
     })
 
 
-@require_http_methods(['POST'])
-def recipe_delete(request, pk):
-    recipe = get_object_or_404(Recipe, pk=pk)
-    recipe.delete()
-    return redirect(reverse('recipe-list'))
-
-
 def recipe_detail(request, pk):
     recipe = get_object_or_404(Recipe, pk=pk)
     recipe_ingredients = recipe.ingredients.through.objects.filter(
