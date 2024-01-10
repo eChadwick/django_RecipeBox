@@ -1,7 +1,6 @@
 * recipe search
 * deletes only available in admin
 * recipe tags
-* add "-" in between ingredient name and amount for dynamically added forms
 
 ----MVP LINE------------------------------------------
 

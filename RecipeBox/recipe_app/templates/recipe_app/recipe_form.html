@@ -30,7 +30,7 @@
                 {{ ingredients_list.management_form }}
                 {% for i in ingredients_list %}
                     <div>
-                        {{ i.name }} - {{ i.measurement }}{{ i.DELETE }}
+                        {{ i.name }} - {{ i.measurement }} {{ i.DELETE }}
                         {{ i.errors.name }}
                     </div>
                 {% endfor %}
