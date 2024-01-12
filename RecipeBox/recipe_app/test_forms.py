@@ -1,9 +1,22 @@
 from unittest.mock import patch
 
-from django.forms import CharField, BooleanField
+from django.forms import (
+    CharField,
+    BooleanField,
+    IntegerField,
+    HiddenInput,
+    ChoiceField
+)
+
 from django.test import TestCase
 
-from recipe_app.forms import IngredientForm, RecipeForm, IngredientFormSet, extra_ingredient_form_count
+from recipe_app.forms import (
+    IngredientForm,
+    RecipeForm,
+    IngredientFormSet,
+    extra_ingredient_form_count,
+    IngredientInclusionForm
+)
 from recipe_app.models import Recipe
 
 
@@ -133,3 +146,25 @@ class RecipeFormTests(TestCase):
 
         self.assertFalse(form.is_valid())
         self.assertIn(RecipeForm.name_error, form.errors['name'])
+
+
+class IngredientInclusionFormTests(TestCase):
+
+    def test_form_fields(self):
+        form = IngredientInclusionForm()
+
+        name_field = form.fields['name']
+        self.assertIsInstance(name_field, CharField)
+        self.assertEqual(name_field.max_length, 255)
+        self.assertTrue(name_field.disabled)
+
+        pk_field = form.fields['pk']
+        self.assertIsInstance(pk_field, IntegerField)
+        self.assertIsInstance(pk_field.widget, HiddenInput)
+
+        inclusion_field = form.fields['inclusion']
+        self.assertIsInstance(inclusion_field, ChoiceField)
+        self.assertEqual(
+            inclusion_field.choices,
+            IngredientInclusionForm.radio_button_options
+        )

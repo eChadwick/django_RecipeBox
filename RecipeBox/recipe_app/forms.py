@@ -1,4 +1,14 @@
-from django.forms import CharField, formset_factory, Form, TextInput, BooleanField, CheckboxInput
+from django.forms import (
+    CharField,
+    formset_factory,
+    Form,
+    TextInput,
+    BooleanField,
+    CheckboxInput,
+    IntegerField,
+    HiddenInput,
+    ChoiceField
+)
 
 
 class IngredientForm(Form):
@@ -84,3 +94,18 @@ class RecipeForm(Form):
     def clean(self):
         if not self.cleaned_data['name']:
             self.add_error('name', self.name_error)
+
+
+class IngredientInclusionForm(Form):
+    radio_button_options = ['Include', '-', 'Exclude']
+
+    name = CharField(
+        max_length=255,
+        disabled=True
+    )
+    pk = IntegerField(
+        widget=HiddenInput()
+    )
+    inclusion = ChoiceField(
+        choices=radio_button_options
+    )
