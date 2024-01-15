@@ -109,3 +109,6 @@ class IngredientInclusionForm(Form):
     inclusion = ChoiceField(
         choices=radio_button_options
     )
+
+
+IngredientInclusionFormSet = formset_factory(IngredientInclusionForm, extra=0)

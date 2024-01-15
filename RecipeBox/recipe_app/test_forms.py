@@ -15,7 +15,8 @@ from recipe_app.forms import (
     RecipeForm,
     IngredientFormSet,
     extra_ingredient_form_count,
-    IngredientInclusionForm
+    IngredientInclusionForm,
+    IngredientInclusionFormSet,
 )
 from recipe_app.models import Recipe
 
@@ -167,4 +168,20 @@ class IngredientInclusionFormTests(TestCase):
         self.assertEqual(
             inclusion_field.choices,
             IngredientInclusionForm.radio_button_options
+        )
+
+
+class IngredientInclusionFormSetTests(TestCase):
+
+    def test_formset_settings(self):
+        formset = IngredientInclusionFormSet()
+
+        self.assertEqual(
+            formset.extra,
+            0
+        )
+
+        self.assertEqual(
+            formset.form,
+            IngredientInclusionForm
         )
