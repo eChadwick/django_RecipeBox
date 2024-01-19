@@ -169,6 +169,10 @@ class IngredientInclusionFormTests(TestCase):
             inclusion_field.choices,
             IngredientInclusionForm.radio_button_options
         )
+        self.assertEqual(
+            inclusion_field.initial,
+            IngredientInclusionForm.default_inclusion_option
+        )
 
 
 class IngredientInclusionFormSetTests(TestCase):
@@ -185,3 +189,4 @@ class IngredientInclusionFormSetTests(TestCase):
             formset.form,
             IngredientInclusionForm
         )
+

@@ -98,6 +98,7 @@ class RecipeForm(Form):
 
 class IngredientInclusionForm(Form):
     radio_button_options = ['Include', '-', 'Exclude']
+    default_inclusion_option = radio_button_options[1]
 
     name = CharField(
         max_length=255,
@@ -107,7 +108,8 @@ class IngredientInclusionForm(Form):
         widget=HiddenInput()
     )
     inclusion = ChoiceField(
-        choices=radio_button_options
+        choices=radio_button_options,
+        initial=default_inclusion_option
     )
 
 

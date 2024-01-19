@@ -7,7 +7,7 @@ from django.shortcuts import redirect, render
 from django.test import TestCase, Client
 from django.urls import reverse
 
-from recipe_app.forms import RecipeForm, IngredientFormSet
+from recipe_app.forms import RecipeForm, IngredientFormSet, IngredientInclusionFormSet
 from recipe_app.models import Recipe, Ingredient, RecipeIngredient
 from recipe_app.views import DEFAULT_PAGINATION, RECIPE_NOT_FOUND_ERROR
 
@@ -81,6 +81,7 @@ class RecipeListViewTests(TestCase):
     def test_recipe_list_includes_pagination_value(self):
         response = self.client.get(reverse('recipe-list'))
         self.assertEqual(response.context['pagination'], DEFAULT_PAGINATION)
+
 
 class RecipeDetailViewTestCase(TestCase):
     def setUp(self):
@@ -736,3 +737,26 @@ class RecipeUpdateViewTests(TestCase):
 
         mock_redirect.assert_called_with(
             reverse('recipe-detail', args=[self.recipe.pk]))
+
+
+# @patch('recipe_app.views.render', return_value=HttpResponse())
+# class RecipeSearchViewTests(TestCase):
+
+#     def setUp(self):
+#         for i in range(5):
+#             Ingredient.objects.create(name=f'Ingredient {i}')
+
+#     def test_get_renders_correct_template(self, mock_render):
+#         self.client.get(reverse('recipe-search'))
+
+#         mock_render.assert_called_with(
+#             ANY, 'recipe_app/recipe_search.html', ANY
+#         )
+
+#     def test_get_returns_all_ingredients(self, mock_render):
+#         self.client.get(reverse('recipe-search'))
+
+#         from recipe_app.forms import IngredientInclusionForm
+#         rendered_list = mock_render.call_args[0][2]['ingredients']
+#         self.assertIsInstance(rendered_list, IngredientInclusionFormSet)
+#         # self.assertEqual( len(rendered_list), 5)
