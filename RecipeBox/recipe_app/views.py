@@ -154,3 +154,6 @@ def recipe_update(request, pk):
             'recipe_pk': recipe.pk
         }
         return render(request, 'recipe_app/recipe_form.html', context)
+
+def recipe_search(request):
+    return render(request, 'recipe_app/recipe_search.html', {})

@@ -739,19 +739,19 @@ class RecipeUpdateViewTests(TestCase):
             reverse('recipe-detail', args=[self.recipe.pk]))
 
 
-# @patch('recipe_app.views.render', return_value=HttpResponse())
-# class RecipeSearchViewTests(TestCase):
+@patch('recipe_app.views.render', return_value=HttpResponse())
+class RecipeSearchViewTests(TestCase):
 
-#     def setUp(self):
-#         for i in range(5):
-#             Ingredient.objects.create(name=f'Ingredient {i}')
+    def setUp(self):
+        for i in range(5):
+            Ingredient.objects.create(name=f'Ingredient {i}')
 
-#     def test_get_renders_correct_template(self, mock_render):
-#         self.client.get(reverse('recipe-search'))
+    def test_get_renders_correct_template(self, mock_render):
+        self.client.get(reverse('recipe-search'))
 
-#         mock_render.assert_called_with(
-#             ANY, 'recipe_app/recipe_search.html', ANY
-#         )
+        mock_render.assert_called_with(
+            ANY, 'recipe_app/recipe_search.html', ANY
+        )
 
 #     def test_get_returns_all_ingredients(self, mock_render):
 #         self.client.get(reverse('recipe-search'))
