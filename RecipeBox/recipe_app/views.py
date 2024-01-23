@@ -5,7 +5,7 @@ from django.urls import reverse
 from django.views.decorators.http import require_http_methods
 
 from recipe_app.models import Ingredient, Recipe, RecipeIngredient
-from recipe_app.forms import RecipeForm, IngredientFormSet
+from recipe_app.forms import RecipeForm, IngredientFormSet, IngredientInclusionFormSet
 
 DEFAULT_PAGINATION = 25
 
@@ -155,5 +155,11 @@ def recipe_update(request, pk):
         }
         return render(request, 'recipe_app/recipe_form.html', context)
 
+
 def recipe_search(request):
-    return render(request, 'recipe_app/recipe_search.html', {})
+    all_ingredients = list(Ingredient.objects.all().values())
+
+    context = {
+        'ingredients': IngredientInclusionFormSet(initial=all_ingredients)
+    }
+    return render(request, 'recipe_app/recipe_search.html', context)

@@ -743,7 +743,7 @@ class RecipeUpdateViewTests(TestCase):
 class RecipeSearchViewTests(TestCase):
 
     def setUp(self):
-        for i in range(5):
+        for i in range(1,6):
             Ingredient.objects.create(name=f'Ingredient {i}')
 
     def test_get_renders_correct_template(self, mock_render):
@@ -753,10 +753,18 @@ class RecipeSearchViewTests(TestCase):
             ANY, 'recipe_app/recipe_search.html', ANY
         )
 
-#     def test_get_returns_all_ingredients(self, mock_render):
-#         self.client.get(reverse('recipe-search'))
+    def test_get_returns_all_ingredients(self, mock_render):
+        self.client.get(reverse('recipe-search'))
 
-#         from recipe_app.forms import IngredientInclusionForm
-#         rendered_list = mock_render.call_args[0][2]['ingredients']
-#         self.assertIsInstance(rendered_list, IngredientInclusionFormSet)
-#         # self.assertEqual( len(rendered_list), 5)
+        rendered_list = mock_render.call_args[0][2]['ingredients']
+        self.assertIsInstance(rendered_list, IngredientInclusionFormSet)
+        self.assertEqual( len(rendered_list), 5)
+
+        for i in range(1,6):
+            self.assertIn(
+                {
+                    'id': i,
+                    'name': f'Ingredient {i}'
+                },
+            rendered_list.initial
+            )
