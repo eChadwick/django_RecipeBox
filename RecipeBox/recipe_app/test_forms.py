@@ -5,7 +5,8 @@ from django.forms import (
     BooleanField,
     IntegerField,
     HiddenInput,
-    ChoiceField
+    ChoiceField,
+    RadioSelect
 )
 
 from django.test import TestCase
@@ -158,6 +159,7 @@ class IngredientInclusionFormTests(TestCase):
         self.assertIsInstance(name_field, CharField)
         self.assertEqual(name_field.max_length, 255)
         self.assertTrue(name_field.disabled)
+        self.assertEqual(name_field.label, '')
 
         pk_field = form.fields['pk']
         self.assertIsInstance(pk_field, IntegerField)
@@ -172,6 +174,14 @@ class IngredientInclusionFormTests(TestCase):
         self.assertEqual(
             inclusion_field.initial,
             IngredientInclusionForm.default_inclusion_option
+        )
+        self.assertIsInstance(
+            inclusion_field.widget,
+            RadioSelect
+        )
+        self.assertEqual(
+            inclusion_field.label,
+            ''
         )
 
 
@@ -189,4 +199,3 @@ class IngredientInclusionFormSetTests(TestCase):
             formset.form,
             IngredientInclusionForm
         )
-

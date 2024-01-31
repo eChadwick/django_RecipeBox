@@ -7,6 +7,6 @@
 {% block body-content %}
     <form method='post'>
         {% csrf_token %}
-
+        {{ ingredients }}
     </form>
 {% endblock %}

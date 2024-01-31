@@ -7,7 +7,8 @@ from django.forms import (
     CheckboxInput,
     IntegerField,
     HiddenInput,
-    ChoiceField
+    ChoiceField,
+    RadioSelect
 )
 
 
@@ -97,19 +98,23 @@ class RecipeForm(Form):
 
 
 class IngredientInclusionForm(Form):
-    radio_button_options = ['Include', '-', 'Exclude']
+    radio_button_options = [('include', 'Include'),
+                            ('neutral', '-'), ('exclude', 'Exclude')]
     default_inclusion_option = radio_button_options[1]
 
     name = CharField(
         max_length=255,
-        disabled=True
+        disabled=True,
+        label=''
     )
     pk = IntegerField(
         widget=HiddenInput()
     )
     inclusion = ChoiceField(
         choices=radio_button_options,
-        initial=default_inclusion_option
+        widget=RadioSelect(),
+        initial=default_inclusion_option,
+        label=''
     )
 
 
