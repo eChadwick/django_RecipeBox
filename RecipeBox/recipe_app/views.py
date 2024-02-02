@@ -157,9 +157,12 @@ def recipe_update(request, pk):
 
 
 def recipe_search(request):
-    all_ingredients = list(Ingredient.objects.all().values())
+    if 'POST' == request.method:
+        return render(request, 'recipe_app/recipe_list.html', {})
+    else:
+        all_ingredients = list(Ingredient.objects.all().values())
 
-    context = {
-        'ingredients': IngredientInclusionFormSet(initial=all_ingredients)
-    }
-    return render(request, 'recipe_app/recipe_search.html', context)
+        context = {
+            'ingredients': IngredientInclusionFormSet(initial=all_ingredients)
+        }
+        return render(request, 'recipe_app/recipe_search.html', context)
