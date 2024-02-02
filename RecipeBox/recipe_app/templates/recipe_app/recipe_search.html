@@ -7,6 +7,11 @@
 {% block body-content %}
     <form method='post'>
         {% csrf_token %}
-        {{ ingredients }}
+        {% for i in ingredients %}
+            <div class='ingredient-inclusion-form'>
+                {{ i }}
+            </div>
+        {% endfor %}
+        <button type=Submit>Submit</button>
     </form>
 {% endblock %}
