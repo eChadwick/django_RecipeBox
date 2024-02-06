@@ -158,7 +158,10 @@ def recipe_update(request, pk):
 
 def recipe_search(request):
     if 'POST' == request.method:
-        return render(request, 'recipe_app/recipe_list.html', {})
+        context = {
+            'recipes': Recipe.objects.all()
+        }
+        return render(request, 'recipe_app/recipe_list.html', context)
     else:
         all_ingredients = list(Ingredient.objects.all().values())
 
