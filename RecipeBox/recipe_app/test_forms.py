@@ -161,9 +161,9 @@ class IngredientInclusionFormTests(TestCase):
         self.assertTrue(name_field.disabled)
         self.assertEqual(name_field.label, '')
 
-        pk_field = form.fields['pk']
-        self.assertIsInstance(pk_field, IntegerField)
-        self.assertIsInstance(pk_field.widget, HiddenInput)
+        id_field = form.fields['id']
+        self.assertIsInstance(id_field, IntegerField)
+        self.assertIsInstance(id_field.widget, HiddenInput)
 
         inclusion_field = form.fields['inclusion']
         self.assertIsInstance(inclusion_field, ChoiceField)

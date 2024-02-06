@@ -107,7 +107,7 @@ class IngredientInclusionForm(Form):
         disabled=True,
         label=''
     )
-    pk = IntegerField(
+    id = IntegerField(
         widget=HiddenInput()
     )
     inclusion = ChoiceField(
