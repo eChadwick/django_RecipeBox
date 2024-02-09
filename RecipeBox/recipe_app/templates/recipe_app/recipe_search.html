@@ -6,6 +6,7 @@
 
 {% block body-content %}
     <form method='post'>
+        {{ ingredients.management_form}}
         {% csrf_token %}
         {% for i in ingredients %}
             <div class='ingredient-inclusion-form'>
