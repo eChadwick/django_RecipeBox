@@ -6,7 +6,8 @@ from django.forms import (
     IntegerField,
     HiddenInput,
     ChoiceField,
-    RadioSelect
+    RadioSelect,
+    TextInput
 )
 
 from django.test import TestCase
@@ -158,8 +159,14 @@ class IngredientInclusionFormTests(TestCase):
         name_field = form.fields['name']
         self.assertIsInstance(name_field, CharField)
         self.assertEqual(name_field.max_length, 255)
-        self.assertTrue(name_field.disabled)
         self.assertEqual(name_field.label, '')
+
+        name_field_widget = name_field.widget
+        self.assertIsInstance(name_field_widget, TextInput)
+        self.assertEqual(
+            name_field_widget.attrs['readonly'],
+            'readonly'
+        )
 
         id_field = form.fields['id']
         self.assertIsInstance(id_field, IntegerField)

@@ -8,7 +8,7 @@ from django.forms import (
     IntegerField,
     HiddenInput,
     ChoiceField,
-    RadioSelect
+    RadioSelect,
 )
 
 
@@ -104,7 +104,7 @@ class IngredientInclusionForm(Form):
 
     name = CharField(
         max_length=255,
-        disabled=True,
+        widget=TextInput(attrs={'readonly': 'readonly'}),
         label=''
     )
     id = IntegerField(
