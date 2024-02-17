@@ -799,3 +799,43 @@ class RecipeSearchViewTests(TestCase):
         self.assertEqual(len(rendered_recipe_list), 2)
         self.assertIn(recipe_no_ingredients, rendered_recipe_list)
         self.assertIn(recipe_with_ingredients, rendered_recipe_list)
+
+    # def test_excludes(self, mock_render):
+    #     exclude_ingredient_1 = Ingredient.objects.create(
+    #         name='Exclude Ingredient 1')
+    #     exclude_recipe_1 = Recipe.objects.create(name='Exclude Recipe 1')
+    #     RecipeIngredient.objects.create(
+    #         recipe=exclude_recipe_1,
+    #         ingredient=exclude_ingredient_1
+    #     )
+
+    #     exclude_ingredient_2 = Ingredient.objects.create(
+    #         name='Exclude Ingredient 2')
+    #     exclude_recipe_2 = Recipe.objects.create(name='Exclude Recipe 2')
+    #     RecipeIngredient.objects.create(
+    #         recipe=exclude_recipe_2,
+    #         ingredient=exclude_ingredient_2
+    #     )
+
+    #     neutral_ingredient = Ingredient.objects.create(
+    #         name='Neutral Ingredient')
+    #     neutral_recipe = Recipe.objects.create(name='Neutral Recipe')
+
+    #     post_data = {
+    #         'csrfmiddlewaretoken': 'irrelevant',
+    #         'form-TOTAL_FORMS': 3,
+    #         'form-INITIAL_FORMS': 3,
+    #         'form-0-inclusion': 'exclude',
+    #         'form-0-id': exclude_ingredient_1.pk,
+    #         'form-1-inclusion': 'exclude',
+    #         'form-1-id': exclude_ingredient_2.pk,
+    #         'form-2-inclusion': 'neutral',
+    #         'form-2-id': neutral_ingredient.pk
+    #     }
+
+    #     self.client.post(reverse('recipe-search'), post_data)
+    #     rendered_recipe_list = mock_render.call_args[0][2]['recipes']
+    #     self.assertEqual(len(rendered_recipe_list), 1)
+    #     self.assertIn(neutral_recipe, rendered_recipe_list)
+    #     self.assertNotIn(exclude_recipe_1, rendered_recipe_list)
+    #     self.assertNotIn(exclude_recipe_2, rendered_recipe_list)
