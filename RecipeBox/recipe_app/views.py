@@ -158,8 +158,13 @@ def recipe_update(request, pk):
 
 def recipe_search(request):
     if 'POST' == request.method:
+        inclusion_forms = IngredientInclusionFormSet(request.POST.dict())
+        exclude_ids = [
+            i['id'] for i in inclusion_forms.cleaned_data if i['inclusion'] == 'exclude'
+        ]
+
         context = {
-            'recipes': Recipe.objects.all()
+            'recipes': Recipe.objects.exclude(ingredients__id__in=exclude_ids)
         }
         return render(request, 'recipe_app/recipe_list.html', context)
     else:
