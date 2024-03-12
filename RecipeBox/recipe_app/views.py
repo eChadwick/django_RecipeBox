@@ -162,10 +162,16 @@ def recipe_search(request):
         exclude_ids = [
             i['id'] for i in inclusion_forms.cleaned_data if i['inclusion'] == 'exclude'
         ]
+        or_ids = [
+            i['id'] for i in inclusion_forms.cleaned_data if i['inclusion'] == 'or'
+        ]
 
-        context = {
-            'recipes': Recipe.objects.exclude(ingredients__id__in=exclude_ids)
-        }
+        recipe_matches = Recipe.objects.exclude(
+            ingredients__id__in=exclude_ids)
+        if or_ids:
+            recipe_matches = recipe_matches.filter(ingredients__id__in=or_ids)
+
+        context = {'recipes': recipe_matches}
         return render(request, 'recipe_app/recipe_list.html', context)
     else:
         all_ingredients = list(Ingredient.objects.all().values())
