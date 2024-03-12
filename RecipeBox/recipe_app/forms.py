@@ -98,9 +98,13 @@ class RecipeForm(Form):
 
 
 class IngredientInclusionForm(Form):
-    radio_button_options = [('include', 'Include'),
-                            ('neutral', '-'), ('exclude', 'Exclude')]
-    default_inclusion_option = radio_button_options[1]
+    radio_button_options = [
+        ('or', 'Or'),
+        ('and', 'And'),
+        ('exclude', 'Exclude'),
+        ('neutral', '-')
+    ]
+    default_inclusion_option = radio_button_options[3]
 
     name = CharField(
         max_length=255,
