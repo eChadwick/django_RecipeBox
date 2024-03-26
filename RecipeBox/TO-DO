@@ -1,4 +1,6 @@
-* recipe search
+* recipe search by name
+* remove recipe list view and routes
+* address pagination 
 * recipe tags
 
 ----MVP LINE------------------------------------------

@@ -8,7 +8,7 @@
 
 {% block nav-bar-links %}
     {% if action == 'create' %}
-        <a href="{% url 'recipe-list' %}">Cancel</a>
+        <a href="{% url 'recipe-search' %}">Cancel</a>
     {% elif action == 'update' %}
         <a href="{% url 'recipe-detail' recipe_pk %}">Cancel</a>
     {% endif %}
