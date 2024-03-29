@@ -11,6 +11,4 @@
         <a href="{% url 'recipe-detail' recipe.pk %}">{{recipe.name}}</a>
         <br>
     {% endfor %}
-    <p>Page {{current_page}} of {{num_pages}}</p>
-    <p>Results per page: {{pagination}}
 {% endblock %}
