@@ -5,7 +5,12 @@ from django.urls import reverse
 from django.views.decorators.http import require_http_methods
 
 from recipe_app.models import Ingredient, Recipe, RecipeIngredient
-from recipe_app.forms import RecipeForm, IngredientFormSet, IngredientInclusionFormSet
+from recipe_app.forms import (
+    RecipeForm,
+    IngredientFormSet,
+    IngredientInclusionFormSet,
+    RecipeInclusionForm
+)
 
 DEFAULT_PAGINATION = 25
 
@@ -157,6 +162,9 @@ def recipe_search(request):
             ingredients__id__in=exclude_ids)
         if or_ids:
             recipe_matches = recipe_matches.filter(ingredients__id__in=or_ids)
+        if '' != request.POST.dict().get('recipe_name', ''):
+            recipe_matches = recipe_matches.filter(
+                name__contains=request.POST.dict()['recipe_name'])
         if and_ids:
             for id in and_ids:
                 recipe_matches = recipe_matches.filter(ingredients__id=id)
@@ -167,6 +175,7 @@ def recipe_search(request):
         all_ingredients = list(Ingredient.objects.all().values())
 
         context = {
-            'ingredients': IngredientInclusionFormSet(initial=all_ingredients)
+            'ingredients': IngredientInclusionFormSet(initial=all_ingredients),
+            'recipe_name': RecipeInclusionForm()
         }
         return render(request, 'recipe_app/recipe_search.html', context)

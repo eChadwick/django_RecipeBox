@@ -7,7 +7,12 @@ from django.shortcuts import redirect, render
 from django.test import TestCase, Client
 from django.urls import reverse
 
-from recipe_app.forms import RecipeForm, IngredientFormSet, IngredientInclusionFormSet
+from recipe_app.forms import (
+    RecipeForm,
+    IngredientFormSet,
+    IngredientInclusionFormSet,
+    RecipeInclusionForm
+)
 from recipe_app.models import Recipe, Ingredient, RecipeIngredient
 from recipe_app.views import DEFAULT_PAGINATION, RECIPE_NOT_FOUND_ERROR
 
@@ -682,21 +687,23 @@ class RecipeSearchViewTests(TestCase):
             ANY, 'recipe_app/recipe_search.html', ANY
         )
 
-    def test_get_returns_all_ingredients(self, mock_render):
+    def test_get_returns_all_elements(self, mock_render):
         self.client.get(reverse('recipe-search'))
 
-        rendered_list = mock_render.call_args[0][2]['ingredients']
-        self.assertIsInstance(rendered_list, IngredientInclusionFormSet)
-        self.assertEqual(len(rendered_list), 5)
-
+        ingredients_list = mock_render.call_args[0][2]['ingredients']
+        self.assertIsInstance(ingredients_list, IngredientInclusionFormSet)
+        self.assertEqual(len(ingredients_list), 5)
         for i in range(1, 6):
             self.assertIn(
                 {
                     'id': i,
                     'name': f'Ingredient {i}'
                 },
-                rendered_list.initial
+                ingredients_list.initial
             )
+
+        recipe_name = mock_render.call_args[0][2]['recipe_name']
+        self.assertIsInstance(recipe_name, RecipeInclusionForm)
 
     def test_post_renders_correct_template(self, mock_render):
         post_data = {
@@ -882,3 +889,27 @@ class RecipeSearchViewTests(TestCase):
         self.assertIn(include_recipe, rendered_recipe_list)
         self.assertNotIn(exclude_recipe_1, rendered_recipe_list)
         self.assertNotIn(exclude_recipe_2, rendered_recipe_list)
+
+    def test_recipe_name_handling(self, mock_render):
+        include_recipe_1 = Recipe.objects.create(
+            name='Chicken 1', directions='do stuff')
+        include_recipe_2 = Recipe.objects.create(
+            name='Chicken 2', directions='do other stuff')
+        exclude_recipe = Recipe.objects.create(
+            name='Beef', directions='dont do stuff')
+
+        post_data = {
+            'form-TOTAL_FORMS': '0',
+            'form-INITIAL_FORMS': '0',
+            'form-MIN_NUM_FORMS': '0',
+            'form-MAX_NUM_FORMS': '1000',
+            'csrfmiddlewaretoken': 'irrelevant',
+            'recipe_name': 'Chicken'
+        }
+        self.client.post(reverse('recipe-search'), post_data)
+
+        rendered_recipe_list = mock_render.call_args[0][2]['recipes_list']
+        self.assertEqual(len(rendered_recipe_list), 2)
+        self.assertIn(include_recipe_1, rendered_recipe_list)
+        self.assertIn(include_recipe_2, rendered_recipe_list)
+        self.assertNotIn(exclude_recipe, rendered_recipe_list)

@@ -6,7 +6,8 @@
 
 {% block body-content %}
     <form method='post'>
-        <button type=Submit>Submit</button>
+        <button type=Submit>Submit</button><br><br>
+        {{ recipe_name }}<br><br>
         {{ ingredients.management_form}}
         {% csrf_token %}
         {% for i in ingredients %}
