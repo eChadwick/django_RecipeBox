@@ -6,5 +6,5 @@ from recipe_app import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('recipes/', include('recipe_app.recipe_urls')),
-    path('', views.recipe_list),
+    path('', views.recipe_search),
 ]

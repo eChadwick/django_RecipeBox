@@ -16,22 +16,6 @@ def index(request):
     return HttpResponse("Recipe Index Page!!!")
 
 
-def recipe_list(request):
-    pagination = request.GET.get('pagination', DEFAULT_PAGINATION)
-    all_recipes = Recipe.objects.all().order_by('name')
-    paginator = Paginator(all_recipes, pagination)
-    page_num = request.GET.get('page')
-    page_obj = paginator.get_page(page_num)
-    num_pages = paginator.num_pages
-
-    return render(request, 'recipe_app/recipe_list.html', {
-        'recipes_list': page_obj,
-        'current_page': page_num or 1,
-        'num_pages': num_pages,
-        'pagination': pagination
-    })
-
-
 def recipe_detail(request, pk):
     recipe = get_object_or_404(Recipe, pk=pk)
     recipe_ingredients = recipe.ingredients.through.objects.filter(

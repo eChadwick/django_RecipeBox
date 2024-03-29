@@ -12,77 +12,6 @@ from recipe_app.models import Recipe, Ingredient, RecipeIngredient
 from recipe_app.views import DEFAULT_PAGINATION, RECIPE_NOT_FOUND_ERROR
 
 
-# class RecipeListViewTests(TestCase):
-#     num_test_recipes = DEFAULT_PAGINATION + 5
-
-#     @classmethod
-#     def setUp(cls):
-#         for x in range(cls.num_test_recipes):
-#             recipe = Recipe.objects.create(
-#                 name=f'Recipe {x}',
-#                 directions=f'These are the directions for Recipe {x}'
-#             )
-#             for y in range(x):
-#                 ingredient = Ingredient.objects.create(
-#                     name=f'Recipe {x} - Ingredient {y}'
-#                 )
-#                 RecipeIngredient.objects.create(
-#                     recipe=recipe,
-#                     ingredient=ingredient,
-#                     measurement='1 cup'
-#                 )
-
-#     def test_recipe_list_path(self):
-#         response = self.client.get('/recipes/')
-#         self.assertEqual(response.status_code, 200)
-
-#     def test_recipe_list_route_name(self):
-#         response = self.client.get(reverse('recipe-list'))
-#         self.assertEqual(response.status_code, 200)
-
-#     def test_recipe_list_has_number_of_pages(self):
-#         response = self.client.get(reverse('recipe-list'))
-#         num_pages = response.context['num_pages']
-
-#         total_recipes = Recipe.objects.all().count()
-#         expected_num_pages = math.ceil(total_recipes / DEFAULT_PAGINATION)
-
-#         self.assertEqual(num_pages, expected_num_pages)
-
-#     def test_recipe_list_default_pagination(self):
-#         response = self.client.get(reverse('recipe-list'))
-#         self.assertEqual(
-#             len(response.context['recipes_list']),
-#             DEFAULT_PAGINATION
-#         )
-
-#         total_recipes = Recipe.objects.all().count()
-#         last_page_result_number = total_recipes % DEFAULT_PAGINATION
-#         response = self.client.get(reverse('recipe-list')+'?page=2')
-#         self.assertEqual(
-#             len(response.context['recipes_list']),
-#             last_page_result_number
-#         )
-
-#     def test_recipe_list_parameterized_pagination(self):
-#         pagination = 5
-#         response = self.client.get(
-#             reverse('recipe-list')+f'?pagination={pagination}'
-#         )
-#         self.assertEqual(
-#             len(response.context['recipes_list']),
-#             pagination
-#         )
-
-#     def test_recipe_list_includes_current_page_number(self):
-#         response = self.client.get(reverse('recipe-list'))
-#         self.assertEqual(response.context['current_page'], 1)
-
-#     def test_recipe_list_includes_pagination_value(self):
-#         response = self.client.get(reverse('recipe-list'))
-#         self.assertEqual(response.context['pagination'], DEFAULT_PAGINATION)
-
-
 class RecipeDetailViewTestCase(TestCase):
     def setUp(self):
         self.ingredient1 = Ingredient.objects.create(name='salt')
@@ -807,7 +736,7 @@ class RecipeSearchViewTests(TestCase):
         }
         self.client.post(reverse('recipe-search'), post_data)
 
-        rendered_recipe_list = mock_render.call_args[0][2]['recipes']
+        rendered_recipe_list = mock_render.call_args[0][2]['recipes_list']
         self.assertEqual(len(rendered_recipe_list), 2)
         self.assertIn(recipe_no_ingredients, rendered_recipe_list)
         self.assertIn(recipe_with_ingredients, rendered_recipe_list)
@@ -852,7 +781,7 @@ class RecipeSearchViewTests(TestCase):
 
         self.client.post(reverse('recipe-search'), post_data)
 
-        rendered_recipe_list = mock_render.call_args[0][2]['recipes']
+        rendered_recipe_list = mock_render.call_args[0][2]['recipes_list']
         self.assertEqual(len(rendered_recipe_list), 1)
         self.assertIn(neutral_recipe, rendered_recipe_list)
         self.assertNotIn(exclude_recipe_1, rendered_recipe_list)
@@ -898,7 +827,7 @@ class RecipeSearchViewTests(TestCase):
 
         self.client.post(reverse('recipe-search'), post_data)
 
-        rendered_recipe_list = mock_render.call_args[0][2]['recipes']
+        rendered_recipe_list = mock_render.call_args[0][2]['recipes_list']
         self.assertEqual(len(rendered_recipe_list), 2)
         self.assertIn(include_recipe_1, rendered_recipe_list)
         self.assertIn(include_recipe_2, rendered_recipe_list)
@@ -948,7 +877,7 @@ class RecipeSearchViewTests(TestCase):
 
         self.client.post(reverse('recipe-search'), post_data)
 
-        rendered_recipe_list = mock_render.call_args[0][2]['recipes']
+        rendered_recipe_list = mock_render.call_args[0][2]['recipes_list']
         self.assertEqual(len(rendered_recipe_list), 1)
         self.assertIn(include_recipe, rendered_recipe_list)
         self.assertNotIn(exclude_recipe_1, rendered_recipe_list)
