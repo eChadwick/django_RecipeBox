@@ -123,3 +123,9 @@ class IngredientInclusionForm(Form):
 
 
 IngredientInclusionFormSet = formset_factory(IngredientInclusionForm, extra=0)
+
+
+class RecipeInclusionForm(Form):
+    recipe_name = CharField(
+        max_length=10000
+    )
