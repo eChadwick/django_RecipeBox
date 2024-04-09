@@ -169,7 +169,7 @@ def recipe_search(request):
             for id in and_ids:
                 recipe_matches = recipe_matches.filter(ingredients__id=id)
 
-        context = {'recipes_list': recipe_matches}
+        context = {'recipes_list': recipe_matches.distinct()}
         return render(request, 'recipe_app/recipe_list.html', context)
     else:
         all_ingredients = list(Ingredient.objects.all().values())

@@ -913,3 +913,39 @@ class RecipeSearchViewTests(TestCase):
         self.assertIn(include_recipe_1, rendered_recipe_list)
         self.assertIn(include_recipe_2, rendered_recipe_list)
         self.assertNotIn(exclude_recipe, rendered_recipe_list)
+
+    def test_or_includes_are_distinct(self, mock_render):
+        ingredient_1 = Ingredient.objects.create(name='Ingredient 1')
+        ingredient_2 = Ingredient.objects.create(name='Ingredient 2')
+
+        recipe = Recipe.objects.create(
+            name='Recipe Name'
+        )
+        RecipeIngredient.objects.create(
+            recipe=recipe,
+            ingredient=ingredient_1
+        )
+        RecipeIngredient.objects.create(
+            recipe=recipe,
+            ingredient=ingredient_2
+        )
+
+        post_data = {
+            'form-TOTAL_FORMS': '2',
+            'form-INITIAL_FORMS': '2',
+            'form-MIN_NUM_FORMS': '0',
+            'form-MAX_NUM_FORMS': '1000',
+            'csrfmiddlewaretoken': 'irrelevant',
+            'form-0-name': ingredient_1.name,
+            'form-0-inclusion': 'or',
+            'form-0-id': ingredient_1.pk,
+            'form-1-name': ingredient_2.name,
+            'form-1-inclusion': 'or',
+            'form-1-id': ingredient_2.pk
+        }
+
+        self.client.post(reverse('recipe-search'), post_data)
+
+        rendered_recipe_list = mock_render.call_args[0][2]['recipes_list']
+        self.assertEqual(len(rendered_recipe_list), 1)
+        self.assertIn(recipe, rendered_recipe_list)
