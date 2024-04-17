@@ -8,23 +8,30 @@ from django.test import TestCase, Client
 from django.urls import reverse
 
 from recipe_app.forms import (
-    RecipeForm,
     IngredientFormSet,
     IngredientInclusionFormSet,
+    RecipeForm,
     RecipeInclusionForm
 )
-from recipe_app.models import Recipe, Ingredient, RecipeIngredient
-from recipe_app.views import DEFAULT_PAGINATION, RECIPE_NOT_FOUND_ERROR
+from recipe_app.models import (
+    Ingredient,
+    Recipe,
+    RecipeIngredient,
+    Tag
+)
+from recipe_app.views import RECIPE_NOT_FOUND_ERROR
 
 
 class RecipeDetailViewTestCase(TestCase):
     def setUp(self):
         self.ingredient1 = Ingredient.objects.create(name='salt')
         self.ingredient2 = Ingredient.objects.create(name='pepper')
+
         self.recipe = Recipe.objects.create(
             name='Pasta With Salt And Pepper',
             directions='Cook pasta, add salt and pepper to taste.'
         )
+
         self.recipe_ingredient1 = RecipeIngredient.objects.create(
             recipe=self.recipe,
             ingredient=self.ingredient1,
@@ -36,14 +43,19 @@ class RecipeDetailViewTestCase(TestCase):
             measurement='1 tsp'
         )
 
+        self.tag = Tag.objects.create(name='RecipeTag')
+        self.recipe.tags.add(self.tag)
+
     def test_recipe_detail_view(self):
         url = reverse('recipe-detail', args=[self.recipe.pk])
         response = self.client.get(url)
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['recipe'].name, self.recipe.name)
+
         self.assertEqual(
             response.context['recipe'].directions, self.recipe.directions)
+
         expected_ingredient_list = [
             {'name': self.ingredient1.name,
                 'measurement': self.recipe_ingredient1.measurement},
@@ -52,6 +64,9 @@ class RecipeDetailViewTestCase(TestCase):
         ]
         self.assertEqual(
             response.context['ingredients_list'], expected_ingredient_list)
+
+        self.assertEqual(len(response.context['recipe'].tags.all()), 1)
+        self.assertEqual(response.context['recipe'].tags.all()[0], self.tag)
 
     def test_recipe_detail_view_invalid_recipe(self):
         url = reverse('recipe-detail', args=[self.recipe.pk + 1])

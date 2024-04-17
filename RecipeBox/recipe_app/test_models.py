@@ -2,7 +2,12 @@ from django.test import TestCase
 from django.db.models import ForeignKey, ManyToManyField, CASCADE, RESTRICT
 from django.db.models.fields import CharField
 
-from recipe_app.models import Ingredient, Recipe, RecipeIngredient
+from recipe_app.models import (
+    Ingredient,
+    Recipe,
+    RecipeIngredient,
+    Tag
+)
 
 
 class IngredientModelTests(TestCase):
@@ -64,6 +69,9 @@ class RecipeModelTests(TestCase):
             'ingredients'
         )
 
+        tags_field = recipe._meta.get_field('tags')
+        self.assertIsInstance(tags_field, ManyToManyField)
+
 
 class RecipeIngredientModelTests(TestCase):
 
@@ -110,3 +118,27 @@ class RecipeIngredientModelTests(TestCase):
             recipe_field.remote_field.on_delete,
             CASCADE
         )
+
+
+class TagModelTests(TestCase):
+    mixed_case_name = 'TaG nAme'
+    title_case_name = mixed_case_name.title()
+
+    def test_name_casing_on_save(self):
+        tag = Tag(name=self.mixed_case_name)
+        self.assertEqual(tag.name, self.title_case_name)
+
+    def test_dup_save_returns_original(self):
+        tag_1 = Tag.objects.create(name=self.mixed_case_name)
+        tag_2 = Tag.objects.create(name=self.mixed_case_name)
+        self.assertEqual(tag_1.pk, tag_2.pk)
+
+    def test_fields(self):
+        tag = Tag()
+
+        name_field = tag._meta.get_field('name')
+        self.assertIsInstance(name_field, CharField)
+        self.assertFalse(name_field.null)
+        self.assertTrue(name_field.unique)
+        self.assertEqual(200, name_field.max_length)
+        self.assertFalse(name_field.blank)
