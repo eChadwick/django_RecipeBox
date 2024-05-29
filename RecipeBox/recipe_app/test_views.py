@@ -89,6 +89,7 @@ class RecipeCreateViewTests(TestCase):
         rendered_context = mock_render.call_args[0][2]
         self.assertFalse(rendered_context['recipe'].is_bound)
         self.assertFalse(rendered_context['ingredients_list'].is_bound)
+        self.assertFalse(rendered_context['tags'].is_bound)
 
     def test_get_should_pass_request_action(self, mock_render):
         self.client.get(reverse('recipe-create'))
