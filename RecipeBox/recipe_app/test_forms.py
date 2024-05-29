@@ -19,7 +19,8 @@ from recipe_app.forms import (
     extra_ingredient_form_count,
     IngredientInclusionForm,
     IngredientInclusionFormSet,
-    RecipeInclusionForm
+    RecipeInclusionForm,
+    TagForm
 )
 from recipe_app.models import Recipe
 
@@ -216,3 +217,12 @@ class RecipeInclusionFormTests(TestCase):
         self.assertIsInstance(name_field, CharField)
         self.assertEqual(name_field.max_length, 10000)
         self.assertEqual(name_field.required, False)
+
+
+class TagFormTests(TestCase):
+    def test_fields(self):
+        form = TagForm()
+        name_field = form.fields['tag_name']
+        self.assertIsInstance(name_field, CharField)
+        self.assertEqual(name_field.max_length, 250)
+        self.assertEqual(name_field.required, True)
