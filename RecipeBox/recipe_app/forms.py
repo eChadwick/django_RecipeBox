@@ -136,3 +136,6 @@ class TagForm(Form):
     tag_name = CharField(
         max_length=250
     )
+
+
+TagFormset = formset_factory(TagForm, extra=1)
