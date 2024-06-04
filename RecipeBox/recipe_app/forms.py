@@ -132,10 +132,10 @@ class RecipeInclusionForm(Form):
     )
 
 
-class TagForm(Form):
+class TagCreationForm(Form):
     tag_name = CharField(
         max_length=250
     )
 
 
-TagFormset = formset_factory(TagForm, extra=1)
+TagCreationFormset = formset_factory(TagCreationForm, extra=1)

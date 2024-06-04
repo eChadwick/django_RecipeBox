@@ -20,8 +20,8 @@ from recipe_app.forms import (
     IngredientInclusionForm,
     IngredientInclusionFormSet,
     RecipeInclusionForm,
-    TagForm,
-    TagFormset
+    TagCreationForm,
+    TagCreationFormset
 )
 from recipe_app.models import Recipe
 
@@ -220,18 +220,18 @@ class RecipeInclusionFormTests(TestCase):
         self.assertEqual(name_field.required, False)
 
 
-class TagFormTests(TestCase):
+class TagCreationFormTests(TestCase):
     def test_fields(self):
-        form = TagForm()
+        form = TagCreationForm()
         name_field = form.fields['tag_name']
         self.assertIsInstance(name_field, CharField)
         self.assertEqual(name_field.max_length, 250)
         self.assertEqual(name_field.required, True)
 
 
-class TagFormsetTests(TestCase):
+class TagCreationFormsetTests(TestCase):
     def test_formset_settings(self):
-        formset = TagFormset()
+        formset = TagCreationFormset()
 
         self.assertEqual(
             formset.extra,
@@ -240,5 +240,5 @@ class TagFormsetTests(TestCase):
 
         self.assertEqual(
             formset.form,
-            TagForm
+            TagCreationForm
         )

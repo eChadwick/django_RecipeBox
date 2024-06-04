@@ -10,7 +10,7 @@ from recipe_app.forms import (
     IngredientFormSet,
     IngredientInclusionFormSet,
     RecipeInclusionForm,
-    TagFormset
+    TagCreationFormset
 )
 
 DEFAULT_PAGINATION = 25
@@ -82,7 +82,7 @@ def recipe_create(request):
         context = {
             'recipe': RecipeForm(),
             'ingredients_list': IngredientFormSet(),
-            'tags': TagFormset(),
+            'tags': TagCreationFormset(),
             'action': 'create'
         }
         return render(request, 'recipe_app/recipe_form.html', context)
