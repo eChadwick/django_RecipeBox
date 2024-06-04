@@ -139,3 +139,9 @@ class TagCreationForm(Form):
 
 
 TagCreationFormset = formset_factory(TagCreationForm, extra=1)
+
+
+class TagSelectionForm(Form):
+    tag_name = CharField(
+        max_length=250
+    )

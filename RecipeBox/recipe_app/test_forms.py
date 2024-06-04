@@ -21,7 +21,8 @@ from recipe_app.forms import (
     IngredientInclusionFormSet,
     RecipeInclusionForm,
     TagCreationForm,
-    TagCreationFormset
+    TagCreationFormset,
+    TagSelectionForm
 )
 from recipe_app.models import Recipe
 
@@ -242,3 +243,11 @@ class TagCreationFormsetTests(TestCase):
             formset.form,
             TagCreationForm
         )
+
+
+class TagSelectionFormTests(TestCase):
+    def test_fields(self):
+        form = TagSelectionForm()
+        name_field = form.fields['tag_name']
+        self.assertIsInstance(name_field, CharField)
+        self.assertEqual(name_field.max_length, 250)
