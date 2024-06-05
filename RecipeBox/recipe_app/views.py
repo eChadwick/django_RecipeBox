@@ -82,7 +82,7 @@ def recipe_create(request):
         context = {
             'recipe': RecipeForm(),
             'ingredients_list': IngredientFormSet(),
-            'tags': TagCreationFormset(),
+            'tag_create': TagCreationFormset(),
             'action': 'create'
         }
         return render(request, 'recipe_app/recipe_form.html', context)

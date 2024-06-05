@@ -101,7 +101,7 @@ class RecipeCreateViewTests(TestCase):
         self.assertIsInstance(rendered_ingredients_list, IngredientFormSet)
         self.assertFalse(rendered_ingredients_list.is_bound)
 
-        rendered_tag_create_form = rendered_context['tags']
+        rendered_tag_create_form = rendered_context['tag_create']
         self.assertIsInstance(rendered_tag_create_form, TagCreationFormset)
         self.assertFalse(rendered_tag_create_form.is_bound)
 
