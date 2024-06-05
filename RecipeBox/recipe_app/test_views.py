@@ -11,7 +11,8 @@ from recipe_app.forms import (
     IngredientFormSet,
     IngredientInclusionFormSet,
     RecipeForm,
-    RecipeInclusionForm
+    RecipeInclusionForm,
+    TagCreationFormset
 )
 from recipe_app.models import (
     Ingredient,
@@ -84,12 +85,25 @@ class RecipeCreateViewTests(TestCase):
             ANY, 'recipe_app/recipe_form.html', ANY
         )
 
-    def test_get_should_return_unbound_forms(self, mock_render):
+    def test_get_returns_correct_forms(self, mock_render):
+        for x in range(5):
+            Tag.objects.create(name=f'Tag{x}')
+
         self.client.get(reverse('recipe-create'))
+
         rendered_context = mock_render.call_args[0][2]
-        self.assertFalse(rendered_context['recipe'].is_bound)
-        self.assertFalse(rendered_context['ingredients_list'].is_bound)
-        self.assertFalse(rendered_context['tags'].is_bound)
+
+        rendered_recipe = rendered_context['recipe']
+        self.assertIsInstance(rendered_recipe, RecipeForm)
+        self.assertFalse(rendered_recipe.is_bound)
+
+        rendered_ingredients_list = rendered_context['ingredients_list']
+        self.assertIsInstance(rendered_ingredients_list, IngredientFormSet)
+        self.assertFalse(rendered_ingredients_list.is_bound)
+
+        rendered_tag_create_form = rendered_context['tags']
+        self.assertIsInstance(rendered_tag_create_form, TagCreationFormset)
+        self.assertFalse(rendered_tag_create_form.is_bound)
 
     def test_get_should_pass_request_action(self, mock_render):
         self.client.get(reverse('recipe-create'))
