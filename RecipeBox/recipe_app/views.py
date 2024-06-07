@@ -4,13 +4,14 @@ from django.http import HttpResponse, HttpResponseNotFound
 from django.urls import reverse
 from django.views.decorators.http import require_http_methods
 
-from recipe_app.models import Ingredient, Recipe, RecipeIngredient
+from recipe_app.models import Ingredient, Recipe, RecipeIngredient, Tag
 from recipe_app.forms import (
     RecipeForm,
     IngredientFormSet,
     IngredientInclusionFormSet,
     RecipeInclusionForm,
-    TagCreationFormset
+    TagCreationFormset,
+    TagSelectionFormset
 )
 
 DEFAULT_PAGINATION = 25
@@ -83,6 +84,7 @@ def recipe_create(request):
             'recipe': RecipeForm(),
             'ingredients_list': IngredientFormSet(),
             'tag_create': TagCreationFormset(),
+            'tag_select': TagSelectionFormset(initial=Tag.objects.all()),
             'action': 'create'
         }
         return render(request, 'recipe_app/recipe_form.html', context)

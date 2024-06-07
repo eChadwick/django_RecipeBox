@@ -12,7 +12,8 @@ from recipe_app.forms import (
     IngredientInclusionFormSet,
     RecipeForm,
     RecipeInclusionForm,
-    TagCreationFormset
+    TagCreationFormset,
+    TagSelectionFormset
 )
 from recipe_app.models import (
     Ingredient,
@@ -104,6 +105,10 @@ class RecipeCreateViewTests(TestCase):
         rendered_tag_create_form = rendered_context['tag_create']
         self.assertIsInstance(rendered_tag_create_form, TagCreationFormset)
         self.assertFalse(rendered_tag_create_form.is_bound)
+
+        rendered_tag_select_form = rendered_context['tag_select']
+        self.assertIsInstance(rendered_tag_select_form, TagSelectionFormset)
+        self.assertEqual(len(rendered_tag_select_form.forms), 5)
 
     def test_get_should_pass_request_action(self, mock_render):
         self.client.get(reverse('recipe-create'))
