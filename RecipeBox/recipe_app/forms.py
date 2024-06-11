@@ -146,5 +146,9 @@ class TagSelectionForm(Form):
         max_length=250
     )
 
+    id = IntegerField(
+        widget=HiddenInput
+    )
+
 
 TagSelectionFormset = formset_factory(TagSelectionForm, extra=0)

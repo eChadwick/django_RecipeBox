@@ -249,9 +249,14 @@ class TagCreationFormsetTests(TestCase):
 class TagSelectionFormTests(TestCase):
     def test_fields(self):
         form = TagSelectionForm()
+
         name_field = form.fields['tag_name']
         self.assertIsInstance(name_field, CharField)
         self.assertEqual(name_field.max_length, 250)
+
+        id_field = form.fields['id']
+        self.assertIsInstance(id_field, IntegerField)
+        self.assertIsInstance(id_field.widget, HiddenInput)
 
 
 class TagSelectionFormsetTests(TestCase):
