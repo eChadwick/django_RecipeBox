@@ -150,5 +150,7 @@ class TagSelectionForm(Form):
         widget=HiddenInput
     )
 
+    include = BooleanField()
+
 
 TagSelectionFormset = formset_factory(TagSelectionForm, extra=0)

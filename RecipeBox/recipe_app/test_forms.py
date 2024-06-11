@@ -258,6 +258,9 @@ class TagSelectionFormTests(TestCase):
         self.assertIsInstance(id_field, IntegerField)
         self.assertIsInstance(id_field.widget, HiddenInput)
 
+        include_field = form.fields['include']
+        self.assertIsInstance(include_field, BooleanField)
+
 
 class TagSelectionFormsetTests(TestCase):
     def test_formset_settings(self):
