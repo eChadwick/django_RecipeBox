@@ -1,4 +1,6 @@
 * recipe tags
+** add id in TagSelectForm
+** add validity test for TagSelectionForm in RecipeCreate get view
 
 ----MVP LINE------------------------------------------
 
