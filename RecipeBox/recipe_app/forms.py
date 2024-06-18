@@ -153,4 +153,8 @@ class TagSelectionForm(Form):
     include = BooleanField()
 
 
-TagSelectionFormset = formset_factory(TagSelectionForm, extra=0)
+TagSelectionFormsetBase = formset_factory(TagSelectionForm, extra=0)
+
+
+class TagSelectionFormset(TagSelectionFormsetBase):
+    pass
