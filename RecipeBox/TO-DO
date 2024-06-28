@@ -1,4 +1,7 @@
 * recipe tags
+** Tag form include shoud default to false
+** TagSelectionFormset should return all tag as not selected by default
+** TagSelectionFormset __init__ needs param which tags to mark true
 ** add validity test for TagSelectionForm in RecipeCreate get view
 
 ----MVP LINE------------------------------------------
