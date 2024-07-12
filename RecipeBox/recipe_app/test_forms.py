@@ -277,11 +277,21 @@ class TagSelectionFormsetTests(TestCase):
             TagSelectionForm
         )
 
-    # def test_formset_returns_all_tags_unselected_by_default(self):
-    #     tag1 = Tag.objects.create(name='Tag1')
-    #     tag2 = Tag.objects.create(name='Tag2')
+    def test_formset_returns_all_tags_unselected_by_default(self):
+        tag1 = Tag.objects.create(name='Tag1')
+        tag2 = Tag.objects.create(name='Tag2')
 
-    #     uut = TagSelectionFormset()
+        uut = TagSelectionFormset()
 
-    #     self.assertTrue(uut.is_valid())
-    #     self.assertEqual(len(uut), 2)
+        self.assertTrue(uut.is_valid())
+        self.assertEqual(len(uut), 2)
+
+        tag_form1 = uut.cleaned_data[0]
+        self.assertEqual(tag_form1['tag_name'], tag1.name)
+        self.assertEqual(tag_form1['id'], tag1.id)
+        self.assertFalse(tag_form1['include'])
+
+        tag_form2 = uut.cleaned_data[1]
+        self.assertEqual(tag_form2['tag_name'], tag2.name)
+        self.assertEqual(tag_form2['id'], tag2.id)
+        self.assertFalse(tag_form2['include'])
