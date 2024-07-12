@@ -25,7 +25,7 @@ from recipe_app.forms import (
     TagSelectionForm,
     TagSelectionFormset
 )
-from recipe_app.models import Recipe
+from recipe_app.models import Tag
 
 
 class IngredientFormTests(TestCase):
@@ -260,6 +260,7 @@ class TagSelectionFormTests(TestCase):
 
         include_field = form.fields['include']
         self.assertIsInstance(include_field, BooleanField)
+        self.assertFalse(include_field.required)
 
 
 class TagSelectionFormsetTests(TestCase):
@@ -275,3 +276,12 @@ class TagSelectionFormsetTests(TestCase):
             formset.form,
             TagSelectionForm
         )
+
+    # def test_formset_returns_all_tags_unselected_by_default(self):
+    #     tag1 = Tag.objects.create(name='Tag1')
+    #     tag2 = Tag.objects.create(name='Tag2')
+
+    #     uut = TagSelectionFormset()
+
+    #     self.assertTrue(uut.is_valid())
+    #     self.assertEqual(len(uut), 2)

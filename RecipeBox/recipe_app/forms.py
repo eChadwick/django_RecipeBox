@@ -11,6 +11,8 @@ from django.forms import (
     RadioSelect,
 )
 
+from recipe_app.models import Tag
+
 
 class IngredientForm(Form):
     name_error = "Can't have Amount without Ingredient"
@@ -150,7 +152,9 @@ class TagSelectionForm(Form):
         widget=HiddenInput
     )
 
-    include = BooleanField()
+    include = BooleanField(
+        required=False
+    )
 
 
 TagSelectionFormsetBase = formset_factory(TagSelectionForm, extra=0)
@@ -158,3 +162,19 @@ TagSelectionFormsetBase = formset_factory(TagSelectionForm, extra=0)
 
 class TagSelectionFormset(TagSelectionFormsetBase):
     pass
+
+    # def __init__(self, *args, **kwargs):
+    # all_tags = Tag.objects.all()
+
+    # formset_data = {
+    #     'form-TOTAL_FORMS': len(all_tags),
+    #     'form-INITIAL_FORMS': len(all_tags)
+    # }
+
+    # for i, tag in enumerate(all_tags):
+    #     formset_data[f'form-{i}-tag_name'] = tag.name
+    #     formset_data[f'form-{i}-id'] = tag.id
+
+    # kwargs['data'] = formset_data
+
+    # super().__init__(args, kwargs)
