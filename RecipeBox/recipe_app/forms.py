@@ -11,6 +11,8 @@ from django.forms import (
     RadioSelect,
 )
 
+from django.db.models import QuerySet
+
 from recipe_app.models import Tag
 
 
@@ -162,8 +164,14 @@ TagSelectionFormsetBase = formset_factory(TagSelectionForm, extra=0)
 
 class TagSelectionFormset(TagSelectionFormsetBase):
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, data=None, *args, **kwargs):
         all_tags = Tag.objects.all()
+
+        selected_tag_ids = []
+        if type(data) == QuerySet:
+            for item in data:
+                if type(item) == Tag:
+                    selected_tag_ids.append(item.id)
 
         formset_data = {
             'form-TOTAL_FORMS': str(len(all_tags)),
@@ -173,6 +181,8 @@ class TagSelectionFormset(TagSelectionFormsetBase):
         for i, tag in enumerate(all_tags):
             formset_data[f'form-{i}-tag_name'] = tag.name
             formset_data[f'form-{i}-id'] = str(tag.id)
+            if tag.id in selected_tag_ids:
+                formset_data[f'form-{i}-include'] = True
 
         kwargs['data'] = formset_data
 
