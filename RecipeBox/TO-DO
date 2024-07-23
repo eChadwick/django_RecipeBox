@@ -1,7 +1,5 @@
 * recipe tags
-** TagSelectionFormset __init__ needs param which tags to mark true
-** add validity test for TagSelectionForm in RecipeCreate get view
-
+* can't line break in directions
 ----MVP LINE------------------------------------------
 
 * recipe update ugly errors on empty ingredient name

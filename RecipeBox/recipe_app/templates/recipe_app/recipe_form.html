@@ -39,6 +39,14 @@
                 <h2>Directions</h2>
                 <p>{{recipe.directions}}</p>
             </div>
+            <div>
+                <h2>Tags</h2>
+                <p>{{tag_create}}</p>
+                {{tag_select.management_form}}
+                {% for tag in tag_select %}
+                    <p>{{tag}}</p>
+                {% endfor %}
+            </div>
         </div>
         <button type="submit">Submit</button>
     </form>
