@@ -21,7 +21,10 @@ from recipe_app.models import (
     RecipeIngredient,
     Tag
 )
-from recipe_app.views import RECIPE_NOT_FOUND_ERROR
+from recipe_app.views import (
+    RECIPE_NOT_FOUND_ERROR,
+    TAG_CREATE_FORMSET_PREFIX
+)
 
 
 class RecipeDetailViewTestCase(TestCase):
@@ -105,6 +108,10 @@ class RecipeCreateViewTests(TestCase):
         rendered_tag_create_form = rendered_context['tag_create']
         self.assertIsInstance(rendered_tag_create_form, TagCreationFormset)
         self.assertFalse(rendered_tag_create_form.is_bound)
+        self.assertEqual(
+            rendered_tag_create_form.prefix,
+            TAG_CREATE_FORMSET_PREFIX
+        )
 
         rendered_tag_select_form = rendered_context['tag_select']
         self.assertIsInstance(rendered_tag_select_form, TagSelectionFormset)

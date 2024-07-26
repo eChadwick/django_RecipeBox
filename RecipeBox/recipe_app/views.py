@@ -17,6 +17,7 @@ from recipe_app.forms import (
 DEFAULT_PAGINATION = 25
 
 RECIPE_NOT_FOUND_ERROR = 'Recipe not found'
+TAG_CREATE_FORMSET_PREFIX = 'tag-create'
 
 
 def index(request):
@@ -83,7 +84,7 @@ def recipe_create(request):
         context = {
             'recipe': RecipeForm(),
             'ingredients_list': IngredientFormSet(),
-            'tag_create': TagCreationFormset(),
+            'tag_create': TagCreationFormset(prefix=TAG_CREATE_FORMSET_PREFIX),
             'tag_select': TagSelectionFormset(data=Tag.objects.all()),
             'action': 'create'
         }
