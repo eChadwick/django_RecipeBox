@@ -85,7 +85,7 @@ def recipe_create(request):
             'recipe': RecipeForm(),
             'ingredients_list': IngredientFormSet(),
             'tag_create': TagCreationFormset(prefix=TAG_CREATE_FORMSET_PREFIX),
-            'tag_select': TagSelectionFormset(data=Tag.objects.all()),
+            'tag_select': TagSelectionFormset(),
             'action': 'create'
         }
         return render(request, 'recipe_app/recipe_form.html', context)
