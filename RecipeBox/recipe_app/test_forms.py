@@ -264,6 +264,11 @@ class TagSelectionFormTests(TestCase):
 
 
 class TagSelectionFormsetTests(TestCase):
+    def setUp(self):
+        self.tag1 = Tag.objects.create(name='Tag1')
+        self.tag2 = Tag.objects.create(name='Tag2')
+        self.tag3 = Tag.objects.create(name='Tag3')
+
     def test_formset_settings(self):
         formset = TagSelectionFormset()
 
@@ -278,53 +283,45 @@ class TagSelectionFormsetTests(TestCase):
         )
 
     def test_formset_returns_all_tags_unselected_by_default(self):
-        tag1 = Tag.objects.create(name='Tag1')
-        tag2 = Tag.objects.create(name='Tag2')
-
         uut = TagSelectionFormset()
 
         self.assertTrue(uut.is_valid())
-        self.assertEqual(len(uut), 2)
+        self.assertEqual(len(uut), 3)
 
         tag_form1 = uut.cleaned_data[0]
-        self.assertEqual(tag_form1['tag_name'], tag1.name)
-        self.assertEqual(tag_form1['id'], tag1.id)
+        self.assertEqual(tag_form1['tag_name'], self.tag1.name)
+        self.assertEqual(tag_form1['id'], self.tag1.id)
         self.assertFalse(tag_form1['include'])
 
         tag_form2 = uut.cleaned_data[1]
-        self.assertEqual(tag_form2['tag_name'], tag2.name)
-        self.assertEqual(tag_form2['id'], tag2.id)
+        self.assertEqual(tag_form2['tag_name'], self.tag2.name)
+        self.assertEqual(tag_form2['id'], self.tag2.id)
         self.assertFalse(tag_form2['include'])
 
-    def test_formset_marks_input_tags_as_selected(self):
-        tag1 = Tag.objects.create(name='Tag1')
-        tag2 = Tag.objects.create(name='Tag2')
-        tag3 = Tag.objects.create(name='Tag3')
-        tag4 = Tag.objects.create(name='Tag4')
+        tag_form3 = uut.cleaned_data[2]
+        self.assertEqual(tag_form3['tag_name'], self.tag3.name)
+        self.assertEqual(tag_form3['id'], self.tag3.id)
+        self.assertFalse(tag_form3['include'])
 
+    def test_formset_marks_input_tags_as_selected(self):
         input_tags = Tag.objects.all()[:2]
 
         uut = TagSelectionFormset(input_tags)
 
         self.assertTrue(uut.is_valid())
-        self.assertEqual(len(uut), 4)
+        self.assertEqual(len(uut), 3)
 
         tag_form1 = uut.cleaned_data[0]
-        self.assertEqual(tag_form1['tag_name'], tag1.name)
-        self.assertEqual(tag_form1['id'], tag1.id)
+        self.assertEqual(tag_form1['tag_name'], self.tag1.name)
+        self.assertEqual(tag_form1['id'], self.tag1.id)
         self.assertTrue(tag_form1['include'])
 
         tag_form2 = uut.cleaned_data[1]
-        self.assertEqual(tag_form2['tag_name'], tag2.name)
-        self.assertEqual(tag_form2['id'], tag2.id)
+        self.assertEqual(tag_form2['tag_name'], self.tag2.name)
+        self.assertEqual(tag_form2['id'], self.tag2.id)
         self.assertTrue(tag_form2['include'])
 
         tag_form3 = uut.cleaned_data[2]
-        self.assertEqual(tag_form3['tag_name'], tag3.name)
-        self.assertEqual(tag_form3['id'], tag3.id)
+        self.assertEqual(tag_form3['tag_name'], self.tag3.name)
+        self.assertEqual(tag_form3['id'], self.tag3.id)
         self.assertFalse(tag_form3['include'])
-
-        tag_form4 = uut.cleaned_data[3]
-        self.assertEqual(tag_form4['tag_name'], tag4.name)
-        self.assertEqual(tag_form4['id'], tag4.id)
-        self.assertFalse(tag_form4['include'])
