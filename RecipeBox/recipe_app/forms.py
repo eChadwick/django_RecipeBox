@@ -164,12 +164,12 @@ TagSelectionFormsetBase = formset_factory(TagSelectionForm, extra=0)
 
 class TagSelectionFormset(TagSelectionFormsetBase):
 
-    def __init__(self, data=None, *args, **kwargs):
+    def __init__(self, selected_tags=None, *args, **kwargs):
         all_tags = Tag.objects.all()
 
         selected_tag_ids = []
-        if type(data) == QuerySet:
-            for item in data:
+        if type(selected_tags) == QuerySet:
+            for item in selected_tags:
                 if type(item) == Tag:
                     selected_tag_ids.append(item.id)
 
