@@ -325,3 +325,9 @@ class TagSelectionFormsetTests(TestCase):
         self.assertEqual(tag_form3['tag_name'], self.tag3.name)
         self.assertEqual(tag_form3['id'], self.tag3.id)
         self.assertFalse(tag_form3['include'])
+
+    def test_init_handles_custom_prefix(self):
+        uut = TagSelectionFormset(prefix='test-prefix')
+
+        self.assertTrue(uut.is_valid())
+        self.assertEqual(len(uut), 3)

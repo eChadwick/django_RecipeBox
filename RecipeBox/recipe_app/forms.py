@@ -173,16 +173,17 @@ class TagSelectionFormset(TagSelectionFormsetBase):
                 if type(item) == Tag:
                     selected_tag_ids.append(item.id)
 
+        form_prefix = kwargs.get('prefix', 'form')
         formset_data = {
-            'form-TOTAL_FORMS': str(len(all_tags)),
-            'form-INITIAL_FORMS': str(len(all_tags))
+            f'{form_prefix}-TOTAL_FORMS': str(len(all_tags)),
+            f'{form_prefix}-INITIAL_FORMS': str(len(all_tags))
         }
 
         for i, tag in enumerate(all_tags):
-            formset_data[f'form-{i}-tag_name'] = tag.name
-            formset_data[f'form-{i}-id'] = str(tag.id)
+            formset_data[f'{form_prefix}-{i}-tag_name'] = tag.name
+            formset_data[f'{form_prefix}-{i}-id'] = str(tag.id)
             if tag.id in selected_tag_ids:
-                formset_data[f'form-{i}-include'] = True
+                formset_data[f'{form_prefix}-{i}-include'] = True
 
         kwargs['data'] = formset_data
 
