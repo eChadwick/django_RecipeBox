@@ -19,6 +19,7 @@ DEFAULT_PAGINATION = 25
 RECIPE_NOT_FOUND_ERROR = 'Recipe not found'
 TAG_CREATE_FORMSET_PREFIX = 'tag-create-form'
 TAG_SELECT_FORMSET_PREFIX = 'tag-select-form'
+INGREDIENT_LIST_FORMSET_PREFIX = 'ingredient-form'
 
 
 def index(request):
@@ -84,7 +85,7 @@ def recipe_create(request):
     else:
         context = {
             'recipe': RecipeForm(),
-            'ingredients_list': IngredientFormSet(),
+            'ingredients_list': IngredientFormSet(prefix=INGREDIENT_LIST_FORMSET_PREFIX),
             'tag_create': TagCreationFormset(prefix=TAG_CREATE_FORMSET_PREFIX),
             'tag_select': TagSelectionFormset(prefix=TAG_SELECT_FORMSET_PREFIX),
             'action': 'create'
