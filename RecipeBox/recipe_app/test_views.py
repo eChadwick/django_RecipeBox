@@ -23,7 +23,8 @@ from recipe_app.models import (
 )
 from recipe_app.views import (
     RECIPE_NOT_FOUND_ERROR,
-    TAG_CREATE_FORMSET_PREFIX
+    TAG_CREATE_FORMSET_PREFIX,
+    TAG_SELECT_FORMSET_PREFIX
 )
 
 
@@ -115,7 +116,12 @@ class RecipeCreateViewTests(TestCase):
 
         rendered_tag_select_form = rendered_context['tag_select']
         self.assertIsInstance(rendered_tag_select_form, TagSelectionFormset)
+        self.assertTrue(rendered_tag_select_form.is_valid())
         self.assertEqual(len(rendered_tag_select_form.forms), 5)
+        self.assertEqual(
+            rendered_tag_select_form.prefix,
+            TAG_SELECT_FORMSET_PREFIX
+        )
 
     def test_get_should_pass_request_action(self, mock_render):
         self.client.get(reverse('recipe-create'))
