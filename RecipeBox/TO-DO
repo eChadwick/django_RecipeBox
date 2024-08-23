@@ -1,5 +1,6 @@
 * recipe tags
 ** tag formsets need non default prefix
+** add_ingredient.js needs to account for new IngredientFormset prefix
 * can't line break in directions
 ----MVP LINE------------------------------------------
 
