@@ -138,12 +138,12 @@ class RecipeCreateViewTests(TestCase):
         form_data = {
             'csrfmiddlewaretoken': 'irrelevant',
             'name': '',
-            'form-TOTAL_FORMS': '1',
-            'form-INITIAL_FORMS': '0',
-            'form-MIN_NUM_FORMS': '0',
-            'form-MAX_NUM_FORMS': '1000',
-            'form-0-name': 'Ingredient ',
-            'form-0-measurement': 'Amount',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-TOTAL_FORMS': '1',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-INITIAL_FORMS': '0',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MIN_NUM_FORMS': '0',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MAX_NUM_FORMS': '1000',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name': 'Ingredient ',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement': 'Amount',
             'directions': 'Do things'
         }
         self.client.post(reverse('recipe-create'), form_data)
@@ -164,12 +164,12 @@ class RecipeCreateViewTests(TestCase):
         self.assertEqual(
             rendered_ingredients.data,
             {
-                'form-TOTAL_FORMS': form_data['form-TOTAL_FORMS'],
-                'form-INITIAL_FORMS': form_data['form-INITIAL_FORMS'],
-                'form-MIN_NUM_FORMS': form_data['form-MIN_NUM_FORMS'],
-                'form-MAX_NUM_FORMS': form_data['form-MAX_NUM_FORMS'],
-                'form-0-name': form_data['form-0-name'],
-                'form-0-measurement': form_data['form-0-measurement']
+                f'{INGREDIENT_LIST_FORMSET_PREFIX}-TOTAL_FORMS': form_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-TOTAL_FORMS'],
+                f'{INGREDIENT_LIST_FORMSET_PREFIX}-INITIAL_FORMS': form_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-INITIAL_FORMS'],
+                f'{INGREDIENT_LIST_FORMSET_PREFIX}-MIN_NUM_FORMS': form_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-MIN_NUM_FORMS'],
+                f'{INGREDIENT_LIST_FORMSET_PREFIX}-MAX_NUM_FORMS': form_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-MAX_NUM_FORMS'],
+                f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name': form_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name'],
+                f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement': form_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement']
             }
         )
 
@@ -178,12 +178,12 @@ class RecipeCreateViewTests(TestCase):
         form_data = {
             'csrfmiddlewaretoken': 'irrelevant',
             'name': 'Recipe Name',
-            'form-TOTAL_FORMS': '1',
-            'form-INITIAL_FORMS': '0',
-            'form-MIN_NUM_FORMS': '0',
-            'form-MAX_NUM_FORMS': '1000',
-            'form-0-name': '',
-            'form-0-measurement': 'Amount',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-TOTAL_FORMS': '1',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-INITIAL_FORMS': '0',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MIN_NUM_FORMS': '0',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MAX_NUM_FORMS': '1000',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name': '',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement': 'Amount',
             'directions': 'Do things'
         }
         self.client.post(reverse('recipe-create'), form_data)
@@ -204,12 +204,12 @@ class RecipeCreateViewTests(TestCase):
         self.assertEqual(
             rendered_ingredients.data,
             {
-                'form-TOTAL_FORMS': form_data['form-TOTAL_FORMS'],
-                'form-INITIAL_FORMS': form_data['form-INITIAL_FORMS'],
-                'form-MIN_NUM_FORMS': form_data['form-MIN_NUM_FORMS'],
-                'form-MAX_NUM_FORMS': form_data['form-MAX_NUM_FORMS'],
-                'form-0-name': form_data['form-0-name'],
-                'form-0-measurement': form_data['form-0-measurement']
+                f'{INGREDIENT_LIST_FORMSET_PREFIX}-TOTAL_FORMS': form_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-TOTAL_FORMS'],
+                f'{INGREDIENT_LIST_FORMSET_PREFIX}-INITIAL_FORMS': form_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-INITIAL_FORMS'],
+                f'{INGREDIENT_LIST_FORMSET_PREFIX}-MIN_NUM_FORMS': form_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-MIN_NUM_FORMS'],
+                f'{INGREDIENT_LIST_FORMSET_PREFIX}-MAX_NUM_FORMS': form_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-MAX_NUM_FORMS'],
+                f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name': form_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name'],
+                f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement': form_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement']
             }
         )
 
@@ -217,12 +217,12 @@ class RecipeCreateViewTests(TestCase):
         form_data = {
             'csrfmiddlewaretoken': 'irrelevant',
             'name': 'Recipe Name',
-            'form-TOTAL_FORMS': '1',
-            'form-INITIAL_FORMS': '0',
-            'form-MIN_NUM_FORMS': '0',
-            'form-MAX_NUM_FORMS': '1000',
-            'form-0-name': '',
-            'form-0-measurement': '',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-TOTAL_FORMS': '1',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-INITIAL_FORMS': '0',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MIN_NUM_FORMS': '0',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MAX_NUM_FORMS': '1000',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name': '',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement': '',
             'directions': ''
         }
         self.client.post(reverse('recipe-create'), form_data)
@@ -244,12 +244,12 @@ class RecipeCreateViewTests(TestCase):
         self.assertEqual(
             rendered_ingredients.data,
             {
-                'form-TOTAL_FORMS': form_data['form-TOTAL_FORMS'],
-                'form-INITIAL_FORMS': form_data['form-INITIAL_FORMS'],
-                'form-MIN_NUM_FORMS': form_data['form-MIN_NUM_FORMS'],
-                'form-MAX_NUM_FORMS': form_data['form-MAX_NUM_FORMS'],
-                'form-0-name': form_data['form-0-name'],
-                'form-0-measurement': form_data['form-0-measurement']
+                f'{INGREDIENT_LIST_FORMSET_PREFIX}-TOTAL_FORMS': form_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-TOTAL_FORMS'],
+                f'{INGREDIENT_LIST_FORMSET_PREFIX}-INITIAL_FORMS': form_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-INITIAL_FORMS'],
+                f'{INGREDIENT_LIST_FORMSET_PREFIX}-MIN_NUM_FORMS': form_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-MIN_NUM_FORMS'],
+                f'{INGREDIENT_LIST_FORMSET_PREFIX}-MAX_NUM_FORMS': form_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-MAX_NUM_FORMS'],
+                f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name': form_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name'],
+                f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement': form_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement']
             }
         )
 
@@ -257,12 +257,12 @@ class RecipeCreateViewTests(TestCase):
     def test_recipe_post_success_with_name_and_directions(self, mock_redirect, _):
         form_data = {'csrfmiddlewaretoken': 'irrelevant',
                      'name': 'oooppp',
-                     'form-TOTAL_FORMS': '1',
-                     'form-INITIAL_FORMS': '0',
-                     'form-MIN_NUM_FORMS': '0',
-                     'form-MAX_NUM_FORMS': '1000',
-                     'form-0-name': '',
-                     'form-0-measurement': '',
+                     f'{INGREDIENT_LIST_FORMSET_PREFIX}-TOTAL_FORMS': '1',
+                     f'{INGREDIENT_LIST_FORMSET_PREFIX}-INITIAL_FORMS': '0',
+                     f'{INGREDIENT_LIST_FORMSET_PREFIX}-MIN_NUM_FORMS': '0',
+                     f'{INGREDIENT_LIST_FORMSET_PREFIX}-MAX_NUM_FORMS': '1000',
+                     f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name': '',
+                     f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement': '',
                      'directions': 'jkjk'}
         self.client.post(reverse('recipe-create'), form_data)
         mock_redirect.assert_called()
@@ -272,12 +272,12 @@ class RecipeCreateViewTests(TestCase):
         form_data = {
             'csrfmiddlewaretoken': 'irrelevant',
             'name': 'Test name',
-            'form-TOTAL_FORMS': '1',
-            'form-INITIAL_FORMS': '0',
-            'form-MIN_NUM_FORMS': '0',
-            'form-MAX_NUM_FORMS': '1000',
-            'form-0-name': 'Ingredient 1',
-            'form-0-measurement': 'a bit',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-TOTAL_FORMS': '1',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-INITIAL_FORMS': '0',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MIN_NUM_FORMS': '0',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MAX_NUM_FORMS': '1000',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name': 'Ingredient 1',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement': 'a bit',
             'directions': ''
         }
         self.client.post(reverse('recipe-create'), form_data)
@@ -287,42 +287,42 @@ class RecipeCreateViewTests(TestCase):
         form_data = {
             'csrfmiddlewaretoken': 'irrelevant',
             'name': 'Test ',
-            'form-TOTAL_FORMS': '2',
-            'form-INITIAL_FORMS': '0',
-            'form-MIN_NUM_FORMS': '0',
-            'form-MAX_NUM_FORMS': '1000',
-            'form-0-name': 'Delete',
-            'form-0-measurement': 'ignored ',
-            'form-0-DELETE': 'on',
-            'form-1-name': 'Keep this',
-            'form-1-measurement': 'a bit',
-            'form-2-name': '',
-            'form-2-measurement': '',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-TOTAL_FORMS': '2',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-INITIAL_FORMS': '0',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MIN_NUM_FORMS': '0',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MAX_NUM_FORMS': '1000',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name': 'Delete',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement': 'ignored ',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-DELETE': 'on',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-1-name': 'Keep this',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-1-measurement': 'a bit',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-2-name': '',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-2-measurement': '',
             'directions': ''
         }
         self.client.post(reverse('recipe-create'), form_data)
 
         self.assertFalse(
             RecipeIngredient.objects.filter(
-                measurement=form_data['form-0-measurement']
+                measurement=form_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement']
             ).exists()
         )
 
         self.assertFalse(
             Ingredient.objects.filter(
-                name__iexact=form_data['form-0-name']
+                name__iexact=form_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name']
             ).exists()
         )
 
         self.assertFalse(
             RecipeIngredient.objects.filter(
-                measurement=form_data['form-2-measurement']
+                measurement=form_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-2-measurement']
             ).exists()
         )
 
         self.assertFalse(
             Ingredient.objects.filter(
-                name__iexact=form_data['form-2-name']
+                name__iexact=form_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-2-name']
             ).exists()
         )
 
@@ -331,14 +331,14 @@ class RecipeCreateViewTests(TestCase):
         form_data = {
             'csrfmiddlewaretoken': 'irrelevant',
             'name': 'Another Test',
-            'form-TOTAL_FORMS': '2',
-            'form-INITIAL_FORMS': '0',
-            'form-MIN_NUM_FORMS': '0',
-            'form-MAX_NUM_FORMS': '1000',
-            'form-0-name': 'first ingredient',
-            'form-0-measurement': 'a bit',
-            'form-1-name': 'second ingredient',
-            'form-1-measurement': 'a bunch',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-TOTAL_FORMS': '2',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-INITIAL_FORMS': '0',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MIN_NUM_FORMS': '0',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MAX_NUM_FORMS': '1000',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name': 'first ingredient',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement': 'a bit',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-1-name': 'second ingredient',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-1-measurement': 'a bunch',
             'directions': 'Do stuff'
         }
 
@@ -350,23 +350,23 @@ class RecipeCreateViewTests(TestCase):
         self.assertEqual(recipe[0].directions, form_data['directions'])
 
         ingredient0 = Ingredient.objects.filter(
-            name__iexact=form_data['form-0-name'])
+            name__iexact=form_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name'])
         self.assertTrue(ingredient0)
 
         ingredient1 = Ingredient.objects.filter(
-            name__iexact=form_data['form-1-name'])
+            name__iexact=form_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-1-name'])
         self.assertTrue(ingredient1)
 
         self.assertTrue(RecipeIngredient.objects.filter(
             recipe=recipe[0],
             ingredient=ingredient0[0],
-            measurement=form_data['form-0-measurement']).exists()
+            measurement=form_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement']).exists()
         )
 
         self.assertTrue(RecipeIngredient.objects.filter(
             recipe=recipe[0],
             ingredient=ingredient1[0],
-            measurement=form_data['form-1-measurement']).exists()
+            measurement=form_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-1-measurement']).exists()
         )
 
         mock_redirect.assert_called_with(
@@ -419,10 +419,10 @@ class RecipeUpdateViewTests(TestCase):
         self.assertEqual(
             rendered_ingredients_list.data,
             {
-                'form-TOTAL_FORMS': '1',
-                'form-INITIAL_FORMS': '1',
-                'form-0-name': self.ingredient.name,
-                'form-0-measurement': self.recipe_ingredient.measurement
+                f'{INGREDIENT_LIST_FORMSET_PREFIX}-TOTAL_FORMS': '1',
+                f'{INGREDIENT_LIST_FORMSET_PREFIX}-INITIAL_FORMS': '1',
+                f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name': self.ingredient.name,
+                f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement': self.recipe_ingredient.measurement
             }
         )
 
@@ -431,12 +431,12 @@ class RecipeUpdateViewTests(TestCase):
         form_data = {
             'csrfmiddlewaretoken': 'irrelevant',
             'name': '',
-            'form-TOTAL_FORMS': '1',
-            'form-INITIAL_FORMS': '1',
-            'form-MIN_NUM_FORMS': '',
-            'form-MAX_NUM_FORMS': '',
-            'form-0-name': 'Ingredient',
-            'form-0-measurement': 'Amount',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-TOTAL_FORMS': '1',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-INITIAL_FORMS': '1',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MIN_NUM_FORMS': '',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MAX_NUM_FORMS': '',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name': 'Ingredient',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement': 'Amount',
             'directions': 'Do things'
         }
         self.client.post(
@@ -455,12 +455,12 @@ class RecipeUpdateViewTests(TestCase):
         self.assertEqual(
             rendered_ingredients.data,
             {
-                'form-TOTAL_FORMS': form_data['form-TOTAL_FORMS'],
-                'form-INITIAL_FORMS': form_data['form-INITIAL_FORMS'],
-                'form-MIN_NUM_FORMS': form_data['form-MIN_NUM_FORMS'],
-                'form-MAX_NUM_FORMS': form_data['form-MAX_NUM_FORMS'],
-                'form-0-name': form_data['form-0-name'],
-                'form-0-measurement': form_data['form-0-measurement']
+                f'{INGREDIENT_LIST_FORMSET_PREFIX}-TOTAL_FORMS': form_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-TOTAL_FORMS'],
+                f'{INGREDIENT_LIST_FORMSET_PREFIX}-INITIAL_FORMS': form_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-INITIAL_FORMS'],
+                f'{INGREDIENT_LIST_FORMSET_PREFIX}-MIN_NUM_FORMS': form_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-MIN_NUM_FORMS'],
+                f'{INGREDIENT_LIST_FORMSET_PREFIX}-MAX_NUM_FORMS': form_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-MAX_NUM_FORMS'],
+                f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name': form_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name'],
+                f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement': form_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement']
             }
         )
 
@@ -468,12 +468,12 @@ class RecipeUpdateViewTests(TestCase):
         form_data = {
             'csrfmiddlewaretoken': 'irrelevant',
             'name': 'Recipe Name',
-            'form-TOTAL_FORMS': '1',
-            'form-INITIAL_FORMS': '1',
-            'form-MIN_NUM_FORMS': '',
-            'form-MAX_NUM_FORMS': '',
-            'form-0-name': '',
-            'form-0-measurement': 'Amount',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-TOTAL_FORMS': '1',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-INITIAL_FORMS': '1',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MIN_NUM_FORMS': '',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MAX_NUM_FORMS': '',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name': '',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement': 'Amount',
             'directions': 'Do things'
         }
         self.client.post(
@@ -492,12 +492,12 @@ class RecipeUpdateViewTests(TestCase):
         self.assertEqual(
             rendered_ingredients.data,
             {
-                'form-TOTAL_FORMS': form_data['form-TOTAL_FORMS'],
-                'form-INITIAL_FORMS': form_data['form-INITIAL_FORMS'],
-                'form-MIN_NUM_FORMS': form_data['form-MIN_NUM_FORMS'],
-                'form-MAX_NUM_FORMS': form_data['form-MAX_NUM_FORMS'],
-                'form-0-name': form_data['form-0-name'],
-                'form-0-measurement': form_data['form-0-measurement']
+                f'{INGREDIENT_LIST_FORMSET_PREFIX}-TOTAL_FORMS': form_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-TOTAL_FORMS'],
+                f'{INGREDIENT_LIST_FORMSET_PREFIX}-INITIAL_FORMS': form_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-INITIAL_FORMS'],
+                f'{INGREDIENT_LIST_FORMSET_PREFIX}-MIN_NUM_FORMS': form_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-MIN_NUM_FORMS'],
+                f'{INGREDIENT_LIST_FORMSET_PREFIX}-MAX_NUM_FORMS': form_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-MAX_NUM_FORMS'],
+                f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name': form_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name'],
+                f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement': form_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement']
             }
         )
 
@@ -505,15 +505,15 @@ class RecipeUpdateViewTests(TestCase):
         form_data = {
             'csrfmiddlewaretoken': 'irrelevant',
             'name': 'Test Recipe',
-            'form-TOTAL_FORMS': '2',
-            'form-INITIAL_FORMS': '1',
-            'form-MIN_NUM_FORMS': '',
-            'form-MAX_NUM_FORMS': '',
-            'form-0-name': 'Test Ingredient',
-            'form-0-measurement': 'a bunch',
-            'form-0-DELETE': 'on',
-            'form-1-name': '',
-            'form-1-measurement': '',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-TOTAL_FORMS': '2',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-INITIAL_FORMS': '1',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MIN_NUM_FORMS': '',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MAX_NUM_FORMS': '',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name': 'Test Ingredient',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement': 'a bunch',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-DELETE': 'on',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-1-name': '',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-1-measurement': '',
             'directions': ''
         }
 
@@ -534,15 +534,15 @@ class RecipeUpdateViewTests(TestCase):
         self.assertEqual(
             rendered_ingredients.data,
             {
-                'form-TOTAL_FORMS': form_data['form-TOTAL_FORMS'],
-                'form-INITIAL_FORMS': form_data['form-INITIAL_FORMS'],
-                'form-MIN_NUM_FORMS': form_data['form-MIN_NUM_FORMS'],
-                'form-MAX_NUM_FORMS': form_data['form-MAX_NUM_FORMS'],
-                'form-0-name': form_data['form-0-name'],
-                'form-0-measurement': form_data['form-0-measurement'],
-                'form-0-DELETE': form_data['form-0-DELETE'],
-                'form-1-name': form_data['form-1-name'],
-                'form-1-measurement': form_data['form-1-measurement']
+                f'{INGREDIENT_LIST_FORMSET_PREFIX}-TOTAL_FORMS': form_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-TOTAL_FORMS'],
+                f'{INGREDIENT_LIST_FORMSET_PREFIX}-INITIAL_FORMS': form_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-INITIAL_FORMS'],
+                f'{INGREDIENT_LIST_FORMSET_PREFIX}-MIN_NUM_FORMS': form_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-MIN_NUM_FORMS'],
+                f'{INGREDIENT_LIST_FORMSET_PREFIX}-MAX_NUM_FORMS': form_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-MAX_NUM_FORMS'],
+                f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name': form_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name'],
+                f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement': form_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement'],
+                f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-DELETE': form_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-DELETE'],
+                f'{INGREDIENT_LIST_FORMSET_PREFIX}-1-name': form_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-1-name'],
+                f'{INGREDIENT_LIST_FORMSET_PREFIX}-1-measurement': form_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-1-measurement']
             }
         )
 
@@ -551,12 +551,12 @@ class RecipeUpdateViewTests(TestCase):
             'csrfmiddlewaretoken': 'irrelevant',
             'name': 'new name',
             'directions': 'new directions',
-            'form-TOTAL_FORMS': '2',
-            'form-INITIAL_FORMS': '2',
-            'form-0-name': self.ingredient.name,
-            'form-0-measurement': 'updated measurement',
-            'form-2-name': 'new ingredient name',
-            'form-2-measurement': 'new ingredient measurement'
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-TOTAL_FORMS': '2',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-INITIAL_FORMS': '2',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name': self.ingredient.name,
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement': 'updated measurement',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-2-name': 'new ingredient name',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-2-measurement': 'new ingredient measurement'
         }
 
         response = self.client.post(
@@ -572,12 +572,12 @@ class RecipeUpdateViewTests(TestCase):
         updated_form_data = {
             'csrfmiddlewaretoken': 'irrelevant',
             'name': 'New Recipe Name',
-            'form-TOTAL_FORMS': '1',
-            'form-INITIAL_FORMS': '1',
-            'form-MIN_NUM_FORMS': '',
-            'form-MAX_NUM_FORMS': '',
-            'form-0-name': 'Test Ingredient',
-            'form-0-measurement': 'a bunch',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-TOTAL_FORMS': '1',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-INITIAL_FORMS': '1',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MIN_NUM_FORMS': '',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MAX_NUM_FORMS': '',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name': 'Test Ingredient',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement': 'a bunch',
             'directions': 'New Directions'
         }
 
@@ -598,7 +598,7 @@ class RecipeUpdateViewTests(TestCase):
             RecipeIngredient.objects.filter(
                 recipe=self.recipe.pk,
                 ingredient=self.recipe_ingredient.ingredient.pk,
-                measurement=updated_form_data['form-0-measurement']
+                measurement=updated_form_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement']
             ).count(),
             1
         )
@@ -611,14 +611,14 @@ class RecipeUpdateViewTests(TestCase):
         updated_form_data = {
             'csrfmiddlewaretoken': 'irrelevant',
             'name': 'Test Recipe',
-            'form-TOTAL_FORMS': '2',
-            'form-INITIAL_FORMS': '1',
-            'form-MIN_NUM_FORMS': '',
-            'form-MAX_NUM_FORMS': '',
-            'form-0-name': 'Test Ingredient',
-            'form-0-measurement': 'a bunch',
-            'form-1-name': 'New Ingredient',
-            'form-1-measurement': 'new amount',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-TOTAL_FORMS': '2',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-INITIAL_FORMS': '1',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MIN_NUM_FORMS': '',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MAX_NUM_FORMS': '',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name': 'Test Ingredient',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement': 'a bunch',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-1-name': 'New Ingredient',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-1-measurement': 'new amount',
             'directions': 'Test Directions'
         }
 
@@ -635,20 +635,20 @@ class RecipeUpdateViewTests(TestCase):
             RecipeIngredient.objects.filter(
                 recipe=self.recipe.pk,
                 ingredient=self.recipe_ingredient.ingredient.pk,
-                measurement=updated_form_data['form-0-measurement']
+                measurement=updated_form_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement']
             ).count(),
             1
         )
 
         new_ingredient = Ingredient.objects.filter(
-            name=updated_form_data['form-1-name'])
+            name=updated_form_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-1-name'])
         self.assertTrue(new_ingredient.exists())
 
         self.assertEqual(
             RecipeIngredient.objects.filter(
                 recipe=self.recipe.pk,
                 ingredient=new_ingredient[0].pk,
-                measurement=updated_form_data['form-1-measurement']
+                measurement=updated_form_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-1-measurement']
             ).count(),
             1
         )
@@ -661,13 +661,13 @@ class RecipeUpdateViewTests(TestCase):
         updated_form_data = {
             'csrfmiddlewaretoken': 'irrelevant',
             'name': 'Test Recipe',
-            'form-TOTAL_FORMS': '1',
-            'form-INITIAL_FORMS': '1',
-            'form-MIN_NUM_FORMS': '',
-            'form-MAX_NUM_FORMS': '',
-            'form-0-name': 'Test Ingredient',
-            'form-0-measurement': 'a bunch',
-            'form-0-DELETE': 'on',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-TOTAL_FORMS': '1',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-INITIAL_FORMS': '1',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MIN_NUM_FORMS': '',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MAX_NUM_FORMS': '',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name': 'Test Ingredient',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement': 'a bunch',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-DELETE': 'on',
             'directions': 'Test Directions'
         }
 
@@ -695,12 +695,12 @@ class RecipeUpdateViewTests(TestCase):
         updated_form_data = {
             'csrfmiddlewaretoken': 'irrelevant',
             'name': 'Test Recipe',
-            'form-TOTAL_FORMS': '1',
-            'form-INITIAL_FORMS': '1',
-            'form-MIN_NUM_FORMS': '',
-            'form-MAX_NUM_FORMS': '',
-            'form-0-name': 'Test Ingredient',
-            'form-0-measurement': 'a bit',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-TOTAL_FORMS': '1',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-INITIAL_FORMS': '1',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MIN_NUM_FORMS': '',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MAX_NUM_FORMS': '',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name': 'Test Ingredient',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement': 'a bit',
             'directions': 'Test Directions'
         }
 
@@ -717,7 +717,7 @@ class RecipeUpdateViewTests(TestCase):
             RecipeIngredient.objects.filter(
                 recipe=self.recipe.pk,
                 ingredient=self.recipe_ingredient.ingredient.pk,
-                measurement=updated_form_data['form-0-measurement']
+                measurement=updated_form_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement']
             ).count(),
             1
         )
@@ -760,10 +760,10 @@ class RecipeSearchViewTests(TestCase):
 
     def test_post_renders_correct_template(self, mock_render):
         post_data = {
-            'form-TOTAL_FORMS': '0',
-            'form-INITIAL_FORMS': '0',
-            'form-MIN_NUM_FORMS': '0',
-            'form-MAX_NUM_FORMS': '1000',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-TOTAL_FORMS': '0',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-INITIAL_FORMS': '0',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MIN_NUM_FORMS': '0',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MAX_NUM_FORMS': '1000',
             'csrfmiddlewaretoken': 'irrelevant'
         }
         self.client.post(reverse('recipe-search'), post_data)
@@ -785,14 +785,14 @@ class RecipeSearchViewTests(TestCase):
         )
 
         post_data = {
-            'form-TOTAL_FORMS': '1',
-            'form-INITIAL_FORMS': '1',
-            'form-MIN_NUM_FORMS': '0',
-            'form-MAX_NUM_FORMS': '1000',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-TOTAL_FORMS': '1',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-INITIAL_FORMS': '1',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MIN_NUM_FORMS': '0',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MAX_NUM_FORMS': '1000',
             'csrfmiddlewaretoken': 'irrelevant',
-            'form-0-name': ingredient.name,
-            'form-0-inclusion': 'neutral',
-            'form-0-id': ingredient.pk
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name': ingredient.name,
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-inclusion': 'neutral',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-id': ingredient.pk
         }
         self.client.post(reverse('recipe-search'), post_data)
 
@@ -823,20 +823,20 @@ class RecipeSearchViewTests(TestCase):
         neutral_recipe = Recipe.objects.create(name='Neutral Recipe')
 
         post_data = {
-            'form-TOTAL_FORMS': '3',
-            'form-INITIAL_FORMS': '3',
-            'form-MIN_NUM_FORMS': '0',
-            'form-MAX_NUM_FORMS': '1000',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-TOTAL_FORMS': '3',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-INITIAL_FORMS': '3',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MIN_NUM_FORMS': '0',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MAX_NUM_FORMS': '1000',
             'csrfmiddlewaretoken': 'irrelevant',
-            'form-0-name': exclude_ingredient_1.name,
-            'form-0-inclusion': 'exclude',
-            'form-0-id': exclude_ingredient_1.pk,
-            'form-1-name': exclude_ingredient_2.name,
-            'form-1-inclusion': 'exclude',
-            'form-1-id': exclude_ingredient_2.pk,
-            'form-2-name': neutral_ingredient.name,
-            'form-2-inclusion': 'neutral',
-            'form-2-id': neutral_ingredient.pk
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name': exclude_ingredient_1.name,
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-inclusion': 'exclude',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-id': exclude_ingredient_1.pk,
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-1-name': exclude_ingredient_2.name,
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-1-inclusion': 'exclude',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-1-id': exclude_ingredient_2.pk,
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-2-name': neutral_ingredient.name,
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-2-inclusion': 'neutral',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-2-id': neutral_ingredient.pk
         }
 
         self.client.post(reverse('recipe-search'), post_data)
@@ -872,17 +872,17 @@ class RecipeSearchViewTests(TestCase):
         )
 
         post_data = {
-            'form-TOTAL_FORMS': '2',
-            'form-INITIAL_FORMS': '2',
-            'form-MIN_NUM_FORMS': '0',
-            'form-MAX_NUM_FORMS': '1000',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-TOTAL_FORMS': '2',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-INITIAL_FORMS': '2',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MIN_NUM_FORMS': '0',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MAX_NUM_FORMS': '1000',
             'csrfmiddlewaretoken': 'irrelevant',
-            'form-0-name': ingredient_1.name,
-            'form-0-inclusion': 'or',
-            'form-0-id': ingredient_1.pk,
-            'form-1-name': ingredient_2.name,
-            'form-1-inclusion': 'or',
-            'form-1-id': ingredient_2.pk
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name': ingredient_1.name,
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-inclusion': 'or',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-id': ingredient_1.pk,
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-1-name': ingredient_2.name,
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-1-inclusion': 'or',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-1-id': ingredient_2.pk
         }
 
         self.client.post(reverse('recipe-search'), post_data)
@@ -922,17 +922,17 @@ class RecipeSearchViewTests(TestCase):
         )
 
         post_data = {
-            'form-TOTAL_FORMS': '2',
-            'form-INITIAL_FORMS': '2',
-            'form-MIN_NUM_FORMS': '0',
-            'form-MAX_NUM_FORMS': '1000',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-TOTAL_FORMS': '2',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-INITIAL_FORMS': '2',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MIN_NUM_FORMS': '0',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MAX_NUM_FORMS': '1000',
             'csrfmiddlewaretoken': 'irrelevant',
-            'form-0-name': ingredient_1.name,
-            'form-0-inclusion': 'and',
-            'form-0-id': ingredient_1.pk,
-            'form-1-name': ingredient_2.name,
-            'form-1-inclusion': 'and',
-            'form-1-id': ingredient_2.pk
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name': ingredient_1.name,
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-inclusion': 'and',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-id': ingredient_1.pk,
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-1-name': ingredient_2.name,
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-1-inclusion': 'and',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-1-id': ingredient_2.pk
         }
 
         self.client.post(reverse('recipe-search'), post_data)
@@ -952,10 +952,10 @@ class RecipeSearchViewTests(TestCase):
             name='Beef', directions='dont do stuff')
 
         post_data = {
-            'form-TOTAL_FORMS': '0',
-            'form-INITIAL_FORMS': '0',
-            'form-MIN_NUM_FORMS': '0',
-            'form-MAX_NUM_FORMS': '1000',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-TOTAL_FORMS': '0',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-INITIAL_FORMS': '0',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MIN_NUM_FORMS': '0',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MAX_NUM_FORMS': '1000',
             'csrfmiddlewaretoken': 'irrelevant',
             'recipe_name': 'Chicken'
         }
@@ -984,17 +984,17 @@ class RecipeSearchViewTests(TestCase):
         )
 
         post_data = {
-            'form-TOTAL_FORMS': '2',
-            'form-INITIAL_FORMS': '2',
-            'form-MIN_NUM_FORMS': '0',
-            'form-MAX_NUM_FORMS': '1000',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-TOTAL_FORMS': '2',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-INITIAL_FORMS': '2',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MIN_NUM_FORMS': '0',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MAX_NUM_FORMS': '1000',
             'csrfmiddlewaretoken': 'irrelevant',
-            'form-0-name': ingredient_1.name,
-            'form-0-inclusion': 'or',
-            'form-0-id': ingredient_1.pk,
-            'form-1-name': ingredient_2.name,
-            'form-1-inclusion': 'or',
-            'form-1-id': ingredient_2.pk
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name': ingredient_1.name,
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-inclusion': 'or',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-id': ingredient_1.pk,
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-1-name': ingredient_2.name,
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-1-inclusion': 'or',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-1-id': ingredient_2.pk
         }
 
         self.client.post(reverse('recipe-search'), post_data)
