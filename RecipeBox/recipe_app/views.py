@@ -19,7 +19,7 @@ DEFAULT_PAGINATION = 25
 RECIPE_NOT_FOUND_ERROR = 'Recipe not found'
 TAG_CREATE_FORMSET_PREFIX = 'tag-create-form'
 TAG_SELECT_FORMSET_PREFIX = 'tag-select-form'
-INGREDIENT_LIST_FORMSET_PREFIX = 'ingredient-form'
+INGREDIENT_LIST_FORMSET_PREFIX = 'form'
 
 
 def index(request):
@@ -45,7 +45,7 @@ def _validate_recipe_form_data(request):
     recipe_form.is_valid()
 
     ingredients_data = {
-        k: v for (k, v) in request.POST.items() if 'form-' in k}
+        k: v for (k, v) in request.POST.items() if INGREDIENT_LIST_FORMSET_PREFIX in k}
     ingredients_formset = IngredientFormSet(ingredients_data)
     ingredients_formset.is_valid()
 
@@ -136,11 +136,13 @@ def recipe_update(request, pk):
         ingredients_list_data = {}
         form_count = 0
         for i, ri in zip(recipe.ingredients.all(), recipe.recipeingredient_set.all()):
-            ingredients_list_data[f'form-{form_count}-name'] = i.name
-            ingredients_list_data[f'form-{form_count}-measurement'] = ri.measurement
+            ingredients_list_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-{form_count}-name'] = i.name
+            ingredients_list_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-{form_count}-measurement'] = ri.measurement
             form_count += 1
-        ingredients_list_data['form-TOTAL_FORMS'] = str(form_count)
-        ingredients_list_data['form-INITIAL_FORMS'] = str(form_count)
+        ingredients_list_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-TOTAL_FORMS'] = str(
+            form_count)
+        ingredients_list_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-INITIAL_FORMS'] = str(
+            form_count)
 
         ingredients_formset = IngredientFormSet(ingredients_list_data)
         context = {
