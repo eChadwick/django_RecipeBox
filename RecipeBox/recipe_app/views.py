@@ -19,7 +19,7 @@ DEFAULT_PAGINATION = 25
 RECIPE_NOT_FOUND_ERROR = 'Recipe not found'
 TAG_CREATE_FORMSET_PREFIX = 'tag-create-form'
 TAG_SELECT_FORMSET_PREFIX = 'tag-select-form'
-INGREDIENT_LIST_FORMSET_PREFIX = 'form'
+INGREDIENT_LIST_FORMSET_PREFIX = 'ingredient-form'
 
 
 def index(request):
@@ -46,7 +46,8 @@ def _validate_recipe_form_data(request):
 
     ingredients_data = {
         k: v for (k, v) in request.POST.items() if INGREDIENT_LIST_FORMSET_PREFIX in k}
-    ingredients_formset = IngredientFormSet(ingredients_data)
+    ingredients_formset = IngredientFormSet(
+        ingredients_data, prefix=INGREDIENT_LIST_FORMSET_PREFIX)
     ingredients_formset.is_valid()
 
     if not recipe_form.data['directions'] and ingredients_formset.is_empty():

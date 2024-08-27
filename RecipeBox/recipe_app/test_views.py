@@ -760,10 +760,10 @@ class RecipeSearchViewTests(TestCase):
 
     def test_post_renders_correct_template(self, mock_render):
         post_data = {
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-TOTAL_FORMS': '0',
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-INITIAL_FORMS': '0',
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MIN_NUM_FORMS': '0',
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MAX_NUM_FORMS': '1000',
+            'form-TOTAL_FORMS': '0',
+            'form-INITIAL_FORMS': '0',
+            'form-MIN_NUM_FORMS': '0',
+            'form-MAX_NUM_FORMS': '1000',
             'csrfmiddlewaretoken': 'irrelevant'
         }
         self.client.post(reverse('recipe-search'), post_data)
@@ -785,14 +785,14 @@ class RecipeSearchViewTests(TestCase):
         )
 
         post_data = {
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-TOTAL_FORMS': '1',
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-INITIAL_FORMS': '1',
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MIN_NUM_FORMS': '0',
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MAX_NUM_FORMS': '1000',
+            'form-TOTAL_FORMS': '1',
+            'form-INITIAL_FORMS': '1',
+            'form-MIN_NUM_FORMS': '0',
+            'form-MAX_NUM_FORMS': '1000',
             'csrfmiddlewaretoken': 'irrelevant',
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name': ingredient.name,
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-inclusion': 'neutral',
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-id': ingredient.pk
+            'form-0-name': ingredient.name,
+            'form-0-inclusion': 'neutral',
+            'form-0-id': ingredient.pk
         }
         self.client.post(reverse('recipe-search'), post_data)
 
@@ -823,20 +823,20 @@ class RecipeSearchViewTests(TestCase):
         neutral_recipe = Recipe.objects.create(name='Neutral Recipe')
 
         post_data = {
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-TOTAL_FORMS': '3',
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-INITIAL_FORMS': '3',
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MIN_NUM_FORMS': '0',
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MAX_NUM_FORMS': '1000',
+            'form-TOTAL_FORMS': '3',
+            'form-INITIAL_FORMS': '3',
+            'form-MIN_NUM_FORMS': '0',
+            'form-MAX_NUM_FORMS': '1000',
             'csrfmiddlewaretoken': 'irrelevant',
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name': exclude_ingredient_1.name,
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-inclusion': 'exclude',
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-id': exclude_ingredient_1.pk,
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-1-name': exclude_ingredient_2.name,
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-1-inclusion': 'exclude',
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-1-id': exclude_ingredient_2.pk,
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-2-name': neutral_ingredient.name,
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-2-inclusion': 'neutral',
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-2-id': neutral_ingredient.pk
+            'form-0-name': exclude_ingredient_1.name,
+            'form-0-inclusion': 'exclude',
+            'form-0-id': exclude_ingredient_1.pk,
+            'form-1-name': exclude_ingredient_2.name,
+            'form-1-inclusion': 'exclude',
+            'form-1-id': exclude_ingredient_2.pk,
+            'form-2-name': neutral_ingredient.name,
+            'form-2-inclusion': 'neutral',
+            'form-2-id': neutral_ingredient.pk
         }
 
         self.client.post(reverse('recipe-search'), post_data)
@@ -872,17 +872,17 @@ class RecipeSearchViewTests(TestCase):
         )
 
         post_data = {
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-TOTAL_FORMS': '2',
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-INITIAL_FORMS': '2',
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MIN_NUM_FORMS': '0',
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MAX_NUM_FORMS': '1000',
+            'form-TOTAL_FORMS': '2',
+            'form-INITIAL_FORMS': '2',
+            'form-MIN_NUM_FORMS': '0',
+            'form-MAX_NUM_FORMS': '1000',
             'csrfmiddlewaretoken': 'irrelevant',
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name': ingredient_1.name,
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-inclusion': 'or',
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-id': ingredient_1.pk,
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-1-name': ingredient_2.name,
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-1-inclusion': 'or',
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-1-id': ingredient_2.pk
+            'form-0-name': ingredient_1.name,
+            'form-0-inclusion': 'or',
+            'form-0-id': ingredient_1.pk,
+            'form-1-name': ingredient_2.name,
+            'form-1-inclusion': 'or',
+            'form-1-id': ingredient_2.pk
         }
 
         self.client.post(reverse('recipe-search'), post_data)
@@ -922,17 +922,17 @@ class RecipeSearchViewTests(TestCase):
         )
 
         post_data = {
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-TOTAL_FORMS': '2',
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-INITIAL_FORMS': '2',
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MIN_NUM_FORMS': '0',
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MAX_NUM_FORMS': '1000',
+            'form-TOTAL_FORMS': '2',
+            'form-INITIAL_FORMS': '2',
+            'form-MIN_NUM_FORMS': '0',
+            'form-MAX_NUM_FORMS': '1000',
             'csrfmiddlewaretoken': 'irrelevant',
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name': ingredient_1.name,
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-inclusion': 'and',
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-id': ingredient_1.pk,
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-1-name': ingredient_2.name,
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-1-inclusion': 'and',
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-1-id': ingredient_2.pk
+            'form-0-name': ingredient_1.name,
+            'form-0-inclusion': 'and',
+            'form-0-id': ingredient_1.pk,
+            'form-1-name': ingredient_2.name,
+            'form-1-inclusion': 'and',
+            'form-1-id': ingredient_2.pk
         }
 
         self.client.post(reverse('recipe-search'), post_data)
@@ -952,10 +952,10 @@ class RecipeSearchViewTests(TestCase):
             name='Beef', directions='dont do stuff')
 
         post_data = {
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-TOTAL_FORMS': '0',
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-INITIAL_FORMS': '0',
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MIN_NUM_FORMS': '0',
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MAX_NUM_FORMS': '1000',
+            'form-TOTAL_FORMS': '0',
+            'form-INITIAL_FORMS': '0',
+            'form-MIN_NUM_FORMS': '0',
+            'form-MAX_NUM_FORMS': '1000',
             'csrfmiddlewaretoken': 'irrelevant',
             'recipe_name': 'Chicken'
         }
@@ -984,17 +984,17 @@ class RecipeSearchViewTests(TestCase):
         )
 
         post_data = {
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-TOTAL_FORMS': '2',
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-INITIAL_FORMS': '2',
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MIN_NUM_FORMS': '0',
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MAX_NUM_FORMS': '1000',
+            'form-TOTAL_FORMS': '2',
+            'form-INITIAL_FORMS': '2',
+            'form-MIN_NUM_FORMS': '0',
+            'form-MAX_NUM_FORMS': '1000',
             'csrfmiddlewaretoken': 'irrelevant',
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name': ingredient_1.name,
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-inclusion': 'or',
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-id': ingredient_1.pk,
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-1-name': ingredient_2.name,
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-1-inclusion': 'or',
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-1-id': ingredient_2.pk
+            'form-0-name': ingredient_1.name,
+            'form-0-inclusion': 'or',
+            'form-0-id': ingredient_1.pk,
+            'form-1-name': ingredient_2.name,
+            'form-1-inclusion': 'or',
+            'form-1-id': ingredient_2.pk
         }
 
         self.client.post(reverse('recipe-search'), post_data)
