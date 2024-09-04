@@ -53,16 +53,23 @@ def _validate_recipe_form_data(request):
     if not recipe_form.data['directions'] and ingredients_formset.is_empty():
         recipe_form.add_error('name', RecipeForm.content_error)
 
-    return recipe_form, ingredients_formset
+    tag_create_data = {
+        k: v for (k, v) in request.POST.items() if TAG_CREATE_FORMSET_PREFIX in k}
+    tag_create_formset = TagCreationFormset(
+        tag_create_data, prefix=TAG_CREATE_FORMSET_PREFIX)
+
+    return recipe_form, ingredients_formset, tag_create_formset
 
 
 def recipe_create(request):
     if ('POST' == request.method):
-        recipe_form, ingredients_formset = _validate_recipe_form_data(request)
+        recipe_form, ingredients_formset, tag_create_formset = _validate_recipe_form_data(
+            request)
 
         if (not recipe_form.is_valid() or not ingredients_formset.is_valid()):
             context = {'recipe': recipe_form,
-                       'ingredients_list': ingredients_formset}
+                       'ingredients_list': ingredients_formset,
+                       'tag_create': tag_create_formset}
             return render(request, 'recipe_app/recipe_form.html', context)
 
         recipe_model = Recipe(
@@ -96,7 +103,8 @@ def recipe_create(request):
 
 def recipe_update(request, pk):
     if 'POST' == request.method:
-        recipe_form, ingredients_formset = _validate_recipe_form_data(request)
+        recipe_form, ingredients_formset, _ = _validate_recipe_form_data(
+            request)
 
         if (not recipe_form.is_valid() or not ingredients_formset.is_valid()):
             context = {'recipe': recipe_form,

@@ -144,7 +144,21 @@ class RecipeCreateViewTests(TestCase):
             f'{INGREDIENT_LIST_FORMSET_PREFIX}-MAX_NUM_FORMS': '1000',
             f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name': 'Ingredient ',
             f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement': 'Amount',
-            'directions': 'Do things'
+            'directions': 'Do things',
+            f'{TAG_CREATE_FORMSET_PREFIX}-TOTAL_FORMS': '1',
+            f'{TAG_CREATE_FORMSET_PREFIX}-INITIAL_FORMS': '0',
+            f'{TAG_CREATE_FORMSET_PREFIX}-MIN_NUM_FORMS': '0',
+            f'{TAG_CREATE_FORMSET_PREFIX}-MAX_NUM_FORMS': '1000',
+            f'{TAG_CREATE_FORMSET_PREFIX}-0-tag_name': 'New Tag',
+            f'{TAG_SELECT_FORMSET_PREFIX}-TOTAL_FORMS': '2',
+            f'{TAG_SELECT_FORMSET_PREFIX}-INITIAL_FORMS': '2',
+            f'{TAG_SELECT_FORMSET_PREFIX}-MIN_NUM_FORMS': '',
+            f'{TAG_SELECT_FORMSET_PREFIX}-MAX_NUM_FORMS': '',
+            f'{TAG_SELECT_FORMSET_PREFIX}-0-tag_name': 'Tag1',
+            f'{TAG_SELECT_FORMSET_PREFIX}-0-include': 'on',
+            f'{TAG_SELECT_FORMSET_PREFIX}-0-id': '1',
+            f'{TAG_SELECT_FORMSET_PREFIX}-1-tag_name': 'Tag2',
+            f'{TAG_SELECT_FORMSET_PREFIX}-1-id': '2'
         }
         self.client.post(reverse('recipe-create'), form_data)
 
@@ -170,6 +184,18 @@ class RecipeCreateViewTests(TestCase):
                 f'{INGREDIENT_LIST_FORMSET_PREFIX}-MAX_NUM_FORMS': form_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-MAX_NUM_FORMS'],
                 f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name': form_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name'],
                 f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement': form_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement']
+            }
+        )
+
+        rendered_tag_create = mock_render.call_args[0][2]['tag_create']
+        self.assertEqual(
+            rendered_tag_create.data,
+            {
+                f'{TAG_CREATE_FORMSET_PREFIX}-TOTAL_FORMS': form_data[f'{TAG_CREATE_FORMSET_PREFIX}-TOTAL_FORMS'],
+                f'{TAG_CREATE_FORMSET_PREFIX}-INITIAL_FORMS': form_data[f'{TAG_CREATE_FORMSET_PREFIX}-INITIAL_FORMS'],
+                f'{TAG_CREATE_FORMSET_PREFIX}-MIN_NUM_FORMS': form_data[f'{TAG_CREATE_FORMSET_PREFIX}-MIN_NUM_FORMS'],
+                f'{TAG_CREATE_FORMSET_PREFIX}-MAX_NUM_FORMS': form_data[f'{TAG_CREATE_FORMSET_PREFIX}-MAX_NUM_FORMS'],
+                f'{TAG_CREATE_FORMSET_PREFIX}-0-tag_name': form_data[f'{TAG_CREATE_FORMSET_PREFIX}-0-tag_name']
             }
         )
 
