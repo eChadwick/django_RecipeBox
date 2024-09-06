@@ -199,6 +199,22 @@ class RecipeCreateViewTests(TestCase):
             }
         )
 
+        rendered_tag_select = mock_render.call_args[0][2]['tag_select']
+        self.assertEqual(
+            rendered_tag_select.data,
+            {
+                f'{TAG_SELECT_FORMSET_PREFIX}-TOTAL_FORMS': form_data[f'{TAG_SELECT_FORMSET_PREFIX}-TOTAL_FORMS'],
+                f'{TAG_SELECT_FORMSET_PREFIX}-INITIAL_FORMS': form_data[f'{TAG_SELECT_FORMSET_PREFIX}-INITIAL_FORMS'],
+                f'{TAG_SELECT_FORMSET_PREFIX}-MIN_NUM_FORMS': form_data[f'{TAG_SELECT_FORMSET_PREFIX}-MIN_NUM_FORMS'],
+                f'{TAG_SELECT_FORMSET_PREFIX}-MAX_NUM_FORMS': form_data[f'{TAG_SELECT_FORMSET_PREFIX}-MAX_NUM_FORMS'],
+                f'{TAG_SELECT_FORMSET_PREFIX}-0-tag_name': form_data[f'{TAG_SELECT_FORMSET_PREFIX}-0-tag_name'],
+                f'{TAG_SELECT_FORMSET_PREFIX}-0-include': form_data[f'{TAG_SELECT_FORMSET_PREFIX}-0-include'],
+                f'{TAG_SELECT_FORMSET_PREFIX}-0-id': form_data[f'{TAG_SELECT_FORMSET_PREFIX}-0-id'],
+                f'{TAG_SELECT_FORMSET_PREFIX}-1-tag_name': form_data[f'{TAG_SELECT_FORMSET_PREFIX}-1-tag_name'],
+                f'{TAG_SELECT_FORMSET_PREFIX}-1-id': form_data[f'{TAG_SELECT_FORMSET_PREFIX}-1-id']
+            }
+        )
+
     def test_post_should_rerender_form_on_ingredient_errors(self, mock_render):
         # Empty ingredient name is error when measurement is not empty
         form_data = {
