@@ -498,6 +498,47 @@ class RecipeCreateViewTests(TestCase):
         mock_redirect.assert_called_with(
             reverse('recipe-detail', args=[recipe[0].pk]))
 
+    @patch('recipe_app.views.redirect', wraps=redirect)
+    def test_success_with_tag_create(self, mock_redirect, _):
+        form_data = {
+            'csrfmiddlewaretoken': 'irrelevant',
+            'name': 'Oooppp',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-TOTAL_FORMS': '1',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-INITIAL_FORMS': '0',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MIN_NUM_FORMS': '0',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MAX_NUM_FORMS': '1000',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name': '',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement': '',
+            'directions': 'jkjk',
+            f'{TAG_CREATE_FORMSET_PREFIX}-TOTAL_FORMS': '2',
+            f'{TAG_CREATE_FORMSET_PREFIX}-INITIAL_FORMS': '0',
+            f'{TAG_CREATE_FORMSET_PREFIX}-MIN_NUM_FORMS': '0',
+            f'{TAG_CREATE_FORMSET_PREFIX}-MAX_NUM_FORMS': '1000',
+            f'{TAG_CREATE_FORMSET_PREFIX}-0-tag_name': 'New Tag',
+            f'{TAG_CREATE_FORMSET_PREFIX}-1-tag_name': 'Other New Tag'
+        }
+
+        self.client.post(reverse('recipe-create'), form_data)
+
+        recipe = Recipe.objects.filter(name__iexact=form_data['name'])
+        self.assertTrue(recipe)
+        self.assertEqual(recipe[0].name, form_data['name'])
+        self.assertEqual(recipe[0].directions, form_data['directions'])
+
+        recipe_tags = recipe[0].tags.all()
+        self.assertEqual(len(recipe_tags), 2)
+        self.assertEqual(
+            recipe_tags[0].name,
+            form_data[f'{TAG_CREATE_FORMSET_PREFIX}-0-tag_name']
+        )
+        self.assertEqual(
+            recipe_tags[1].name,
+            form_data[f'{TAG_CREATE_FORMSET_PREFIX}-1-tag_name']
+        )
+
+        mock_redirect.assert_called_with(
+            reverse('recipe-detail', args=[recipe[0].pk]))
+
 
 @patch('recipe_app.views.render', return_value=HttpResponse())
 class RecipeUpdateViewTests(TestCase):
