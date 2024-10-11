@@ -112,6 +112,10 @@ class RecipeCreateViewPostTests(TestCase):
         self.assertEqual(rendered_template, 'recipe_app/recipe_form.html')
 
         rendered_recipe = mock_render.call_args[0][2]['recipe']
+        self.assertIsInstance(
+            rendered_recipe,
+            RecipeForm
+        )
         self.assertEqual(
             rendered_recipe.data,
             {
@@ -121,6 +125,10 @@ class RecipeCreateViewPostTests(TestCase):
         )
 
         rendered_ingredients = mock_render.call_args[0][2]['ingredients_list']
+        self.assertIsInstance(
+            rendered_ingredients,
+            IngredientFormSet
+        )
         self.assertEqual(
             rendered_ingredients.data,
             {
@@ -134,6 +142,10 @@ class RecipeCreateViewPostTests(TestCase):
         )
 
         rendered_tag_create = mock_render.call_args[0][2]['tag_create']
+        self.assertIsInstance(
+            rendered_tag_create,
+            TagCreationFormset
+        )
         self.assertEqual(
             rendered_tag_create.data,
             {
@@ -146,6 +158,10 @@ class RecipeCreateViewPostTests(TestCase):
         )
 
         rendered_tag_select = mock_render.call_args[0][2]['tag_select']
+        # self.assertIsInstance(
+        #     rendered_tag_select,
+        #     TagSelectionFormset
+        # )
         self.assertEqual(
             rendered_tag_select.data,
             {
@@ -194,6 +210,10 @@ class RecipeCreateViewPostTests(TestCase):
         self.assertEqual(rendered_template, 'recipe_app/recipe_form.html')
 
         rendered_recipe = mock_render.call_args[0][2]['recipe']
+        self.assertIsInstance(
+            rendered_recipe,
+            RecipeForm
+        )
         self.assertEqual(
             rendered_recipe.data,
             {
@@ -203,6 +223,10 @@ class RecipeCreateViewPostTests(TestCase):
         )
 
         rendered_ingredients = mock_render.call_args[0][2]['ingredients_list']
+        self.assertIsInstance(
+            rendered_ingredients,
+            IngredientFormSet
+        )
         self.assertEqual(
             rendered_ingredients.data,
             {
@@ -216,6 +240,10 @@ class RecipeCreateViewPostTests(TestCase):
         )
 
         rendered_tag_create = mock_render.call_args[0][2]['tag_create']
+        self.assertIsInstance(
+            rendered_tag_create,
+            TagCreationFormset
+        )
         self.assertEqual(
             rendered_tag_create.data,
             {
@@ -228,6 +256,10 @@ class RecipeCreateViewPostTests(TestCase):
         )
 
         rendered_tag_select = mock_render.call_args[0][2]['tag_select']
+        # self.assertIsInstance(
+        #     rendered_tag_create,
+        #     TagSelectionFormset
+        # )
         self.assertEqual(
             rendered_tag_select.data,
             {
@@ -275,6 +307,10 @@ class RecipeCreateViewPostTests(TestCase):
         self.assertEqual(rendered_template, 'recipe_app/recipe_form.html')
 
         rendered_recipe = mock_render.call_args[0][2]['recipe']
+        self.assertIsInstance(
+            rendered_recipe,
+            RecipeForm
+        )
         self.assertEqual(
             rendered_recipe.data,
             {
@@ -285,6 +321,10 @@ class RecipeCreateViewPostTests(TestCase):
         self.assertIn(RecipeForm.content_error, rendered_recipe.errors['name'])
 
         rendered_ingredients = mock_render.call_args[0][2]['ingredients_list']
+        self.assertIsInstance(
+            rendered_ingredients,
+            IngredientFormSet
+        )
         self.assertEqual(
             rendered_ingredients.data,
             {
@@ -298,6 +338,10 @@ class RecipeCreateViewPostTests(TestCase):
         )
 
         rendered_tag_create = mock_render.call_args[0][2]['tag_create']
+        self.assertIsInstance(
+            rendered_tag_create,
+            TagCreationFormset
+        )
         self.assertEqual(
             rendered_tag_create.data,
             {
@@ -310,6 +354,10 @@ class RecipeCreateViewPostTests(TestCase):
         )
 
         rendered_tag_select = mock_render.call_args[0][2]['tag_select']
+        # self.assertIsInstance(
+        #     rendered_tag_select,
+        #     TagSelectionFormset
+        # )
         self.assertEqual(
             rendered_tag_select.data,
             {
