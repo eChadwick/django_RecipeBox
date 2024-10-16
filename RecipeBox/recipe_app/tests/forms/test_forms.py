@@ -1,4 +1,4 @@
-from unittest.mock import patch
+from unittest.mock import patch, ANY
 
 from django.forms import (
     CharField,
@@ -331,3 +331,23 @@ class TagSelectionFormsetTests(TestCase):
 
         self.assertTrue(uut.is_valid())
         self.assertEqual(len(uut), 3)
+
+    def test_init_properly_constructs_management_form(self):
+        uut = TagSelectionFormset()
+
+        self.assertEqual(
+            uut.data['form-TOTAL_FORMS'],
+            str(len(Tag.objects.all()))
+        )
+        self.assertEqual(
+            uut.data['form-INITIAL_FORMS'],
+            str(len(Tag.objects.all()))
+        )
+        self.assertEqual(
+            uut.data['form-MIN_NUM_FORMS'],
+            ANY
+        )
+        self.assertEqual(
+            uut.data['form-MAX_NUM_FORMS'],
+            ANY
+        )
