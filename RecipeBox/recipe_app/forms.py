@@ -176,7 +176,9 @@ class TagSelectionFormset(TagSelectionFormsetBase):
         form_prefix = kwargs.get('prefix', 'form')
         formset_data = {
             f'{form_prefix}-TOTAL_FORMS': str(len(all_tags)),
-            f'{form_prefix}-INITIAL_FORMS': str(len(all_tags))
+            f'{form_prefix}-INITIAL_FORMS': str(len(all_tags)),
+            f'{form_prefix}-MIN_NUM_FORMS': '',
+            f'{form_prefix}-MAX_NUM_FORMS': '',
         }
 
         for i, tag in enumerate(all_tags):
