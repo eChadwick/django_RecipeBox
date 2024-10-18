@@ -10,9 +10,9 @@ from recipe_app.forms.forms import (
     IngredientFormSet,
     IngredientInclusionFormSet,
     RecipeInclusionForm,
-    TagCreationFormset,
-    TagSelectionFormset
+    TagCreationFormset
 )
+from recipe_app.forms.tag_selection_formset import TagSelectionFormset
 
 DEFAULT_PAGINATION = 25
 

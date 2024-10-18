@@ -8,9 +8,11 @@ from django.urls import reverse
 from recipe_app.forms.forms import (
     IngredientFormSet,
     RecipeForm,
-    TagCreationFormset,
-    TagSelectionFormset
+    TagCreationFormset
+
 )
+from recipe_app.forms.tag_selection_formset import TagSelectionFormset
+
 from recipe_app.models import (
     Ingredient,
     Recipe,
