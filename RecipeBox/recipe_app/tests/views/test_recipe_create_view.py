@@ -535,39 +535,39 @@ class RecipeCreateViewPostTests(TestCase):
         mock_redirect.assert_called_with(
             reverse('recipe-detail', args=[recipe[0].pk]))
 
-    # def test_success_with_tag_select(self, _):
-    #     form_data = {
-    #         'csrfmiddlewaretoken': 'irrelevant',
-    #         'name': 'Oooppp',
-    #         f'{INGREDIENT_LIST_FORMSET_PREFIX}-TOTAL_FORMS': '1',
-    #         f'{INGREDIENT_LIST_FORMSET_PREFIX}-INITIAL_FORMS': '0',
-    #         f'{INGREDIENT_LIST_FORMSET_PREFIX}-MIN_NUM_FORMS': '0',
-    #         f'{INGREDIENT_LIST_FORMSET_PREFIX}-MAX_NUM_FORMS': '1000',
-    #         f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name': '',
-    #         f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement': '',
-    #         'directions': 'jkjk',
-    #         f'{TAG_SELECT_FORMSET_PREFIX}-TOTAL_FORMS': '2',
-    #         f'{TAG_SELECT_FORMSET_PREFIX}-INITIAL_FORMS': '2',
-    #         f'{TAG_SELECT_FORMSET_PREFIX}-MIN_NUM_FORMS': '',
-    #         f'{TAG_SELECT_FORMSET_PREFIX}-MAX_NUM_FORMS': '',
-    #         f'{TAG_SELECT_FORMSET_PREFIX}-0-tag_name': 'Tag1',
-    #         f'{TAG_SELECT_FORMSET_PREFIX}-0-include': 'on',
-    #         f'{TAG_SELECT_FORMSET_PREFIX}-0-id': '1',
-    #         f'{TAG_SELECT_FORMSET_PREFIX}-1-tag_name': 'Tag2',
-    #         f'{TAG_SELECT_FORMSET_PREFIX}-1-id': '2'
-    #     }
+    def test_success_with_tag_select(self, _):
+        form_data = {
+            'csrfmiddlewaretoken': 'irrelevant',
+            'name': 'Oooppp',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-TOTAL_FORMS': '1',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-INITIAL_FORMS': '0',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MIN_NUM_FORMS': '0',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MAX_NUM_FORMS': '1000',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name': '',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement': '',
+            'directions': 'jkjk',
+            f'{TAG_SELECT_FORMSET_PREFIX}-TOTAL_FORMS': '2',
+            f'{TAG_SELECT_FORMSET_PREFIX}-INITIAL_FORMS': '2',
+            f'{TAG_SELECT_FORMSET_PREFIX}-MIN_NUM_FORMS': '',
+            f'{TAG_SELECT_FORMSET_PREFIX}-MAX_NUM_FORMS': '',
+            f'{TAG_SELECT_FORMSET_PREFIX}-0-tag_name': 'Tag1',
+            f'{TAG_SELECT_FORMSET_PREFIX}-0-include': 'on',
+            f'{TAG_SELECT_FORMSET_PREFIX}-0-id': '1',
+            f'{TAG_SELECT_FORMSET_PREFIX}-1-tag_name': 'Tag2',
+            f'{TAG_SELECT_FORMSET_PREFIX}-1-id': '2'
+        }
 
-    #     self.client.post(reverse('recipe-create'), form_data)
+        self.client.post(reverse('recipe-create'), form_data)
 
-    #     recipe = Recipe.objects.filter(name__iexact=form_data['name'])
-    #     self.assertTrue(recipe)
+        recipe = Recipe.objects.filter(name__iexact=form_data['name'])
+        self.assertTrue(recipe)
 
-    #     recipe_tags = recipe[0].tags.all()
-    #     self.assertEqual(
-    #         len(recipe_tags),
-    #         1
-    #     )
-    #     self.assertEqual(
-    #         recipe_tags[0].name,
-    #         form_data[f'{TAG_SELECT_FORMSET_PREFIX}-0-tag_name': 'Tag1']
-    #     )
+        recipe_tags = recipe[0].tags.all()
+        self.assertEqual(
+            len(recipe_tags),
+            1
+        )
+        self.assertEqual(
+            recipe_tags[0].name,
+            form_data[f'{TAG_SELECT_FORMSET_PREFIX}-0-tag_name']
+        )
