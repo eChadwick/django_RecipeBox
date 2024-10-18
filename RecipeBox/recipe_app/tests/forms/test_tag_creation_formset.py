@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from recipe_app.forms import TagCreationFormset, TagCreationForm
+from recipe_app.forms.forms import TagCreationFormset, TagCreationForm
 
 
 class TagCreationFormsetTests(TestCase):

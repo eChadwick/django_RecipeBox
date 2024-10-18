@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from recipe_app.forms import IngredientInclusionFormSet, IngredientInclusionForm
+from recipe_app.forms.forms import IngredientInclusionFormSet, IngredientInclusionForm
 
 
 class IngredientInclusionFormSetTests(TestCase):

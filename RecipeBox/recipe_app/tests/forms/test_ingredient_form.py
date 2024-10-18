@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.forms import CharField, BooleanField
 
-from recipe_app.forms import IngredientForm
+from recipe_app.forms.forms import IngredientForm
 
 
 class IngredientFormTests(TestCase):

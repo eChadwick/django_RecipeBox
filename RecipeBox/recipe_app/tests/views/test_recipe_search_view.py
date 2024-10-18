@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from django.test import TestCase
 from django.urls import reverse
 
-from recipe_app.forms import (
+from recipe_app.forms.forms import (
     IngredientInclusionFormSet,
     RecipeInclusionForm,
 )

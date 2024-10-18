@@ -2,7 +2,7 @@ from django.test import TestCase
 
 from unittest.mock import patch
 
-from recipe_app.forms import IngredientFormSet, extra_ingredient_form_count
+from recipe_app.forms.forms import IngredientFormSet, extra_ingredient_form_count
 
 
 class IngredientFormsetTests(TestCase):
@@ -14,13 +14,13 @@ class IngredientFormsetTests(TestCase):
             extra_ingredient_form_count
         )
 
-    @patch('recipe_app.forms.IngredientForm.__eq__', return_value=True)
+    @patch('recipe_app.forms.forms.IngredientForm.__eq__', return_value=True)
     def test_equal(self, mock_eq):
         IngredientFormSet1 = IngredientFormSet({})
         IngredientFormSet2 = IngredientFormSet({})
         self.assertEqual(IngredientFormSet1, IngredientFormSet2)
 
-    @patch('recipe_app.forms.IngredientForm.__eq__', return_value=True)
+    @patch('recipe_app.forms.forms.IngredientForm.__eq__', return_value=True)
     def test_not_equal(self, mock_eq):
         IngredientFormSet1 = IngredientFormSet({})
         IngredientFormSet2 = IngredientFormSet({

@@ -3,7 +3,7 @@ from unittest.mock import ANY
 from django.test import TestCase
 
 from recipe_app.models import Tag
-from recipe_app.forms import TagSelectionFormset, TagSelectionForm
+from recipe_app.forms.forms import TagSelectionFormset, TagSelectionForm
 
 
 class TagSelectionFormsetTests(TestCase):

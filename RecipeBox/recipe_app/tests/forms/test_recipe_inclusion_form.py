@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.forms import CharField
 
-from recipe_app.forms import RecipeInclusionForm
+from recipe_app.forms.forms import RecipeInclusionForm
 
 
 class RecipeInclusionFormTests(TestCase):

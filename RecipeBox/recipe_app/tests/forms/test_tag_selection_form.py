@@ -6,7 +6,7 @@ from django.forms import (
     BooleanField
 )
 
-from recipe_app.forms import TagSelectionForm
+from recipe_app.forms.forms import TagSelectionForm
 
 
 class TagSelectionFormTests(TestCase):

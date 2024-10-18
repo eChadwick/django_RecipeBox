@@ -9,7 +9,7 @@ from django.forms import (
 )
 
 
-from recipe_app.forms import IngredientInclusionForm
+from recipe_app.forms.forms import IngredientInclusionForm
 
 
 class IngredientInclusionFormTests(TestCase):
