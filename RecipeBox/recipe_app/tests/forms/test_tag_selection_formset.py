@@ -95,3 +95,23 @@ class TagSelectionFormsetTests(TestCase):
             uut.data['form-MAX_NUM_FORMS'],
             ANY
         )
+
+    def test_init_passes_through_data_param_when_provided(self):
+        form_data = {
+            'form-TOTAL_FORMS': str(len(Tag.objects.all())),
+            'form-INITIAL_FORMS': str(len(Tag.objects.all())),
+            'form-MIN_NUM_FORMS': '',
+            'form-MAX_NUM_FORMS': '',
+            'form-0-tag_name': self.tag1.name,
+            'form-0-include': 'on',
+            'form-0-id': self.tag1.id,
+            'form-1-tag_name': self.tag2.name,
+            'form-1-include': 'on'
+        }
+
+        uut = TagSelectionFormset(data=form_data)
+
+        self.assertEqual(
+            form_data,
+            uut.data
+        )
