@@ -1,7 +1,11 @@
 * recipe tags
-** update recipe create post tests to use tags in test data
-** add_ingredient.js needs to account for new IngredientFormset prefix
+    ** Full stack test of recipe tags in create view
+        *** make sure tags aren't duplicating the db
+    ** add_ingredient.js needs to account for new IngredientFormset prefix
+    ** Add tags in recipe detail view
+    ** Add tags in recipe update view
 * can't line break in directions
+
 ----MVP LINE------------------------------------------
 
 * recipe update ugly errors on empty ingredient name
