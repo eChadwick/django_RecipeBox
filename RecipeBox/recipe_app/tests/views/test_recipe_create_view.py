@@ -160,10 +160,10 @@ class RecipeCreateViewPostTests(TestCase):
         )
 
         rendered_tag_select = mock_render.call_args[0][2]['tag_select']
-        # self.assertIsInstance(
-        #     rendered_tag_select,
-        #     TagSelectionFormset
-        # )
+        self.assertIsInstance(
+            rendered_tag_select,
+            TagSelectionFormset
+        )
         self.assertEqual(
             rendered_tag_select.data,
             {
@@ -258,10 +258,10 @@ class RecipeCreateViewPostTests(TestCase):
         )
 
         rendered_tag_select = mock_render.call_args[0][2]['tag_select']
-        # self.assertIsInstance(
-        #     rendered_tag_create,
-        #     TagSelectionFormset
-        # )
+        self.assertIsInstance(
+            rendered_tag_select,
+            TagSelectionFormset
+        )
         self.assertEqual(
             rendered_tag_select.data,
             {
@@ -356,10 +356,10 @@ class RecipeCreateViewPostTests(TestCase):
         )
 
         rendered_tag_select = mock_render.call_args[0][2]['tag_select']
-        # self.assertIsInstance(
-        #     rendered_tag_select,
-        #     TagSelectionFormset
-        # )
+        self.assertIsInstance(
+            rendered_tag_select,
+            TagSelectionFormset
+        )
         self.assertEqual(
             rendered_tag_select.data,
             {

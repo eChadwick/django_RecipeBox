@@ -61,8 +61,8 @@ def _validate_recipe_form_data(request):
 
     tag_select_data = {
         k: v for (k, v) in request.POST.items() if TAG_SELECT_FORMSET_PREFIX in k}
-    tag_select_formset = TagCreationFormset(
-        tag_select_data, prefix=TAG_SELECT_FORMSET_PREFIX)
+    tag_select_formset = TagSelectionFormset(
+        data=tag_select_data, prefix=TAG_SELECT_FORMSET_PREFIX)
 
     return recipe_form, ingredients_formset, tag_create_formset, tag_select_formset
 
