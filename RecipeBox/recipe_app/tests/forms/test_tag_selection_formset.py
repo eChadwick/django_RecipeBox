@@ -47,9 +47,9 @@ class TagSelectionFormsetTests(TestCase):
         self.assertFalse(tag_form3['include'])
 
     def test_formset_marks_input_tags_as_selected(self):
-        input_tag_ids = [tag.id for tag in Tag.objects.all()[:2]]
+        input_tags = Tag.objects.all()[:2]
 
-        uut = TagSelectionFormset(input_tag_ids)
+        uut = TagSelectionFormset(input_tags)
 
         self.assertTrue(uut.is_valid())
         self.assertEqual(len(uut), 3)
