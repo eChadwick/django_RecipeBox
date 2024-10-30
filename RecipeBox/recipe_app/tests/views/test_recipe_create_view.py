@@ -535,6 +535,65 @@ class RecipeCreateViewPostTests(TestCase):
         mock_redirect.assert_called_with(
             reverse('recipe-detail', args=[recipe[0].pk]))
 
+    @patch('recipe_app.views.redirect', wraps=redirect)
+    def test_success_with_empty_tag_create_form(self, mock_redirect, _):
+        form_data = {
+            'csrfmiddlewaretoken': 'irrelevant',
+            'name': 'Oooppp',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-TOTAL_FORMS': '1',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-INITIAL_FORMS': '0',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MIN_NUM_FORMS': '0',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MAX_NUM_FORMS': '1000',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name': '',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement': '',
+            'directions': 'jkjk',
+            f'{TAG_CREATE_FORMSET_PREFIX}-TOTAL_FORMS': '1',
+            f'{TAG_CREATE_FORMSET_PREFIX}-INITIAL_FORMS': '0',
+            f'{TAG_CREATE_FORMSET_PREFIX}-MIN_NUM_FORMS': '0',
+            f'{TAG_CREATE_FORMSET_PREFIX}-MAX_NUM_FORMS': '1000',
+            f'{TAG_CREATE_FORMSET_PREFIX}-0-tag_name': '',
+        }
+
+        self.client.post(reverse('recipe-create'), form_data)
+
+        recipe = Recipe.objects.filter(name__iexact=form_data['name'])
+        self.assertTrue(recipe)
+        self.assertEqual(recipe[0].name, form_data['name'])
+        self.assertEqual(recipe[0].directions, form_data['directions'])
+
+        mock_redirect.assert_called_with(
+            reverse('recipe-detail', args=[recipe[0].pk]))
+
+    @patch('recipe_app.views.redirect', wraps=redirect)
+    def test_success_with_empty_tag_select_form(self, mock_redirect, _):
+        form_data = {
+            'csrfmiddlewaretoken': 'irrelevant',
+            'name': 'Oooppp',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-TOTAL_FORMS': '1',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-INITIAL_FORMS': '0',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MIN_NUM_FORMS': '0',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MAX_NUM_FORMS': '1000',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name': '',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement': '',
+            'directions': 'jkjk',
+            f'{TAG_SELECT_FORMSET_PREFIX}-TOTAL_FORMS': '1',
+            f'{TAG_SELECT_FORMSET_PREFIX}-INITIAL_FORMS': '0',
+            f'{TAG_SELECT_FORMSET_PREFIX}-MIN_NUM_FORMS': '0',
+            f'{TAG_SELECT_FORMSET_PREFIX}-MAX_NUM_FORMS': '1000',
+            f'{TAG_SELECT_FORMSET_PREFIX}-0-tag_name': '',
+            f'{TAG_SELECT_FORMSET_PREFIX}-0-id': '',
+        }
+
+        self.client.post(reverse('recipe-create'), form_data)
+
+        recipe = Recipe.objects.filter(name__iexact=form_data['name'])
+        self.assertTrue(recipe)
+        self.assertEqual(recipe[0].name, form_data['name'])
+        self.assertEqual(recipe[0].directions, form_data['directions'])
+
+        mock_redirect.assert_called_with(
+            reverse('recipe-detail', args=[recipe[0].pk]))
+
     def test_success_with_tag_select(self, _):
         form_data = {
             'csrfmiddlewaretoken': 'irrelevant',
