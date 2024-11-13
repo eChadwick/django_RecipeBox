@@ -1,5 +1,7 @@
 * recipe tags
     ** Full stack test of recipe tags in create view
+        *** tag select handling is wrong
+            ****It shouldn't create it should add because the tags should already exist
         *** make sure tags aren't duplicating the db
     ** add_ingredient.js needs to account for new IngredientFormset prefix
     ** Need to be able to add more tag create forms in recipe form template
