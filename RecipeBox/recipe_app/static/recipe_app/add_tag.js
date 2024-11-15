@@ -3,8 +3,7 @@ function addTag() {
     const newFormNumber = document.getElementById('id_tag-create-form-TOTAL_FORMS').value;
 
     newDiv.innerHTML = `
-            <label for=id_tag-create-form-${newFormNumber}-tag_name>Tag name:</label>
-            <input type="text" name="tag-create-form-${newFormNumber}-tag_name" maxlength="250" id="id_tag-create-form-${newFormNumber}-tag_name">
+            <input type="text" name="tag-create-form-${newFormNumber}-tag_name" maxlength="250" id="id_tag-create-form-${newFormNumber}-tag_name" placeholder="Create Tag">
             <input type="checkbox" onclick="hideParent(this)">
     `
 
