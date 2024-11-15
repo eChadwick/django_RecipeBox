@@ -11,3 +11,4 @@ class TagCreationFormTests(TestCase):
         self.assertIsInstance(name_field, CharField)
         self.assertEqual(name_field.max_length, 250)
         self.assertEqual(name_field.required, True)
+        self.assertEqual(name_field.label, '')

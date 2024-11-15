@@ -138,7 +138,8 @@ class RecipeInclusionForm(Form):
 
 class TagCreationForm(Form):
     tag_name = CharField(
-        max_length=250
+        max_length=250,
+        label=''
     )
 
 
