@@ -176,7 +176,11 @@ def recipe_update(request, pk):
         ingredients_list_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-INITIAL_FORMS'] = str(
             form_count)
 
-        ingredients_formset = IngredientFormSet(ingredients_list_data)
+        ingredients_formset = IngredientFormSet(
+            ingredients_list_data,
+            prefix=INGREDIENT_LIST_FORMSET_PREFIX
+        )
+
         context = {
             'recipe': recipe_form,
             'ingredients_list': ingredients_formset,

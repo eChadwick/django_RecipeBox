@@ -64,6 +64,10 @@ class RecipeUpdateViewTests(TestCase):
         rendered_ingredients_list = mock_render.call_args[0][2]['ingredients_list']
         self.assertIsInstance(rendered_ingredients_list, IngredientFormSet)
         self.assertEqual(
+            rendered_ingredients_list.prefix,
+            INGREDIENT_LIST_FORMSET_PREFIX
+        )
+        self.assertEqual(
             rendered_ingredients_list.data,
             {
                 f'{INGREDIENT_LIST_FORMSET_PREFIX}-TOTAL_FORMS': '1',
