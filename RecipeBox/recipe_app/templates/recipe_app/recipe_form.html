@@ -4,6 +4,7 @@
 {% block scripts %}
     <script src={% static 'recipe_app/delete_ingredient.js' %}></script>
     <script src={% static 'recipe_app/add_ingredient.js' %}></script>
+    <script src={% static 'recipe_app/add_tag.js' %}></script>
 {% endblock %}
 
 {% block nav-bar-links %}
@@ -39,13 +40,20 @@
                 <h2>Directions</h2>
                 <p>{{recipe.directions}}</p>
             </div>
-            <div>
-                <h2>Tags</h2>
-                <p>{{tag_create}}</p>
-                {{tag_select.management_form}}
-                {% for tag in tag_select %}
-                    <p>{{tag}}</p>
-                {% endfor %}
+            <div class='tags-pane'>
+                <h2>
+                    Tags
+                    <button type="button" onclick="addTag()">+</button>
+                </h2>
+                <div class='tag-create-pane'>
+                    <p>{{tag_create}}</p>
+                </div>
+                <div class='tag-select-pane'>
+                    {{tag_select.management_form}}
+                    {% for tag in tag_select %}
+                        <p>{{tag}}</p>
+                    {% endfor %}
+                </div>
             </div>
         </div>
         <button type="submit">Submit</button>
