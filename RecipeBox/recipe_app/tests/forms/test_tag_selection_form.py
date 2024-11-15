@@ -16,6 +16,7 @@ class TagSelectionFormTests(TestCase):
         name_field = form.fields['tag_name']
         self.assertIsInstance(name_field, CharField)
         self.assertEqual(name_field.max_length, 250)
+        self.assertEqual(name_field.label, '')
 
         id_field = form.fields['id']
         self.assertIsInstance(id_field, IntegerField)
