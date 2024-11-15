@@ -24,5 +24,11 @@
             <h2>Directions</h2>
             <p>{{recipe.directions}}</p>
         </div>
+        <div class='tag-pane'>
+            <h2>Tags</h2>
+            {% for tag in recipe.tags.all %}
+                <p>{{ tag.name }}<p>
+            {% endfor %}
+        </div>
     </div>
 {% endblock %}
