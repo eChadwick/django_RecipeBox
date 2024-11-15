@@ -10,15 +10,19 @@ from recipe_app.forms.forms import (
     RecipeForm,
     TagCreationFormset
 )
+
+from recipe_app.forms.tag_selection_formset import TagSelectionFormset
 from recipe_app.models import (
     Ingredient,
     Recipe,
-    RecipeIngredient
+    RecipeIngredient,
+    Tag
 )
 from recipe_app.views import (
     RECIPE_NOT_FOUND_ERROR,
     INGREDIENT_LIST_FORMSET_PREFIX,
-    TAG_CREATE_FORMSET_PREFIX
+    TAG_CREATE_FORMSET_PREFIX,
+    TAG_SELECT_FORMSET_PREFIX
 )
 
 
@@ -32,6 +36,10 @@ class RecipeUpdateViewTests(TestCase):
             name='Test Recipe',
             directions='Test Directions'
         )
+        self.recipe.tags.create(name='Tag1')
+
+        self.unincluded_tag = Tag.objects.create(name='Tag2')
+
         self.recipe_ingredient = RecipeIngredient.objects.create(
             recipe=self.recipe,
             ingredient=self.ingredient,
@@ -84,6 +92,27 @@ class RecipeUpdateViewTests(TestCase):
         self.assertEqual(
             rendered_tag_create.prefix,
             TAG_CREATE_FORMSET_PREFIX
+        )
+
+        rendered_tag_select = mock_render.call_args[0][2]['tag_select']
+        self.assertIsInstance(rendered_tag_select, TagSelectionFormset)
+        self.assertEqual(
+            rendered_tag_select.prefix,
+            TAG_SELECT_FORMSET_PREFIX
+        )
+        self.assertEqual(
+            rendered_tag_select.data,
+            {
+                'tag-select-form-TOTAL_FORMS': '2',
+                'tag-select-form-INITIAL_FORMS': '2',
+                'tag-select-form-MIN_NUM_FORMS': '',
+                'tag-select-form-MAX_NUM_FORMS': '',
+                'tag-select-form-0-tag_name': self.recipe.tags.all()[0].name,
+                'tag-select-form-0-id': str(self.recipe.tags.all()[0].id),
+                'tag-select-form-0-include': True,
+                'tag-select-form-1-tag_name': self.unincluded_tag.name,
+                'tag-select-form-1-id': str(self.unincluded_tag.id)
+            }
         )
 
     def test_post_should_rerender_form_on_recipe_errors(self, mock_render):

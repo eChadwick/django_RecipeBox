@@ -185,6 +185,10 @@ def recipe_update(request, pk):
             'recipe': recipe_form,
             'ingredients_list': ingredients_formset,
             'tag_create': TagCreationFormset(prefix=TAG_CREATE_FORMSET_PREFIX),
+            'tag_select': TagSelectionFormset(
+                prefix=TAG_SELECT_FORMSET_PREFIX,
+                selected_tags=recipe.tags.all()
+            ),
             'action': 'update',
             'recipe_pk': recipe.pk
         }
