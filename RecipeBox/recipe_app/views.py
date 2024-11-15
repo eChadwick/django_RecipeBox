@@ -184,6 +184,7 @@ def recipe_update(request, pk):
         context = {
             'recipe': recipe_form,
             'ingredients_list': ingredients_formset,
+            'tag_create': TagCreationFormset(prefix=TAG_CREATE_FORMSET_PREFIX),
             'action': 'update',
             'recipe_pk': recipe.pk
         }

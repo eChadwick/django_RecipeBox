@@ -7,7 +7,8 @@ from django.urls import reverse
 
 from recipe_app.forms.forms import (
     IngredientFormSet,
-    RecipeForm
+    RecipeForm,
+    TagCreationFormset
 )
 from recipe_app.models import (
     Ingredient,
@@ -16,7 +17,8 @@ from recipe_app.models import (
 )
 from recipe_app.views import (
     RECIPE_NOT_FOUND_ERROR,
-    INGREDIENT_LIST_FORMSET_PREFIX
+    INGREDIENT_LIST_FORMSET_PREFIX,
+    TAG_CREATE_FORMSET_PREFIX
 )
 
 
@@ -75,6 +77,13 @@ class RecipeUpdateViewTests(TestCase):
                 f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name': self.ingredient.name,
                 f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement': self.recipe_ingredient.measurement
             }
+        )
+
+        rendered_tag_create = mock_render.call_args[0][2]['tag_create']
+        self.assertIsInstance(rendered_tag_create, TagCreationFormset)
+        self.assertEqual(
+            rendered_tag_create.prefix,
+            TAG_CREATE_FORMSET_PREFIX
         )
 
     def test_post_should_rerender_form_on_recipe_errors(self, mock_render):
