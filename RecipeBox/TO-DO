@@ -1,5 +1,4 @@
 * recipe tags
-    ** Need to be able to add more tag create forms in recipe form template
     ** Add tags in recipe detail view
     ** Add tags in recipe update view
 * can't line break in directions
@@ -8,4 +7,3 @@
 
 * recipe update ugly errors on empty ingredient name
 * ingredient name not editable on edit template
-* favicon
