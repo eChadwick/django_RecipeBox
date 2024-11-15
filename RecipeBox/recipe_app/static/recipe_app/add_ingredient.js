@@ -1,5 +1,5 @@
 function addIngredient() {
-  var newDiv = document.createElement('div');
+  var newDiv = document.createElement('p');
   const newFormNumber = document.getElementById('id_ingredient-form-TOTAL_FORMS').value;
 
   newDiv.innerHTML = `
