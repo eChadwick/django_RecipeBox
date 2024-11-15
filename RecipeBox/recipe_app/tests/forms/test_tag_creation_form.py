@@ -12,3 +12,7 @@ class TagCreationFormTests(TestCase):
         self.assertEqual(name_field.max_length, 250)
         self.assertEqual(name_field.required, True)
         self.assertEqual(name_field.label, '')
+        self.assertEqual(
+            name_field.widget.attrs['placeholder'],
+            TagCreationForm.placeholder_text
+        )

@@ -137,9 +137,11 @@ class RecipeInclusionForm(Form):
 
 
 class TagCreationForm(Form):
+    placeholder_text = 'Create Tag'
     tag_name = CharField(
         max_length=250,
-        label=''
+        label='',
+        widget=TextInput(attrs={'placeholder': placeholder_text})
     )
 
 
