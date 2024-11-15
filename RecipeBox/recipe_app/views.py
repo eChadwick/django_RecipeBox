@@ -108,7 +108,9 @@ def recipe_create(request):
         if tag_select_formset.is_valid():
             for form in tag_select_formset.cleaned_data:
                 if form.get('include', False):
-                    recipe_model.tags.create(name=form['tag_name'])
+                    recipe_model.tags.add(
+                        Tag.objects.get(id=form['id'])
+                    )
 
         return redirect(reverse('recipe-detail', args=[recipe_model.pk]))
     else:

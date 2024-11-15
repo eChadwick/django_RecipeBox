@@ -595,6 +595,9 @@ class RecipeCreateViewPostTests(TestCase):
             reverse('recipe-detail', args=[recipe[0].pk]))
 
     def test_success_with_tag_select(self, _):
+        Tag1 = Tag.objects.create(name='Tag1')
+        Tag2 = Tag.objects.create(name='Tag2')
+
         form_data = {
             'csrfmiddlewaretoken': 'irrelevant',
             'name': 'Oooppp',
@@ -609,11 +612,11 @@ class RecipeCreateViewPostTests(TestCase):
             f'{TAG_SELECT_FORMSET_PREFIX}-INITIAL_FORMS': '2',
             f'{TAG_SELECT_FORMSET_PREFIX}-MIN_NUM_FORMS': '',
             f'{TAG_SELECT_FORMSET_PREFIX}-MAX_NUM_FORMS': '',
-            f'{TAG_SELECT_FORMSET_PREFIX}-0-tag_name': 'Tag1',
+            f'{TAG_SELECT_FORMSET_PREFIX}-0-tag_name': Tag1.name,
             f'{TAG_SELECT_FORMSET_PREFIX}-0-include': 'on',
-            f'{TAG_SELECT_FORMSET_PREFIX}-0-id': '1',
-            f'{TAG_SELECT_FORMSET_PREFIX}-1-tag_name': 'Tag2',
-            f'{TAG_SELECT_FORMSET_PREFIX}-1-id': '2'
+            f'{TAG_SELECT_FORMSET_PREFIX}-0-id': Tag1.id,
+            f'{TAG_SELECT_FORMSET_PREFIX}-1-tag_name': Tag2.name,
+            f'{TAG_SELECT_FORMSET_PREFIX}-1-id': Tag2.id
         }
 
         self.client.post(reverse('recipe-create'), form_data)
