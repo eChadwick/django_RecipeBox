@@ -267,7 +267,12 @@ class RecipeUpdateViewTests(TestCase):
             f'{INGREDIENT_LIST_FORMSET_PREFIX}-MAX_NUM_FORMS': '',
             f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name': 'Test Ingredient',
             f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement': 'a bunch',
-            'directions': 'New Directions'
+            'directions': 'New Directions',
+            f'{TAG_CREATE_FORMSET_PREFIX}-TOTAL_FORMS': '1',
+            f'{TAG_CREATE_FORMSET_PREFIX}-INITIAL_FORMS': '0',
+            f'{TAG_CREATE_FORMSET_PREFIX}-MIN_NUM_FORMS': '0',
+            f'{TAG_CREATE_FORMSET_PREFIX}-MAX_NUM_FORMS': '1000',
+            f'{TAG_CREATE_FORMSET_PREFIX}-0-tag_name': ''
         }
 
         self.client.post(
@@ -308,7 +313,12 @@ class RecipeUpdateViewTests(TestCase):
             f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement': 'a bunch',
             f'{INGREDIENT_LIST_FORMSET_PREFIX}-1-name': 'New Ingredient',
             f'{INGREDIENT_LIST_FORMSET_PREFIX}-1-measurement': 'new amount',
-            'directions': 'Test Directions'
+            'directions': 'Test Directions',
+            f'{TAG_CREATE_FORMSET_PREFIX}-TOTAL_FORMS': '1',
+            f'{TAG_CREATE_FORMSET_PREFIX}-INITIAL_FORMS': '0',
+            f'{TAG_CREATE_FORMSET_PREFIX}-MIN_NUM_FORMS': '0',
+            f'{TAG_CREATE_FORMSET_PREFIX}-MAX_NUM_FORMS': '1000',
+            f'{TAG_CREATE_FORMSET_PREFIX}-0-tag_name': ''
         }
 
         self.client.post(
@@ -357,7 +367,12 @@ class RecipeUpdateViewTests(TestCase):
             f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name': 'Test Ingredient',
             f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement': 'a bunch',
             f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-DELETE': 'on',
-            'directions': 'Test Directions'
+            'directions': 'Test Directions',
+            f'{TAG_CREATE_FORMSET_PREFIX}-TOTAL_FORMS': '1',
+            f'{TAG_CREATE_FORMSET_PREFIX}-INITIAL_FORMS': '0',
+            f'{TAG_CREATE_FORMSET_PREFIX}-MIN_NUM_FORMS': '0',
+            f'{TAG_CREATE_FORMSET_PREFIX}-MAX_NUM_FORMS': '1000',
+            f'{TAG_CREATE_FORMSET_PREFIX}-0-tag_name': ''
         }
 
         self.client.post(
@@ -390,7 +405,12 @@ class RecipeUpdateViewTests(TestCase):
             f'{INGREDIENT_LIST_FORMSET_PREFIX}-MAX_NUM_FORMS': '',
             f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name': 'Test Ingredient',
             f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement': 'a bit',
-            'directions': 'Test Directions'
+            'directions': 'Test Directions',
+            f'{TAG_CREATE_FORMSET_PREFIX}-TOTAL_FORMS': '1',
+            f'{TAG_CREATE_FORMSET_PREFIX}-INITIAL_FORMS': '0',
+            f'{TAG_CREATE_FORMSET_PREFIX}-MIN_NUM_FORMS': '0',
+            f'{TAG_CREATE_FORMSET_PREFIX}-MAX_NUM_FORMS': '1000',
+            f'{TAG_CREATE_FORMSET_PREFIX}-0-tag_name': ''
         }
 
         self.client.post(
@@ -413,3 +433,34 @@ class RecipeUpdateViewTests(TestCase):
 
         mock_redirect.assert_called_with(
             reverse('recipe-detail', args=[self.recipe.pk]))
+
+    @patch('recipe_app.views.redirect', wraps=redirect)
+    def test_success_with_tag_create(self, mock_redirect, _):
+        recipe = Recipe.objects.create(name='Name', directions='Directions')
+
+        form_data = {
+            'csrfmiddlewaretoken': 'irrelevant',
+            'name': 'Name',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-TOTAL_FORMS': '1',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-INITIAL_FORMS': '0',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MIN_NUM_FORMS': '',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MAX_NUM_FORMS': '',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name': '',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement': '',
+            'directions': 'Directions',
+            f'{TAG_CREATE_FORMSET_PREFIX}-TOTAL_FORMS': '1',
+            f'{TAG_CREATE_FORMSET_PREFIX}-INITIAL_FORMS': '0',
+            f'{TAG_CREATE_FORMSET_PREFIX}-MIN_NUM_FORMS': '0',
+            f'{TAG_CREATE_FORMSET_PREFIX}-MAX_NUM_FORMS': '1000',
+            f'{TAG_CREATE_FORMSET_PREFIX}-0-tag_name': 'New Tag'
+        }
+
+        self.client.post(
+            reverse('recipe-update', args=[recipe.id]),
+            data=form_data
+        )
+
+        self.assertIn(
+            form_data[f'{TAG_CREATE_FORMSET_PREFIX}-0-tag_name'],
+            recipe.tags.values_list('name', flat=True)
+        )
