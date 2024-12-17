@@ -3,6 +3,7 @@
         *** Tag create form rerender on recipe or ingredient errors
         *** Tag create form reuse exising tags
         *** Tag create form handle creating tag that is already on recipe
+        *** Tag select everything
 * can't line break in directions
 
 ----MVP LINE------------------------------------------
