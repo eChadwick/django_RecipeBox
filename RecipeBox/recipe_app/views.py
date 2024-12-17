@@ -126,8 +126,12 @@ def recipe_create(request):
 
 def recipe_update(request, pk):
     if 'POST' == request.method:
-        recipe_form, ingredients_formset, _, _ = _validate_recipe_form_data(
-            request)
+        (
+            recipe_form,
+            ingredients_formset,
+            tag_create_formset,
+            _
+        ) = _validate_recipe_form_data(request)
 
         if (not recipe_form.is_valid() or not ingredients_formset.is_valid()):
             context = {'recipe': recipe_form,
@@ -148,13 +152,18 @@ def recipe_update(request, pk):
             ri.delete()
 
         for entry in ingredients_formset.cleaned_data:
-            ingredient = Ingredient.objects.get_or_create(name=entry['name'])
-            if not entry['DELETE']:
+            if not entry.get('DELETE') and 'name' in entry:
+                ingredient = Ingredient.objects.get_or_create(
+                    name=entry['name'])
                 RecipeIngredient.objects.create(
                     recipe=recipe_model[0],
                     ingredient=ingredient[0],
                     measurement=entry['measurement']
                 )
+
+        for entry in tag_create_formset.cleaned_data:
+            if 'tag_name' in entry:
+                recipe_model[0].tags.create(name=entry['tag_name'])
 
         return redirect(reverse('recipe-detail', args=[pk]))
 

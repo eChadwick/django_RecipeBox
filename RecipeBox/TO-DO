@@ -1,5 +1,8 @@
 * recipe tags
     ** Add tag handling in recipe update post view
+        *** Tag create form rerender on recipe or ingredient errors
+        *** Tag create form reuse exising tags
+        *** Tag create form handle creating tag that is already on recipe
 * can't line break in directions
 
 ----MVP LINE------------------------------------------
