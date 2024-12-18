@@ -307,7 +307,7 @@ class RecipeUpdateViewTests(TestCase):
         self.assertEqual(response.status_code, 404)
         self.assertEqual(response.content.decode(), RECIPE_NOT_FOUND_ERROR)
 
-    @ patch('recipe_app.views.redirect', wraps=redirect)
+    @patch('recipe_app.views.redirect', wraps=redirect)
     def test_success_updates_recipe_name_and_directions(self, mock_redirect, _):
         updated_form_data = {
             'csrfmiddlewaretoken': 'irrelevant',
@@ -351,7 +351,7 @@ class RecipeUpdateViewTests(TestCase):
         mock_redirect.assert_called_with(
             reverse('recipe-detail', args=[self.recipe.pk]))
 
-    @ patch('recipe_app.views.redirect', wraps=redirect)
+    @patch('recipe_app.views.redirect', wraps=redirect)
     def test_success_adds_ingredient(self, mock_redirect, _):
         updated_form_data = {
             'csrfmiddlewaretoken': 'irrelevant',
@@ -406,7 +406,7 @@ class RecipeUpdateViewTests(TestCase):
         mock_redirect.assert_called_with(
             reverse('recipe-detail', args=[self.recipe.pk]))
 
-    @ patch('recipe_app.views.redirect', wraps=redirect)
+    @patch('recipe_app.views.redirect', wraps=redirect)
     def test_success_deletes_ingredient(self, mock_redirect, _):
         updated_form_data = {
             'csrfmiddlewaretoken': 'irrelevant',
@@ -445,7 +445,7 @@ class RecipeUpdateViewTests(TestCase):
         mock_redirect.assert_called_with(
             reverse('recipe-detail', args=[self.recipe.pk]))
 
-    @ patch('recipe_app.views.redirect', wraps=redirect)
+    @patch('recipe_app.views.redirect', wraps=redirect)
     def test_success_updates_ingredient(self, mock_redirect, _):
         updated_form_data = {
             'csrfmiddlewaretoken': 'irrelevant',
@@ -485,7 +485,7 @@ class RecipeUpdateViewTests(TestCase):
         mock_redirect.assert_called_with(
             reverse('recipe-detail', args=[self.recipe.pk]))
 
-    @ patch('recipe_app.views.redirect', wraps=redirect)
+    @patch('recipe_app.views.redirect', wraps=redirect)
     def test_success_with_tag_create(self, mock_redirect, _):
         recipe = Recipe.objects.create(name='Name', directions='Directions')
 
