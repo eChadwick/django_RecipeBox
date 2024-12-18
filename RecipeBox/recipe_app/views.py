@@ -164,8 +164,9 @@ def recipe_update(request, pk):
 
         for entry in tag_create_formset.cleaned_data:
             if 'tag_name' in entry:
-                recipe_model[0].tags.create(name=entry['tag_name'])
-
+                recipe_model[0].tags.add(
+                    Tag.objects.get_or_create(name=entry['tag_name'])[0]
+                )
         return redirect(reverse('recipe-detail', args=[pk]))
 
     else:
