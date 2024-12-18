@@ -549,3 +549,35 @@ class RecipeUpdateViewTests(TestCase):
             recipe.tags.all()[0].id,
             tag.id
         )
+
+    def test_success_tag_create_doesnt_duplicate_tags(self, _):
+        tag = Tag.objects.create(name='TagName')
+        recipe = Recipe.objects.create(name='Name', directions='Directions')
+        recipe.tags.add(tag.id)
+
+        form_data = {
+            'csrfmiddlewaretoken': 'irrelevant',
+            'name': recipe.name,
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-TOTAL_FORMS': '1',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-INITIAL_FORMS': '0',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MIN_NUM_FORMS': '',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MAX_NUM_FORMS': '',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name': '',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement': '',
+            'directions': recipe.directions,
+            f'{TAG_CREATE_FORMSET_PREFIX}-TOTAL_FORMS': '1',
+            f'{TAG_CREATE_FORMSET_PREFIX}-INITIAL_FORMS': '0',
+            f'{TAG_CREATE_FORMSET_PREFIX}-MIN_NUM_FORMS': '0',
+            f'{TAG_CREATE_FORMSET_PREFIX}-MAX_NUM_FORMS': '1000',
+            f'{TAG_CREATE_FORMSET_PREFIX}-0-tag_name': tag.name
+        }
+
+        self.client.post(
+            reverse('recipe-update', args=[recipe.id]),
+            data=form_data
+        )
+
+        self.assertEqual(
+            len(recipe.tags.all()),
+            1
+        )

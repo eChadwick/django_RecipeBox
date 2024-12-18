@@ -1,6 +1,5 @@
 * recipe tags
     ** Add tag handling in recipe update post view
-        *** Tag create form handle creating tag that is already on recipe
         *** Tag select everything
 * can't line break in directions
 
