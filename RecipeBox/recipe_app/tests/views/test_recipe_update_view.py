@@ -29,46 +29,54 @@ from recipe_app.views import (
 @patch('recipe_app.views.render', return_value=HttpResponse())
 class RecipeUpdateViewTests(TestCase):
 
-    def setUp(self):
-        self.ingredient = Ingredient.objects.create(name='Test Ingredient')
-
-        self.recipe = Recipe.objects.create(
-            name='Test Recipe',
+    def test_get_renders_the_correct_html(self, mock_render):
+        recipe = Recipe.objects.create(
+            name='Test Recipe 1',
             directions='Test Directions'
         )
-        self.recipe.tags.create(name='Tag1')
-
-        self.unincluded_tag = Tag.objects.create(name='Tag2')
-
-        self.recipe_ingredient = RecipeIngredient.objects.create(
-            recipe=self.recipe,
-            ingredient=self.ingredient,
-            measurement='a bunch'
-        )
-
-    def test_get_renders_the_correct_html(self, mock_render):
-        self.client.get(reverse('recipe-update', args=[self.recipe.pk]))
+        self.client.get(reverse('recipe-update', args=[recipe.pk]))
         mock_render.assert_called_with(
             ANY, 'recipe_app/recipe_form.html', ANY
         )
 
     def test_get_passes_request_action(self, mock_render):
-        self.client.get(reverse('recipe-update', args=[self.recipe.pk]))
+        recipe = Recipe.objects.create(
+            name='Test Recipe 1',
+            directions='Test Directions'
+        )
+        self.client.get(reverse('recipe-update', args=[recipe.pk]))
         rendered_context = mock_render.call_args[0][2]
         self.assertEqual(rendered_context['action'], 'update')
 
     def test_get_passes_recipe_pk(self, mock_render):
-        self.client.get(reverse('recipe-update', args=[self.recipe.pk]))
+        recipe = Recipe.objects.create(
+            name='Test Recipe 1',
+            directions='Test Directions'
+        )
+        self.client.get(reverse('recipe-update', args=[recipe.pk]))
         rendered_context = mock_render.call_args[0][2]
-        self.assertEqual(rendered_context['recipe_pk'], self.recipe.pk)
+        self.assertEqual(rendered_context['recipe_pk'], recipe.pk)
 
     def test_get_fetches_right_form(self, mock_render):
-        self.client.get(reverse('recipe-update', args=[self.recipe.pk]))
+        ingredient = Ingredient.objects.create(name='Test Ingredient')
+        recipe = Recipe.objects.create(
+            name='Test Recipe 1',
+            directions='Test Directions'
+        )
+        recipe.tags.add(Tag.objects.get_or_create(name='Tag1')[0])
+        unincluded_tag = Tag.objects.create(name='Tag2')
+        recipe_ingredient = RecipeIngredient.objects.create(
+            recipe=recipe,
+            ingredient=ingredient,
+            measurement='a bunch'
+        )
+
+        self.client.get(reverse('recipe-update', args=[recipe.pk]))
 
         rendered_recipe = mock_render.call_args[0][2]['recipe']
         self.assertEqual(
             rendered_recipe.data,
-            {'name': self.recipe.name, 'directions': self.recipe.directions}
+            {'name': recipe.name, 'directions': recipe.directions}
         )
 
         rendered_ingredients_list = mock_render.call_args[0][2]['ingredients_list']
@@ -82,8 +90,8 @@ class RecipeUpdateViewTests(TestCase):
             {
                 f'{INGREDIENT_LIST_FORMSET_PREFIX}-TOTAL_FORMS': '1',
                 f'{INGREDIENT_LIST_FORMSET_PREFIX}-INITIAL_FORMS': '1',
-                f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name': self.ingredient.name,
-                f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement': self.recipe_ingredient.measurement
+                f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name': ingredient.name,
+                f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement': recipe_ingredient.measurement
             }
         )
 
@@ -107,15 +115,20 @@ class RecipeUpdateViewTests(TestCase):
                 'tag-select-form-INITIAL_FORMS': '2',
                 'tag-select-form-MIN_NUM_FORMS': '',
                 'tag-select-form-MAX_NUM_FORMS': '',
-                'tag-select-form-0-tag_name': self.recipe.tags.all()[0].name,
-                'tag-select-form-0-id': str(self.recipe.tags.all()[0].id),
+                'tag-select-form-0-tag_name': recipe.tags.all()[0].name,
+                'tag-select-form-0-id': str(recipe.tags.all()[0].id),
                 'tag-select-form-0-include': True,
-                'tag-select-form-1-tag_name': self.unincluded_tag.name,
-                'tag-select-form-1-id': str(self.unincluded_tag.id)
+                'tag-select-form-1-tag_name': unincluded_tag.name,
+                'tag-select-form-1-id': str(unincluded_tag.id)
             }
         )
 
     def test_post_should_rerender_form_on_recipe_errors(self, mock_render):
+        recipe = Recipe.objects.create(
+            name='Test Recipe 1',
+            directions='Test Directions'
+        )
+
         # Empty recipe name is error
         form_data = {
             'csrfmiddlewaretoken': 'irrelevant',
@@ -134,7 +147,7 @@ class RecipeUpdateViewTests(TestCase):
             f'{TAG_CREATE_FORMSET_PREFIX}-0-tag_name': 'New Tag'
         }
         self.client.post(
-            reverse('recipe-update', args=[self.recipe.pk]), form_data)
+            reverse('recipe-update', args=[recipe.pk]), form_data)
 
         rendered_template = mock_render.call_args[0][1]
         self.assertEqual(rendered_template, 'recipe_app/recipe_form.html')
@@ -171,6 +184,11 @@ class RecipeUpdateViewTests(TestCase):
         )
 
     def test_post_should_rerender_form_on_ingredient_errors(self, mock_render):
+        recipe = Recipe.objects.create(
+            name='Test Recipe 1',
+            directions='Test Directions'
+        )
+
         form_data = {
             'csrfmiddlewaretoken': 'irrelevant',
             'name': 'Recipe Name',
@@ -188,7 +206,7 @@ class RecipeUpdateViewTests(TestCase):
             f'{TAG_CREATE_FORMSET_PREFIX}-0-tag_name': 'New Tag'
         }
         self.client.post(
-            reverse('recipe-update', args=[self.recipe.pk]), form_data)
+            reverse('recipe-update', args=[recipe.pk]), form_data)
 
         rendered_template = mock_render.call_args[0][1]
         self.assertEqual(rendered_template, 'recipe_app/recipe_form.html')
@@ -225,6 +243,11 @@ class RecipeUpdateViewTests(TestCase):
         )
 
     def test_recipe_form_has_error_when_no_directions_or_ingredients(self, mock_render):
+        recipe = Recipe.objects.create(
+            name='Test Recipe 1',
+            directions='Test Directions'
+        )
+
         form_data = {
             'csrfmiddlewaretoken': 'irrelevant',
             'name': 'Test Recipe',
@@ -246,7 +269,7 @@ class RecipeUpdateViewTests(TestCase):
         }
 
         self.client.post(
-            reverse('recipe-update', args=[self.recipe.pk]), form_data)
+            reverse('recipe-update', args=[recipe.pk]), form_data)
 
         rendered_template = mock_render.call_args[0][1]
         self.assertEqual(rendered_template, 'recipe_app/recipe_form.html')
@@ -293,14 +316,14 @@ class RecipeUpdateViewTests(TestCase):
             'directions': 'new directions',
             f'{INGREDIENT_LIST_FORMSET_PREFIX}-TOTAL_FORMS': '2',
             f'{INGREDIENT_LIST_FORMSET_PREFIX}-INITIAL_FORMS': '2',
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name': self.ingredient.name,
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name': 'ingredient name',
             f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement': 'updated measurement',
             f'{INGREDIENT_LIST_FORMSET_PREFIX}-2-name': 'new ingredient name',
             f'{INGREDIENT_LIST_FORMSET_PREFIX}-2-measurement': 'new ingredient measurement'
         }
 
         response = self.client.post(
-            reverse('recipe-update', args=[self.recipe.pk + 1]),
+            reverse('recipe-update', args=[1234]),
             updated_form_data
         )
 
@@ -309,6 +332,17 @@ class RecipeUpdateViewTests(TestCase):
 
     @patch('recipe_app.views.redirect', wraps=redirect)
     def test_success_updates_recipe_name_and_directions(self, mock_redirect, _):
+        ingredient = Ingredient.objects.create(name='Test Ingredient')
+        recipe = Recipe.objects.create(
+            name='Test Recipe 1',
+            directions='Test Directions'
+        )
+        recipe_ingredient = RecipeIngredient.objects.create(
+            recipe=recipe,
+            ingredient=ingredient,
+            measurement='a bunch'
+        )
+
         updated_form_data = {
             'csrfmiddlewaretoken': 'irrelevant',
             'name': 'New Recipe Name',
@@ -327,35 +361,46 @@ class RecipeUpdateViewTests(TestCase):
         }
 
         self.client.post(
-            reverse('recipe-update', args=[self.recipe.pk]), updated_form_data
+            reverse('recipe-update', args=[recipe.pk]), updated_form_data
         )
-        self.recipe = Recipe.objects.get(pk=self.recipe.pk)
+        recipe = Recipe.objects.get(pk=recipe.pk)
 
-        self.assertEqual(self.recipe.name, updated_form_data['name'])
-        self.assertEqual(self.recipe.directions,
+        self.assertEqual(recipe.name, updated_form_data['name'])
+        self.assertEqual(recipe.directions,
                          updated_form_data['directions'])
 
         self.assertTrue(
-            Ingredient.objects.filter(pk=self.ingredient.pk).exists()
+            Ingredient.objects.filter(pk=ingredient.pk).exists()
         )
 
         self.assertEqual(
             RecipeIngredient.objects.filter(
-                recipe=self.recipe.pk,
-                ingredient=self.recipe_ingredient.ingredient.pk,
+                recipe=recipe.pk,
+                ingredient=recipe_ingredient.ingredient.pk,
                 measurement=updated_form_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement']
             ).count(),
             1
         )
 
         mock_redirect.assert_called_with(
-            reverse('recipe-detail', args=[self.recipe.pk]))
+            reverse('recipe-detail', args=[recipe.pk]))
 
     @patch('recipe_app.views.redirect', wraps=redirect)
     def test_success_adds_ingredient(self, mock_redirect, _):
+        ingredient = Ingredient.objects.create(name='Test Ingredient')
+        recipe = Recipe.objects.create(
+            name='Test Recipe 1',
+            directions='Test Directions'
+        )
+        recipe_ingredient = RecipeIngredient.objects.create(
+            recipe=recipe,
+            ingredient=ingredient,
+            measurement='a bunch'
+        )
+
         updated_form_data = {
             'csrfmiddlewaretoken': 'irrelevant',
-            'name': 'Test Recipe',
+            'name': recipe.name,
             f'{INGREDIENT_LIST_FORMSET_PREFIX}-TOTAL_FORMS': '2',
             f'{INGREDIENT_LIST_FORMSET_PREFIX}-INITIAL_FORMS': '1',
             f'{INGREDIENT_LIST_FORMSET_PREFIX}-MIN_NUM_FORMS': '',
@@ -373,18 +418,18 @@ class RecipeUpdateViewTests(TestCase):
         }
 
         self.client.post(
-            reverse('recipe-update', args=[self.recipe.pk]), updated_form_data
+            reverse('recipe-update', args=[recipe.pk]), updated_form_data
         )
-        self.recipe = Recipe.objects.get(pk=self.recipe.pk)
+        recipe = Recipe.objects.get(pk=recipe.pk)
 
         self.assertTrue(
-            Ingredient.objects.filter(pk=self.ingredient.pk).exists()
+            Ingredient.objects.filter(pk=ingredient.pk).exists()
         )
 
         self.assertEqual(
             RecipeIngredient.objects.filter(
-                recipe=self.recipe.pk,
-                ingredient=self.recipe_ingredient.ingredient.pk,
+                recipe=recipe.pk,
+                ingredient=recipe_ingredient.ingredient.pk,
                 measurement=updated_form_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement']
             ).count(),
             1
@@ -396,7 +441,7 @@ class RecipeUpdateViewTests(TestCase):
 
         self.assertEqual(
             RecipeIngredient.objects.filter(
-                recipe=self.recipe.pk,
+                recipe=recipe.pk,
                 ingredient=new_ingredient[0].pk,
                 measurement=updated_form_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-1-measurement']
             ).count(),
@@ -404,13 +449,26 @@ class RecipeUpdateViewTests(TestCase):
         )
 
         mock_redirect.assert_called_with(
-            reverse('recipe-detail', args=[self.recipe.pk]))
+            reverse('recipe-detail', args=[recipe.pk]))
 
     @patch('recipe_app.views.redirect', wraps=redirect)
     def test_success_deletes_ingredient(self, mock_redirect, _):
+        ingredient = Ingredient.objects.create(name='Test Ingredient')
+        recipe = Recipe.objects.create(
+            name='Test Recipe 1',
+            directions='Test Directions'
+        )
+        recipe.tags.add(Tag.objects.get_or_create(name='Tag1')[0])
+        unincluded_tag = Tag.objects.create(name='Tag2')
+        recipe_ingredient = RecipeIngredient.objects.create(
+            recipe=recipe,
+            ingredient=ingredient,
+            measurement='a bunch'
+        )
+
         updated_form_data = {
             'csrfmiddlewaretoken': 'irrelevant',
-            'name': 'Test Recipe',
+            'name': recipe.name,
             f'{INGREDIENT_LIST_FORMSET_PREFIX}-TOTAL_FORMS': '1',
             f'{INGREDIENT_LIST_FORMSET_PREFIX}-INITIAL_FORMS': '1',
             f'{INGREDIENT_LIST_FORMSET_PREFIX}-MIN_NUM_FORMS': '',
@@ -427,29 +485,42 @@ class RecipeUpdateViewTests(TestCase):
         }
 
         self.client.post(
-            reverse('recipe-update', args=[self.recipe.pk]), updated_form_data
+            reverse('recipe-update', args=[recipe.pk]), updated_form_data
         )
-        self.recipe = Recipe.objects.get(pk=self.recipe.pk)
+        recipe = Recipe.objects.get(pk=recipe.pk)
 
         self.assertTrue(
-            Ingredient.objects.filter(pk=self.ingredient.pk).exists()
+            Ingredient.objects.filter(pk=ingredient.pk).exists()
         )
 
         self.assertEqual(
             RecipeIngredient.objects.filter(
-                recipe=self.recipe.pk,
+                recipe=recipe.pk,
             ).count(),
             0
         )
 
         mock_redirect.assert_called_with(
-            reverse('recipe-detail', args=[self.recipe.pk]))
+            reverse('recipe-detail', args=[recipe.pk]))
 
     @patch('recipe_app.views.redirect', wraps=redirect)
     def test_success_updates_ingredient(self, mock_redirect, _):
+        ingredient = Ingredient.objects.create(name='Test Ingredient')
+        recipe = Recipe.objects.create(
+            name='Test Recipe 1',
+            directions='Test Directions'
+        )
+        recipe.tags.add(Tag.objects.get_or_create(name='Tag1')[0])
+        unincluded_tag = Tag.objects.create(name='Tag2')
+        recipe_ingredient = RecipeIngredient.objects.create(
+            recipe=recipe,
+            ingredient=ingredient,
+            measurement='a bunch'
+        )
+
         updated_form_data = {
             'csrfmiddlewaretoken': 'irrelevant',
-            'name': 'Test Recipe',
+            'name': recipe.name,
             f'{INGREDIENT_LIST_FORMSET_PREFIX}-TOTAL_FORMS': '1',
             f'{INGREDIENT_LIST_FORMSET_PREFIX}-INITIAL_FORMS': '1',
             f'{INGREDIENT_LIST_FORMSET_PREFIX}-MIN_NUM_FORMS': '',
@@ -465,25 +536,25 @@ class RecipeUpdateViewTests(TestCase):
         }
 
         self.client.post(
-            reverse('recipe-update', args=[self.recipe.pk]), updated_form_data
+            reverse('recipe-update', args=[recipe.pk]), updated_form_data
         )
-        self.recipe = Recipe.objects.get(pk=self.recipe.pk)
+        recipe = Recipe.objects.get(pk=recipe.pk)
 
         self.assertTrue(
-            Ingredient.objects.filter(pk=self.ingredient.pk).exists()
+            Ingredient.objects.filter(pk=ingredient.pk).exists()
         )
 
         self.assertEqual(
             RecipeIngredient.objects.filter(
-                recipe=self.recipe.pk,
-                ingredient=self.recipe_ingredient.ingredient.pk,
+                recipe=recipe.pk,
+                ingredient=recipe_ingredient.ingredient.pk,
                 measurement=updated_form_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement']
             ).count(),
             1
         )
 
         mock_redirect.assert_called_with(
-            reverse('recipe-detail', args=[self.recipe.pk]))
+            reverse('recipe-detail', args=[recipe.pk]))
 
     @patch('recipe_app.views.redirect', wraps=redirect)
     def test_success_with_tag_create(self, mock_redirect, _):
