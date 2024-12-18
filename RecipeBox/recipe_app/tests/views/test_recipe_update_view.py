@@ -515,3 +515,6 @@ class RecipeUpdateViewTests(TestCase):
             form_data[f'{TAG_CREATE_FORMSET_PREFIX}-0-tag_name'],
             recipe.tags.values_list('name', flat=True)
         )
+
+        mock_redirect.assert_called_with(
+            reverse('recipe-detail', args=[recipe.pk]))
