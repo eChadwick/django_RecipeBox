@@ -135,7 +135,8 @@ def recipe_update(request, pk):
 
         if (not recipe_form.is_valid() or not ingredients_formset.is_valid()):
             context = {'recipe': recipe_form,
-                       'ingredients_list': ingredients_formset}
+                       'ingredients_list': ingredients_formset,
+                       'tag_create': tag_create_formset}
             return render(request, 'recipe_app/recipe_form.html', context)
 
         recipe_model = Recipe.objects.filter(pk=pk)
