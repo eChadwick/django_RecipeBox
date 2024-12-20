@@ -139,7 +139,7 @@ class RecipeUpdateViewTests(TestCase):
             f'{INGREDIENT_LIST_FORMSET_PREFIX}-MAX_NUM_FORMS': '',
             f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name': 'Ingredient',
             f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement': 'Amount',
-            'directions': 'Do things',
+            'directions': recipe.directions,
             f'{TAG_CREATE_FORMSET_PREFIX}-TOTAL_FORMS': '1',
             f'{TAG_CREATE_FORMSET_PREFIX}-INITIAL_FORMS': '0',
             f'{TAG_CREATE_FORMSET_PREFIX}-MIN_NUM_FORMS': '0',
@@ -191,14 +191,14 @@ class RecipeUpdateViewTests(TestCase):
 
         form_data = {
             'csrfmiddlewaretoken': 'irrelevant',
-            'name': 'Recipe Name',
+            'name': recipe.name,
             f'{INGREDIENT_LIST_FORMSET_PREFIX}-TOTAL_FORMS': '1',
             f'{INGREDIENT_LIST_FORMSET_PREFIX}-INITIAL_FORMS': '1',
             f'{INGREDIENT_LIST_FORMSET_PREFIX}-MIN_NUM_FORMS': '',
             f'{INGREDIENT_LIST_FORMSET_PREFIX}-MAX_NUM_FORMS': '',
             f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name': '',
             f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement': 'Amount',
-            'directions': 'Do things',
+            'directions': recipe.directions,
             f'{TAG_CREATE_FORMSET_PREFIX}-TOTAL_FORMS': '1',
             f'{TAG_CREATE_FORMSET_PREFIX}-INITIAL_FORMS': '0',
             f'{TAG_CREATE_FORMSET_PREFIX}-MIN_NUM_FORMS': '0',
@@ -250,7 +250,7 @@ class RecipeUpdateViewTests(TestCase):
 
         form_data = {
             'csrfmiddlewaretoken': 'irrelevant',
-            'name': 'Test Recipe',
+            'name': recipe.name,
             f'{INGREDIENT_LIST_FORMSET_PREFIX}-TOTAL_FORMS': '2',
             f'{INGREDIENT_LIST_FORMSET_PREFIX}-INITIAL_FORMS': '1',
             f'{INGREDIENT_LIST_FORMSET_PREFIX}-MIN_NUM_FORMS': '',
@@ -350,8 +350,8 @@ class RecipeUpdateViewTests(TestCase):
             f'{INGREDIENT_LIST_FORMSET_PREFIX}-INITIAL_FORMS': '1',
             f'{INGREDIENT_LIST_FORMSET_PREFIX}-MIN_NUM_FORMS': '',
             f'{INGREDIENT_LIST_FORMSET_PREFIX}-MAX_NUM_FORMS': '',
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name': 'Test Ingredient',
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement': 'a bunch',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name': ingredient.name,
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement': recipe_ingredient.measurement,
             'directions': 'New Directions',
             f'{TAG_CREATE_FORMSET_PREFIX}-TOTAL_FORMS': '1',
             f'{TAG_CREATE_FORMSET_PREFIX}-INITIAL_FORMS': '0',
@@ -458,13 +458,6 @@ class RecipeUpdateViewTests(TestCase):
             name='Test Recipe 1',
             directions='Test Directions'
         )
-        recipe.tags.add(Tag.objects.get_or_create(name='Tag1')[0])
-        unincluded_tag = Tag.objects.create(name='Tag2')
-        recipe_ingredient = RecipeIngredient.objects.create(
-            recipe=recipe,
-            ingredient=ingredient,
-            measurement='a bunch'
-        )
 
         updated_form_data = {
             'csrfmiddlewaretoken': 'irrelevant',
@@ -473,10 +466,10 @@ class RecipeUpdateViewTests(TestCase):
             f'{INGREDIENT_LIST_FORMSET_PREFIX}-INITIAL_FORMS': '1',
             f'{INGREDIENT_LIST_FORMSET_PREFIX}-MIN_NUM_FORMS': '',
             f'{INGREDIENT_LIST_FORMSET_PREFIX}-MAX_NUM_FORMS': '',
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name': 'Test Ingredient',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name': ingredient.name,
             f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement': 'a bunch',
             f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-DELETE': 'on',
-            'directions': 'Test Directions',
+            'directions': recipe.directions,
             f'{TAG_CREATE_FORMSET_PREFIX}-TOTAL_FORMS': '1',
             f'{TAG_CREATE_FORMSET_PREFIX}-INITIAL_FORMS': '0',
             f'{TAG_CREATE_FORMSET_PREFIX}-MIN_NUM_FORMS': '0',
@@ -510,8 +503,6 @@ class RecipeUpdateViewTests(TestCase):
             name='Test Recipe 1',
             directions='Test Directions'
         )
-        recipe.tags.add(Tag.objects.get_or_create(name='Tag1')[0])
-        unincluded_tag = Tag.objects.create(name='Tag2')
         recipe_ingredient = RecipeIngredient.objects.create(
             recipe=recipe,
             ingredient=ingredient,
@@ -525,9 +516,9 @@ class RecipeUpdateViewTests(TestCase):
             f'{INGREDIENT_LIST_FORMSET_PREFIX}-INITIAL_FORMS': '1',
             f'{INGREDIENT_LIST_FORMSET_PREFIX}-MIN_NUM_FORMS': '',
             f'{INGREDIENT_LIST_FORMSET_PREFIX}-MAX_NUM_FORMS': '',
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name': 'Test Ingredient',
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement': 'a bit',
-            'directions': 'Test Directions',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name': ingredient.name,
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement': recipe_ingredient.measurement,
+            'directions': recipe.directions,
             f'{TAG_CREATE_FORMSET_PREFIX}-TOTAL_FORMS': '1',
             f'{TAG_CREATE_FORMSET_PREFIX}-INITIAL_FORMS': '0',
             f'{TAG_CREATE_FORMSET_PREFIX}-MIN_NUM_FORMS': '0',
@@ -562,14 +553,14 @@ class RecipeUpdateViewTests(TestCase):
 
         form_data = {
             'csrfmiddlewaretoken': 'irrelevant',
-            'name': 'Name',
+            'name': recipe.name,
             f'{INGREDIENT_LIST_FORMSET_PREFIX}-TOTAL_FORMS': '1',
             f'{INGREDIENT_LIST_FORMSET_PREFIX}-INITIAL_FORMS': '0',
             f'{INGREDIENT_LIST_FORMSET_PREFIX}-MIN_NUM_FORMS': '',
             f'{INGREDIENT_LIST_FORMSET_PREFIX}-MAX_NUM_FORMS': '',
             f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name': '',
             f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement': '',
-            'directions': 'Directions',
+            'directions': recipe.directions,
             f'{TAG_CREATE_FORMSET_PREFIX}-TOTAL_FORMS': '1',
             f'{TAG_CREATE_FORMSET_PREFIX}-INITIAL_FORMS': '0',
             f'{TAG_CREATE_FORMSET_PREFIX}-MIN_NUM_FORMS': '0',
