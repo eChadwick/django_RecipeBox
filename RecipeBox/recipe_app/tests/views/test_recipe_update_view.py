@@ -27,7 +27,7 @@ from recipe_app.views import (
 
 
 @patch('recipe_app.views.render', return_value=HttpResponse())
-class RecipeUpdateViewTests(TestCase):
+class RecipeUpdateView_GetTests(TestCase):
 
     def test_get_renders_the_correct_html(self, mock_render):
         recipe = Recipe.objects.create(
@@ -122,6 +122,10 @@ class RecipeUpdateViewTests(TestCase):
                 'tag-select-form-1-id': str(unincluded_tag.id)
             }
         )
+
+
+@patch('recipe_app.views.render', return_value=HttpResponse())
+class RecipeUpdateView_Post_Error_Tests(TestCase):
 
     def test_post_should_rerender_form_on_recipe_errors(self, mock_render):
         recipe = Recipe.objects.create(
@@ -330,8 +334,11 @@ class RecipeUpdateViewTests(TestCase):
         self.assertEqual(response.status_code, 404)
         self.assertEqual(response.content.decode(), RECIPE_NOT_FOUND_ERROR)
 
-    @patch('recipe_app.views.redirect', wraps=redirect)
-    def test_success_updates_recipe_name_and_directions(self, mock_redirect, _):
+
+@patch('recipe_app.views.redirect', wraps=redirect)
+class RecipeUpdateView_Post_Success_Tests(TestCase):
+
+    def test_success_updates_recipe_name_and_directions(self, mock_redirect):
         ingredient = Ingredient.objects.create(name='Test Ingredient')
         recipe = Recipe.objects.create(
             name='Test Recipe 1',
@@ -385,8 +392,7 @@ class RecipeUpdateViewTests(TestCase):
         mock_redirect.assert_called_with(
             reverse('recipe-detail', args=[recipe.pk]))
 
-    @patch('recipe_app.views.redirect', wraps=redirect)
-    def test_success_adds_ingredient(self, mock_redirect, _):
+    def test_success_adds_ingredient(self, mock_redirect):
         ingredient = Ingredient.objects.create(name='Test Ingredient')
         recipe = Recipe.objects.create(
             name='Test Recipe 1',
@@ -451,8 +457,7 @@ class RecipeUpdateViewTests(TestCase):
         mock_redirect.assert_called_with(
             reverse('recipe-detail', args=[recipe.pk]))
 
-    @patch('recipe_app.views.redirect', wraps=redirect)
-    def test_success_deletes_ingredient(self, mock_redirect, _):
+    def test_success_deletes_ingredient(self, mock_redirect):
         ingredient = Ingredient.objects.create(name='Test Ingredient')
         recipe = Recipe.objects.create(
             name='Test Recipe 1',
@@ -496,8 +501,7 @@ class RecipeUpdateViewTests(TestCase):
         mock_redirect.assert_called_with(
             reverse('recipe-detail', args=[recipe.pk]))
 
-    @patch('recipe_app.views.redirect', wraps=redirect)
-    def test_success_updates_ingredient(self, mock_redirect, _):
+    def test_success_updates_ingredient(self, mock_redirect):
         ingredient = Ingredient.objects.create(name='Test Ingredient')
         recipe = Recipe.objects.create(
             name='Test Recipe 1',
@@ -547,8 +551,7 @@ class RecipeUpdateViewTests(TestCase):
         mock_redirect.assert_called_with(
             reverse('recipe-detail', args=[recipe.pk]))
 
-    @patch('recipe_app.views.redirect', wraps=redirect)
-    def test_success_with_tag_create(self, mock_redirect, _):
+    def test_success_with_tag_create(self, mock_redirect):
         recipe = Recipe.objects.create(name='Name', directions='Directions')
 
         form_data = {
