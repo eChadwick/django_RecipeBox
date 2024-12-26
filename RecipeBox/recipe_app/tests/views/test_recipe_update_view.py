@@ -338,311 +338,170 @@ class RecipeUpdateView_Post_Error_Tests(TestCase):
 @patch('recipe_app.views.redirect', wraps=redirect)
 class RecipeUpdateView_Post_Success_Tests(TestCase):
 
-    def test_success_updates_recipe_name_and_directions(self, mock_redirect):
-        ingredient = Ingredient.objects.create(name='Test Ingredient')
-        recipe = Recipe.objects.create(
-            name='Test Recipe 1',
+    def setUp(self):
+        self.ingredient = Ingredient.objects.create(name='Test Ingredient')
+        self.recipe = Recipe.objects.create(
+            name='Test Recipe',
             directions='Test Directions'
         )
-        recipe_ingredient = RecipeIngredient.objects.create(
-            recipe=recipe,
-            ingredient=ingredient,
+        self.recipe.tags.create(name='Tag1')
+        self.recipe_ingredient = RecipeIngredient.objects.create(
+            recipe=self.recipe,
+            ingredient=self.ingredient,
             measurement='a bunch'
         )
 
-        updated_form_data = {
+        self.post_data = {
             'csrfmiddlewaretoken': 'irrelevant',
-            'name': 'New Recipe Name',
+            'name': self.recipe.name,
             f'{INGREDIENT_LIST_FORMSET_PREFIX}-TOTAL_FORMS': '1',
             f'{INGREDIENT_LIST_FORMSET_PREFIX}-INITIAL_FORMS': '1',
             f'{INGREDIENT_LIST_FORMSET_PREFIX}-MIN_NUM_FORMS': '',
             f'{INGREDIENT_LIST_FORMSET_PREFIX}-MAX_NUM_FORMS': '',
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name': ingredient.name,
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement': recipe_ingredient.measurement,
-            'directions': 'New Directions',
-            f'{TAG_CREATE_FORMSET_PREFIX}-TOTAL_FORMS': '1',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name': self.ingredient.name,
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement': self.recipe_ingredient.measurement,
+            'directions': self.recipe.directions,
+            f'{TAG_CREATE_FORMSET_PREFIX}-TOTAL_FORMS': '2',
             f'{TAG_CREATE_FORMSET_PREFIX}-INITIAL_FORMS': '0',
             f'{TAG_CREATE_FORMSET_PREFIX}-MIN_NUM_FORMS': '0',
             f'{TAG_CREATE_FORMSET_PREFIX}-MAX_NUM_FORMS': '1000',
-            f'{TAG_CREATE_FORMSET_PREFIX}-0-tag_name': ''
+            f'{TAG_CREATE_FORMSET_PREFIX}-0-tag_name': self.recipe.tags.all()[0].name,
+            f'{TAG_CREATE_FORMSET_PREFIX}-1-tag_name': ''
         }
 
+    def test_success_updates_recipe_name_and_directions(self, mock_redirect):
+
+        self.post_data['name'] = 'New Recipe Name'
+        self.post_data['directions'] = 'New Directions'
+
         self.client.post(
-            reverse('recipe-update', args=[recipe.pk]), updated_form_data
-        )
-        recipe = Recipe.objects.get(pk=recipe.pk)
-
-        self.assertEqual(recipe.name, updated_form_data['name'])
-        self.assertEqual(recipe.directions,
-                         updated_form_data['directions'])
-
-        self.assertTrue(
-            Ingredient.objects.filter(pk=ingredient.pk).exists()
+            reverse('recipe-update', args=[self.recipe.pk]), self.post_data
         )
 
-        self.assertEqual(
-            RecipeIngredient.objects.filter(
-                recipe=recipe.pk,
-                ingredient=recipe_ingredient.ingredient.pk,
-                measurement=updated_form_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement']
-            ).count(),
-            1
-        )
+        updated_recipe = Recipe.objects.get(pk=self.recipe.pk)
+
+        self.assertEqual(updated_recipe.name, self.post_data['name'])
+        self.assertEqual(updated_recipe.directions,
+                         self.post_data['directions'])
 
         mock_redirect.assert_called_with(
-            reverse('recipe-detail', args=[recipe.pk]))
+            reverse('recipe-detail', args=[updated_recipe.pk]))
 
     def test_success_adds_ingredient(self, mock_redirect):
-        ingredient = Ingredient.objects.create(name='Test Ingredient')
-        recipe = Recipe.objects.create(
-            name='Test Recipe 1',
-            directions='Test Directions'
-        )
-        recipe_ingredient = RecipeIngredient.objects.create(
-            recipe=recipe,
-            ingredient=ingredient,
-            measurement='a bunch'
-        )
-
-        updated_form_data = {
-            'csrfmiddlewaretoken': 'irrelevant',
-            'name': recipe.name,
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-TOTAL_FORMS': '2',
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-INITIAL_FORMS': '1',
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MIN_NUM_FORMS': '',
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MAX_NUM_FORMS': '',
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name': 'Test Ingredient',
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement': 'a bunch',
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-1-name': 'New Ingredient',
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-1-measurement': 'new amount',
-            'directions': 'Test Directions',
-            f'{TAG_CREATE_FORMSET_PREFIX}-TOTAL_FORMS': '1',
-            f'{TAG_CREATE_FORMSET_PREFIX}-INITIAL_FORMS': '0',
-            f'{TAG_CREATE_FORMSET_PREFIX}-MIN_NUM_FORMS': '0',
-            f'{TAG_CREATE_FORMSET_PREFIX}-MAX_NUM_FORMS': '1000',
-            f'{TAG_CREATE_FORMSET_PREFIX}-0-tag_name': ''
-        }
+        self.post_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-1-name'] = 'New Ingredient'
+        self.post_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-1-measurement'] = 'new amount'
+        self.post_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-TOTAL_FORMS'] = str(
+            int(self.post_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-TOTAL_FORMS']) + 1)
 
         self.client.post(
-            reverse('recipe-update', args=[recipe.pk]), updated_form_data
+            reverse('recipe-update', args=[self.recipe.pk]), self.post_data
         )
-        recipe = Recipe.objects.get(pk=recipe.pk)
 
         self.assertTrue(
-            Ingredient.objects.filter(pk=ingredient.pk).exists()
+            Ingredient.objects.filter(pk=self.ingredient.pk).exists()
         )
 
         self.assertEqual(
             RecipeIngredient.objects.filter(
-                recipe=recipe.pk,
-                ingredient=recipe_ingredient.ingredient.pk,
-                measurement=updated_form_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement']
+                recipe=self.recipe.pk,
+                ingredient=self.recipe_ingredient.ingredient.pk,
+                measurement=self.post_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement']
             ).count(),
             1
         )
 
         new_ingredient = Ingredient.objects.filter(
-            name=updated_form_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-1-name'])
+            name=self.post_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-1-name'])
         self.assertTrue(new_ingredient.exists())
 
         self.assertEqual(
             RecipeIngredient.objects.filter(
-                recipe=recipe.pk,
+                recipe=self.recipe.pk,
                 ingredient=new_ingredient[0].pk,
-                measurement=updated_form_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-1-measurement']
+                measurement=self.post_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-1-measurement']
             ).count(),
             1
         )
 
         mock_redirect.assert_called_with(
-            reverse('recipe-detail', args=[recipe.pk]))
+            reverse('recipe-detail', args=[self.recipe.pk]))
 
     def test_success_deletes_ingredient(self, mock_redirect):
-        ingredient = Ingredient.objects.create(name='Test Ingredient')
-        recipe = Recipe.objects.create(
-            name='Test Recipe 1',
-            directions='Test Directions'
-        )
-
-        updated_form_data = {
-            'csrfmiddlewaretoken': 'irrelevant',
-            'name': recipe.name,
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-TOTAL_FORMS': '1',
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-INITIAL_FORMS': '1',
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MIN_NUM_FORMS': '',
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MAX_NUM_FORMS': '',
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name': ingredient.name,
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement': 'a bunch',
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-DELETE': 'on',
-            'directions': recipe.directions,
-            f'{TAG_CREATE_FORMSET_PREFIX}-TOTAL_FORMS': '1',
-            f'{TAG_CREATE_FORMSET_PREFIX}-INITIAL_FORMS': '0',
-            f'{TAG_CREATE_FORMSET_PREFIX}-MIN_NUM_FORMS': '0',
-            f'{TAG_CREATE_FORMSET_PREFIX}-MAX_NUM_FORMS': '1000',
-            f'{TAG_CREATE_FORMSET_PREFIX}-0-tag_name': ''
-        }
+        self.post_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-DELETE'] = 'on'
 
         self.client.post(
-            reverse('recipe-update', args=[recipe.pk]), updated_form_data
+            reverse('recipe-update', args=[self.recipe.pk]), self.post_data
         )
-        recipe = Recipe.objects.get(pk=recipe.pk)
 
         self.assertTrue(
-            Ingredient.objects.filter(pk=ingredient.pk).exists()
+            Ingredient.objects.filter(pk=self.ingredient.pk).exists()
         )
 
         self.assertEqual(
             RecipeIngredient.objects.filter(
-                recipe=recipe.pk,
+                recipe=self.recipe.pk,
             ).count(),
             0
         )
 
         mock_redirect.assert_called_with(
-            reverse('recipe-detail', args=[recipe.pk]))
+            reverse('recipe-detail', args=[self.recipe.pk]))
 
     def test_success_updates_ingredient(self, mock_redirect):
-        ingredient = Ingredient.objects.create(name='Test Ingredient')
-        recipe = Recipe.objects.create(
-            name='Test Recipe 1',
-            directions='Test Directions'
-        )
-        recipe_ingredient = RecipeIngredient.objects.create(
-            recipe=recipe,
-            ingredient=ingredient,
-            measurement='a bunch'
-        )
-
-        updated_form_data = {
-            'csrfmiddlewaretoken': 'irrelevant',
-            'name': recipe.name,
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-TOTAL_FORMS': '1',
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-INITIAL_FORMS': '1',
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MIN_NUM_FORMS': '',
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MAX_NUM_FORMS': '',
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name': ingredient.name,
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement': recipe_ingredient.measurement,
-            'directions': recipe.directions,
-            f'{TAG_CREATE_FORMSET_PREFIX}-TOTAL_FORMS': '1',
-            f'{TAG_CREATE_FORMSET_PREFIX}-INITIAL_FORMS': '0',
-            f'{TAG_CREATE_FORMSET_PREFIX}-MIN_NUM_FORMS': '0',
-            f'{TAG_CREATE_FORMSET_PREFIX}-MAX_NUM_FORMS': '1000',
-            f'{TAG_CREATE_FORMSET_PREFIX}-0-tag_name': ''
-        }
+        self.post_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement'] = 'New Measurement'
 
         self.client.post(
-            reverse('recipe-update', args=[recipe.pk]), updated_form_data
+            reverse('recipe-update', args=[self.recipe.pk]), self.post_data
         )
-        recipe = Recipe.objects.get(pk=recipe.pk)
 
         self.assertTrue(
-            Ingredient.objects.filter(pk=ingredient.pk).exists()
+            Ingredient.objects.filter(pk=self.ingredient.pk).exists()
         )
 
         self.assertEqual(
             RecipeIngredient.objects.filter(
-                recipe=recipe.pk,
-                ingredient=recipe_ingredient.ingredient.pk,
-                measurement=updated_form_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement']
+                recipe=self.recipe.pk,
+                ingredient=self.recipe_ingredient.ingredient.pk,
+                measurement=self.post_data[f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement']
             ).count(),
             1
         )
 
         mock_redirect.assert_called_with(
-            reverse('recipe-detail', args=[recipe.pk]))
+            reverse('recipe-detail', args=[self.recipe.pk]))
 
     def test_success_with_tag_create(self, mock_redirect):
-        recipe = Recipe.objects.create(name='Name', directions='Directions')
-
-        form_data = {
-            'csrfmiddlewaretoken': 'irrelevant',
-            'name': recipe.name,
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-TOTAL_FORMS': '1',
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-INITIAL_FORMS': '0',
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MIN_NUM_FORMS': '',
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MAX_NUM_FORMS': '',
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name': '',
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement': '',
-            'directions': recipe.directions,
-            f'{TAG_CREATE_FORMSET_PREFIX}-TOTAL_FORMS': '1',
-            f'{TAG_CREATE_FORMSET_PREFIX}-INITIAL_FORMS': '0',
-            f'{TAG_CREATE_FORMSET_PREFIX}-MIN_NUM_FORMS': '0',
-            f'{TAG_CREATE_FORMSET_PREFIX}-MAX_NUM_FORMS': '1000',
-            f'{TAG_CREATE_FORMSET_PREFIX}-0-tag_name': 'New Tag'
-        }
+        self.post_data[f'{TAG_CREATE_FORMSET_PREFIX}-1-tag_name'] = 'New Tag'
 
         self.client.post(
-            reverse('recipe-update', args=[recipe.id]),
-            data=form_data
+            reverse('recipe-update', args=[self.recipe.id]), data=self.post_data
         )
 
+        self.assertEqual(
+            len(self.recipe.tags.all()),
+            2
+        )
         self.assertIn(
-            form_data[f'{TAG_CREATE_FORMSET_PREFIX}-0-tag_name'],
-            recipe.tags.values_list('name', flat=True)
+            self.post_data[f'{TAG_CREATE_FORMSET_PREFIX}-1-tag_name'],
+            self.recipe.tags.values_list('name', flat=True)
         )
 
         mock_redirect.assert_called_with(
-            reverse('recipe-detail', args=[recipe.pk]))
+            reverse('recipe-detail', args=[self.recipe.pk]))
 
     def test_success_tag_create_reuses_existing_tags(self, _):
-        recipe = Recipe.objects.create(name='Name', directions='Directions')
-        tag = Tag.objects.create(name='TagName')
-
-        form_data = {
-            'csrfmiddlewaretoken': 'irrelevant',
-            'name': recipe.name,
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-TOTAL_FORMS': '1',
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-INITIAL_FORMS': '0',
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MIN_NUM_FORMS': '',
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MAX_NUM_FORMS': '',
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name': '',
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement': '',
-            'directions': recipe.directions,
-            f'{TAG_CREATE_FORMSET_PREFIX}-TOTAL_FORMS': '1',
-            f'{TAG_CREATE_FORMSET_PREFIX}-INITIAL_FORMS': '0',
-            f'{TAG_CREATE_FORMSET_PREFIX}-MIN_NUM_FORMS': '0',
-            f'{TAG_CREATE_FORMSET_PREFIX}-MAX_NUM_FORMS': '1000',
-            f'{TAG_CREATE_FORMSET_PREFIX}-0-tag_name': tag.name
-        }
+        existing_tag = Tag.objects.create(name='TagName')
+        self.post_data[f'{TAG_CREATE_FORMSET_PREFIX}-1-tag_name'] = existing_tag.name
 
         self.client.post(
-            reverse('recipe-update', args=[recipe.id]),
-            data=form_data
+            reverse('recipe-update', args=[self.recipe.id]), data=self.post_data
         )
 
         self.assertEqual(
-            recipe.tags.all()[0].id,
-            tag.id
+            len(self.recipe.tags.all()),
+            2
         )
-
-    def test_success_tag_create_doesnt_duplicate_tags(self, _):
-        tag = Tag.objects.create(name='TagName')
-        recipe = Recipe.objects.create(name='Name', directions='Directions')
-        recipe.tags.add(tag.id)
-
-        form_data = {
-            'csrfmiddlewaretoken': 'irrelevant',
-            'name': recipe.name,
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-TOTAL_FORMS': '1',
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-INITIAL_FORMS': '0',
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MIN_NUM_FORMS': '',
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MAX_NUM_FORMS': '',
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name': '',
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement': '',
-            'directions': recipe.directions,
-            f'{TAG_CREATE_FORMSET_PREFIX}-TOTAL_FORMS': '1',
-            f'{TAG_CREATE_FORMSET_PREFIX}-INITIAL_FORMS': '0',
-            f'{TAG_CREATE_FORMSET_PREFIX}-MIN_NUM_FORMS': '0',
-            f'{TAG_CREATE_FORMSET_PREFIX}-MAX_NUM_FORMS': '1000',
-            f'{TAG_CREATE_FORMSET_PREFIX}-0-tag_name': tag.name
-        }
-
-        self.client.post(
-            reverse('recipe-update', args=[recipe.id]),
-            data=form_data
-        )
-
         self.assertEqual(
-            len(recipe.tags.all()),
-            1
+            self.recipe.tags.all().last().id,
+            existing_tag.id
         )
