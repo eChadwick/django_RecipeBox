@@ -512,6 +512,34 @@ class RecipeUpdateView_Post_Success_Tests(TestCase):
             existing_tag.id
         )
 
-    # def test_success_with_tag_select(self, mock_redirect):
-    #     extra_tag = Tag.objects.create(name='Extra Tag1')
-    #     Tag.objects.create(name='Extra Tag2')
+    def test_success_with_tag_select(self, mock_redirect):
+        extra_tag1 = Tag.objects.create(name='Extra Tag1')
+        extra_tag2 = Tag.objects.create(name='Extra Tag2')
+
+        self.post_data[f'{TAG_SELECT_FORMSET_PREFIX}-1-tag_name'] = extra_tag1.name
+        self.post_data[f'{TAG_SELECT_FORMSET_PREFIX}-1-include'] = 'on'
+        self.post_data[f'{TAG_SELECT_FORMSET_PREFIX}-1-id'] = extra_tag1.id
+
+        self.post_data[f'{TAG_SELECT_FORMSET_PREFIX}-2-tag_name'] = extra_tag2.name
+        self.post_data[f'{TAG_SELECT_FORMSET_PREFIX}-2-id'] = extra_tag2.id
+
+        self.post_data[f'{TAG_SELECT_FORMSET_PREFIX}-TOTAL_FORMS'] = str(
+            int(self.post_data[f'{TAG_SELECT_FORMSET_PREFIX}-TOTAL_FORMS']) + 2)
+        self.post_data[f'{TAG_SELECT_FORMSET_PREFIX}-INITIAL_FORMS'] = self.post_data[f'{TAG_SELECT_FORMSET_PREFIX}-TOTAL_FORMS']
+
+        self.client.post(
+            reverse('recipe-update', args=[self.recipe.id]), data=self.post_data
+        )
+
+        self.assertEqual(
+            len(self.recipe.tags.all()),
+            2
+        )
+
+        self.assertEqual(
+            self.recipe.tags.all().last().id,
+            extra_tag1.id
+        )
+
+        mock_redirect.assert_called_with(
+            reverse('recipe-detail', args=[self.recipe.pk]))

@@ -130,7 +130,7 @@ def recipe_update(request, pk):
             recipe_form,
             ingredients_formset,
             tag_create_formset,
-            _
+            tag_select_formset
         ) = _validate_recipe_form_data(request)
 
         if (not recipe_form.is_valid() or not ingredients_formset.is_valid()):
@@ -164,6 +164,12 @@ def recipe_update(request, pk):
 
         for entry in tag_create_formset.cleaned_data:
             if 'tag_name' in entry:
+                recipe_model[0].tags.add(
+                    Tag.objects.get_or_create(name=entry['tag_name'])[0]
+                )
+
+        for entry in tag_select_formset.cleaned_data:
+            if entry.get('include', False):
                 recipe_model[0].tags.add(
                     Tag.objects.get_or_create(name=entry['tag_name'])[0]
                 )
