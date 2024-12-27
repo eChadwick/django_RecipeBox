@@ -353,20 +353,26 @@ class RecipeUpdateView_Post_Success_Tests(TestCase):
 
         self.post_data = {
             'csrfmiddlewaretoken': 'irrelevant',
-            'name': self.recipe.name,
+            'name': 'Test Recipe',
             f'{INGREDIENT_LIST_FORMSET_PREFIX}-TOTAL_FORMS': '1',
             f'{INGREDIENT_LIST_FORMSET_PREFIX}-INITIAL_FORMS': '1',
             f'{INGREDIENT_LIST_FORMSET_PREFIX}-MIN_NUM_FORMS': '',
             f'{INGREDIENT_LIST_FORMSET_PREFIX}-MAX_NUM_FORMS': '',
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name': self.ingredient.name,
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement': self.recipe_ingredient.measurement,
-            'directions': self.recipe.directions,
-            f'{TAG_CREATE_FORMSET_PREFIX}-TOTAL_FORMS': '2',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name': 'Test Ingredient',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement': 'a bunch',
+            'directions': 'Test Directions',
+            f'{TAG_CREATE_FORMSET_PREFIX}-TOTAL_FORMS': '1',
             f'{TAG_CREATE_FORMSET_PREFIX}-INITIAL_FORMS': '0',
             f'{TAG_CREATE_FORMSET_PREFIX}-MIN_NUM_FORMS': '0',
             f'{TAG_CREATE_FORMSET_PREFIX}-MAX_NUM_FORMS': '1000',
-            f'{TAG_CREATE_FORMSET_PREFIX}-0-tag_name': self.recipe.tags.all()[0].name,
-            f'{TAG_CREATE_FORMSET_PREFIX}-1-tag_name': ''
+            f'{TAG_CREATE_FORMSET_PREFIX}-0-tag_name': '',
+            f'{TAG_SELECT_FORMSET_PREFIX}-TOTAL_FORMS': '1',
+            f'{TAG_SELECT_FORMSET_PREFIX}-INITIAL_FORMS': '1',
+            f'{TAG_SELECT_FORMSET_PREFIX}-MIN_NUM_FORMS': '',
+            f'{TAG_SELECT_FORMSET_PREFIX}-MAX_NUM_FORMS': '',
+            f'{TAG_SELECT_FORMSET_PREFIX}-0-tag_name': 'Tag1',
+            f'{TAG_SELECT_FORMSET_PREFIX}-0-include': 'on',
+            f'{TAG_SELECT_FORMSET_PREFIX}-0-id': '1'
         }
 
     def test_success_updates_recipe_name_and_directions(self, mock_redirect):
@@ -471,7 +477,7 @@ class RecipeUpdateView_Post_Success_Tests(TestCase):
             reverse('recipe-detail', args=[self.recipe.pk]))
 
     def test_success_with_tag_create(self, mock_redirect):
-        self.post_data[f'{TAG_CREATE_FORMSET_PREFIX}-1-tag_name'] = 'New Tag'
+        self.post_data[f'{TAG_CREATE_FORMSET_PREFIX}-0-tag_name'] = 'New Tag'
 
         self.client.post(
             reverse('recipe-update', args=[self.recipe.id]), data=self.post_data
@@ -482,7 +488,7 @@ class RecipeUpdateView_Post_Success_Tests(TestCase):
             2
         )
         self.assertIn(
-            self.post_data[f'{TAG_CREATE_FORMSET_PREFIX}-1-tag_name'],
+            self.post_data[f'{TAG_CREATE_FORMSET_PREFIX}-0-tag_name'],
             self.recipe.tags.values_list('name', flat=True)
         )
 
@@ -491,7 +497,7 @@ class RecipeUpdateView_Post_Success_Tests(TestCase):
 
     def test_success_tag_create_reuses_existing_tags(self, _):
         existing_tag = Tag.objects.create(name='TagName')
-        self.post_data[f'{TAG_CREATE_FORMSET_PREFIX}-1-tag_name'] = existing_tag.name
+        self.post_data[f'{TAG_CREATE_FORMSET_PREFIX}-0-tag_name'] = existing_tag.name
 
         self.client.post(
             reverse('recipe-update', args=[self.recipe.id]), data=self.post_data
