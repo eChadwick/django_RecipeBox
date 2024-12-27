@@ -507,9 +507,9 @@ class RecipeUpdateView_Post_Success_Tests(TestCase):
             len(self.recipe.tags.all()),
             2
         )
-        self.assertEqual(
-            self.recipe.tags.all().last().id,
-            existing_tag.id
+        self.assertIn(
+            existing_tag.id,
+            self.recipe.tags.values_list('id', flat=True)
         )
 
     def test_success_with_tag_select(self, mock_redirect):
@@ -539,6 +539,21 @@ class RecipeUpdateView_Post_Success_Tests(TestCase):
         self.assertEqual(
             self.recipe.tags.all().last().id,
             extra_tag1.id
+        )
+
+        mock_redirect.assert_called_with(
+            reverse('recipe-detail', args=[self.recipe.pk]))
+
+    def test_success_with_deleting_tag(self, mock_redirect):
+        self.post_data.pop(f'{TAG_SELECT_FORMSET_PREFIX}-0-include')
+
+        self.client.post(
+            reverse('recipe-update', args=[self.recipe.id]), data=self.post_data
+        )
+
+        self.assertEqual(
+            len(self.recipe.tags.all()),
+            0
         )
 
         mock_redirect.assert_called_with(
