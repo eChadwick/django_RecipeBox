@@ -353,14 +353,14 @@ class RecipeUpdateView_Post_Success_Tests(TestCase):
 
         self.post_data = {
             'csrfmiddlewaretoken': 'irrelevant',
-            'name': 'Test Recipe',
+            'name': self.recipe.name,
             f'{INGREDIENT_LIST_FORMSET_PREFIX}-TOTAL_FORMS': '1',
             f'{INGREDIENT_LIST_FORMSET_PREFIX}-INITIAL_FORMS': '1',
             f'{INGREDIENT_LIST_FORMSET_PREFIX}-MIN_NUM_FORMS': '',
             f'{INGREDIENT_LIST_FORMSET_PREFIX}-MAX_NUM_FORMS': '',
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name': 'Test Ingredient',
-            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement': 'a bunch',
-            'directions': 'Test Directions',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-name': self.ingredient.name,
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-0-measurement': self.recipe_ingredient.measurement,
+            'directions': self.recipe.directions,
             f'{TAG_CREATE_FORMSET_PREFIX}-TOTAL_FORMS': '1',
             f'{TAG_CREATE_FORMSET_PREFIX}-INITIAL_FORMS': '0',
             f'{TAG_CREATE_FORMSET_PREFIX}-MIN_NUM_FORMS': '0',
@@ -370,9 +370,9 @@ class RecipeUpdateView_Post_Success_Tests(TestCase):
             f'{TAG_SELECT_FORMSET_PREFIX}-INITIAL_FORMS': '1',
             f'{TAG_SELECT_FORMSET_PREFIX}-MIN_NUM_FORMS': '',
             f'{TAG_SELECT_FORMSET_PREFIX}-MAX_NUM_FORMS': '',
-            f'{TAG_SELECT_FORMSET_PREFIX}-0-tag_name': 'Tag1',
+            f'{TAG_SELECT_FORMSET_PREFIX}-0-tag_name': self.recipe.tags.all().last().name,
             f'{TAG_SELECT_FORMSET_PREFIX}-0-include': 'on',
-            f'{TAG_SELECT_FORMSET_PREFIX}-0-id': '1'
+            f'{TAG_SELECT_FORMSET_PREFIX}-0-id': self.recipe.tags.all().last().id
         }
 
     def test_success_updates_recipe_name_and_directions(self, mock_redirect):
@@ -511,3 +511,7 @@ class RecipeUpdateView_Post_Success_Tests(TestCase):
             self.recipe.tags.all().last().id,
             existing_tag.id
         )
+
+    # def test_success_with_tag_select(self, mock_redirect):
+    #     extra_tag = Tag.objects.create(name='Extra Tag1')
+    #     Tag.objects.create(name='Extra Tag2')
