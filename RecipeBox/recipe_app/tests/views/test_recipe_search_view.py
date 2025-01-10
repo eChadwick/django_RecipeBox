@@ -6,18 +6,14 @@ from django.urls import reverse
 
 from recipe_app.forms.forms import (
     IngredientInclusionFormSet,
-    RecipeInclusionForm,
+    RecipeInclusionForm
 )
+from recipe_app.forms.tag_selection_formset import TagSelectionFormset
 from recipe_app.models import (
     Ingredient,
     Recipe,
-    RecipeIngredient
-)
-from recipe_app.views import (
-    RECIPE_NOT_FOUND_ERROR,
-    TAG_CREATE_FORMSET_PREFIX,
-    TAG_SELECT_FORMSET_PREFIX,
-    INGREDIENT_LIST_FORMSET_PREFIX
+    RecipeIngredient,
+    Tag
 )
 
 
@@ -27,6 +23,8 @@ class RecipeSearchViewTests(TestCase):
     def setUp(self):
         for i in range(1, 6):
             Ingredient.objects.create(name=f'Ingredient {i}')
+
+        Tag.objects.create(name='test')
 
     def test_get_renders_correct_template(self, mock_render):
         self.client.get(reverse('recipe-search'))
@@ -52,6 +50,10 @@ class RecipeSearchViewTests(TestCase):
 
         recipe_name = mock_render.call_args[0][2]['recipe_name']
         self.assertIsInstance(recipe_name, RecipeInclusionForm)
+
+        tag_select_form = mock_render.call_args[0][2]['tag_select']
+        self.assertIsInstance(tag_select_form, TagSelectionFormset)
+        self.assertNotIn('on', tag_select_form.data.values())
 
     def test_post_renders_correct_template(self, mock_render):
         post_data = {
