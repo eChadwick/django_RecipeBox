@@ -12,19 +12,12 @@ from recipe_app.forms.tag_selection_formset import TagSelectionFormset
 from recipe_app.models import (
     Ingredient,
     Recipe,
-    RecipeIngredient,
-    Tag
+    RecipeIngredient
 )
 
 
 @patch('recipe_app.views.render', return_value=HttpResponse())
 class RecipeSearchViewTests(TestCase):
-
-    def setUp(self):
-        for i in range(1, 6):
-            Ingredient.objects.create(name=f'Ingredient {i}')
-
-        Tag.objects.create(name='test')
 
     def test_get_renders_correct_template(self, mock_render):
         self.client.get(reverse('recipe-search'))
@@ -34,12 +27,15 @@ class RecipeSearchViewTests(TestCase):
         )
 
     def test_get_returns_all_elements(self, mock_render):
+        for i in range(1, 3):
+            Ingredient.objects.create(name=f'Ingredient {i}')
+
         self.client.get(reverse('recipe-search'))
 
         ingredients_list = mock_render.call_args[0][2]['ingredients']
         self.assertIsInstance(ingredients_list, IngredientInclusionFormSet)
-        self.assertEqual(len(ingredients_list), 5)
-        for i in range(1, 6):
+        self.assertEqual(len(ingredients_list), 2)
+        for i in range(1, 3):
             self.assertIn(
                 {
                     'id': i,
