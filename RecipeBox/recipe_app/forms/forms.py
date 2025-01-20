@@ -9,6 +9,7 @@ from django.forms import (
     HiddenInput,
     ChoiceField,
     RadioSelect,
+    Textarea
 )
 
 from django.db.models import QuerySet
@@ -90,7 +91,7 @@ class RecipeForm(Form):
     directions = CharField(
         max_length=10000,
         required=False,
-        widget=TextInput(attrs={'placeholder': directions_field_placeholder})
+        widget=Textarea(attrs={'placeholder': directions_field_placeholder})
     )
 
     def __eq__(self, other):
