@@ -1,5 +1,10 @@
 
 ----MVP LINE------------------------------------------
 
+*Deployment issues
+    ** secrets
+    ** errors
+    ** backups
+
 * recipe update ugly errors on empty ingredient name
 * ingredient name not editable on edit template
