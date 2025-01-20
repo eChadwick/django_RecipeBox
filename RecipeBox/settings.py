@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -18,14 +19,21 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure--09cchprb4jhzhh#jrm#0xk*9-kl_7r1lzm9n+nq1a-qbic7ij'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
+dev_var_name = 'RECIPE_BOX_DEV'
+secret_key_var_name = 'RECIPE_BOX_SECRET_KEY'
+if os.getenv(dev_var_name, False):
+    DEBUG = True
+    SECRET_KEY = 'django-insecure--09cchprb4jhzhh#jrm#0xk*9-kl_7r1lzm9n+nq1a-qbic7ij'
+    ALLOWED_HOSTS = ['localhost']
+else:
+    DEBUG = False
+    SECRET_KEY = os.getenv(secret_key_var_name, False)
+    if not SECRET_KEY:
+        raise ValueError(
+            f'{secret_key_var_name} must be set in production\n'
+            f'If you want dev mode, set {dev_var_name}\n\n'
+        )
+    ALLOWED_HOSTS = [f'192.168.86.{host}' for host in range(1, 255)]
 
 
 # Application definition
