@@ -306,3 +306,39 @@ class RecipeSearchViewPostTests(TestCase):
         rendered_recipe_list = mock_render.call_args[0][2]['recipes_list']
         self.assertEqual(len(rendered_recipe_list), 1)
         self.assertIn(recipe, rendered_recipe_list)
+
+    def test_tag_filtering(self, mock_render):
+        recipe1 = Recipe.objects.create(name='Recipe1', directions='a')
+        recipe1.tags.create(name='Tag1')
+
+        recipe2 = Recipe.objects.create(name='Recipe2', directions='b')
+        recipe2.tags.create(name='Tag2')
+
+        recipe3 = Recipe.objects.create(name='Recipe3', directions='c')
+        recipe3.tags.add(recipe1.tags.all()[0])
+        recipe3.tags.add(recipe2.tags.all()[0])
+
+        post_data = {
+            'recipe_name': '',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-TOTAL_FORMS': '0',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-INITIAL_FORMS': '0',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MIN_NUM_FORMS': '0',
+            f'{INGREDIENT_LIST_FORMSET_PREFIX}-MAX_NUM_FORMS': '1000',
+            f'{TAG_SELECT_FORMSET_PREFIX}-TOTAL_FORMS': '2',
+            f'{TAG_SELECT_FORMSET_PREFIX}-INITIAL_FORMS': '2',
+            f'{TAG_SELECT_FORMSET_PREFIX}-MIN_NUM_FORMS': '',
+            f'{TAG_SELECT_FORMSET_PREFIX}-MAX_NUM_FORMS': '',
+            'csrfmiddlewaretoken': 'irrelevant',
+            f'{TAG_SELECT_FORMSET_PREFIX}-0-tag_name': 'Tag1',
+            f'{TAG_SELECT_FORMSET_PREFIX}-0-include': 'on',
+            f'{TAG_SELECT_FORMSET_PREFIX}-0-id': '1',
+            f'{TAG_SELECT_FORMSET_PREFIX}-1-tag_name': 'Tag2',
+            f'{TAG_SELECT_FORMSET_PREFIX}-1-include': 'on',
+            f'{TAG_SELECT_FORMSET_PREFIX}-1-id': '2'
+        }
+
+        self.client.post(reverse('recipe-search'), post_data)
+
+        rendered_recipe_list = mock_render.call_args[0][2]['recipes_list']
+        self.assertEqual(len(rendered_recipe_list), 1)
+        self.assertIn(recipe3, rendered_recipe_list)

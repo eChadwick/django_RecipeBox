@@ -230,6 +230,7 @@ def recipe_search(request):
 
         recipe_matches = Recipe.objects.exclude(
             ingredients__id__in=exclude_ids)
+
         if or_ids:
             recipe_matches = recipe_matches.filter(ingredients__id__in=or_ids)
         if '' != request.POST.dict().get('recipe_name', ''):
@@ -238,6 +239,17 @@ def recipe_search(request):
         if and_ids:
             for id in and_ids:
                 recipe_matches = recipe_matches.filter(ingredients__id=id)
+
+        tag_select_formset = TagSelectionFormset(
+            data={k: v for (k, v) in request.POST.items()
+                  if TAG_SELECT_FORMSET_PREFIX in k},
+            prefix=TAG_SELECT_FORMSET_PREFIX
+        )
+        if tag_select_formset.is_valid():
+            for entry in tag_select_formset.cleaned_data:
+                if entry.get('include', False):
+                    recipe_matches = recipe_matches.filter(
+                        tags__id=entry['id'])
 
         context = {'recipes_list': recipe_matches.distinct()}
         return render(request, 'recipe_app/recipe_list.html', context)
