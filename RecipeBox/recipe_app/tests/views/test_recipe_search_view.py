@@ -17,7 +17,7 @@ from recipe_app.models import (
 
 
 @patch('recipe_app.views.render', return_value=HttpResponse())
-class RecipeSearchViewTests(TestCase):
+class RecipeSearchViewGetTests(TestCase):
 
     def test_get_renders_correct_template(self, mock_render):
         self.client.get(reverse('recipe-search'))
@@ -50,6 +50,10 @@ class RecipeSearchViewTests(TestCase):
         tag_select_form = mock_render.call_args[0][2]['tag_select']
         self.assertIsInstance(tag_select_form, TagSelectionFormset)
         self.assertNotIn('on', tag_select_form.data.values())
+
+
+@patch('recipe_app.views.render', return_value=HttpResponse())
+class RecipeSearchViewPostTests(TestCase):
 
     def test_post_renders_correct_template(self, mock_render):
         post_data = {
