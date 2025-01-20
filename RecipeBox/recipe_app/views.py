@@ -216,7 +216,8 @@ def recipe_update(request, pk):
 
 def recipe_search(request):
     if 'POST' == request.method:
-        inclusion_forms = IngredientInclusionFormSet(request.POST)
+        inclusion_forms = IngredientInclusionFormSet(
+            request.POST, prefix=INGREDIENT_LIST_FORMSET_PREFIX)
         exclude_ids = [
             i['id'] for i in inclusion_forms.cleaned_data if i['inclusion'] == 'exclude'
         ]
@@ -244,7 +245,7 @@ def recipe_search(request):
         all_ingredients = list(Ingredient.objects.all().values())
 
         context = {
-            'ingredients': IngredientInclusionFormSet(initial=all_ingredients),
+            'ingredients': IngredientInclusionFormSet(initial=all_ingredients, prefix=INGREDIENT_LIST_FORMSET_PREFIX),
             'recipe_name': RecipeInclusionForm(),
             'tag_select': TagSelectionFormset()
         }
