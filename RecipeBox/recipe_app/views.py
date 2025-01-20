@@ -247,6 +247,6 @@ def recipe_search(request):
         context = {
             'ingredients': IngredientInclusionFormSet(initial=all_ingredients, prefix=INGREDIENT_LIST_FORMSET_PREFIX),
             'recipe_name': RecipeInclusionForm(),
-            'tag_select': TagSelectionFormset()
+            'tag_select': TagSelectionFormset(prefix=TAG_SELECT_FORMSET_PREFIX)
         }
         return render(request, 'recipe_app/recipe_search.html', context)

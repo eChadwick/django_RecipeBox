@@ -14,7 +14,10 @@ from recipe_app.models import (
     Recipe,
     RecipeIngredient
 )
-from recipe_app.views import INGREDIENT_LIST_FORMSET_PREFIX
+from recipe_app.views import (
+    INGREDIENT_LIST_FORMSET_PREFIX,
+    TAG_SELECT_FORMSET_PREFIX
+)
 
 
 @patch('recipe_app.views.render', return_value=HttpResponse())
@@ -52,6 +55,7 @@ class RecipeSearchViewGetTests(TestCase):
 
         tag_select_form = mock_render.call_args[0][2]['tag_select']
         self.assertIsInstance(tag_select_form, TagSelectionFormset)
+        self.assertEqual(tag_select_form.prefix, TAG_SELECT_FORMSET_PREFIX)
         self.assertNotIn('on', tag_select_form.data.values())
 
 
