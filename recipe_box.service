@@ -1,0 +1,11 @@
+[Unit]
+Description=Recipe Box App
+After=network.target
+
+[Service]
+User=recipe_box
+WorkingDirectory=~/django_RecipeBox
+ExecStart=~/django_RecipeBox/.venv/bin/gunicorn --workers 3 --bind 0.0.0.0:8000 RecipeBox.wsgi
+
+[Install]
+WantedBy=multi-user.target
