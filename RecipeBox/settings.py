@@ -23,17 +23,19 @@ dev_var_name = 'RECIPE_BOX_DEV'
 secret_key_var_name = 'RECIPE_BOX_SECRET_KEY'
 if os.getenv(dev_var_name, False):
     DEBUG = True
-    SECRET_KEY = 'django-insecure--09cchprb4jhzhh#jrm#0xk*9-kl_7r1lzm9n+nq1a-qbic7ij'
     ALLOWED_HOSTS = ['localhost']
+    SECRET_KEY = 'django-insecure--09cchprb4jhzhh#jrm#0xk*9-kl_7r1lzm9n+nq1a-qbic7ij'
 else:
     DEBUG = False
-    SECRET_KEY = os.getenv(secret_key_var_name, False)
-    if not SECRET_KEY:
+    ALLOWED_HOSTS = [f'192.168.86.{host}' for host in range(1, 255)]
+    try:
+        with open('.env/secret', 'r') as file:
+            SECRET_KEY = file.read()
+    except:
         raise ValueError(
             f'{secret_key_var_name} must be set in production\n'
             f'If you want dev mode, set {dev_var_name}\n\n'
         )
-    ALLOWED_HOSTS = [f'192.168.86.{host}' for host in range(1, 255)]
 
 
 # Application definition
@@ -128,7 +130,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = '/home/pi/recipe_box_assets/static'
+STATIC_ROOT = '~/recipe_box_assets/static'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
