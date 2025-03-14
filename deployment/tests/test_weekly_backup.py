@@ -17,7 +17,7 @@ class WeeklyBackupTests(TestCase):
 
     def tearDown(self):
         shutil.rmtree(self.source_dir)
-        shutil.rmtree(self.destination_dir)
+        shutil.rmtree(self.destination_dir)        
 
     def test_it_errors_if_db_is_invalid(self):
         test_file_path = self.source_dir / "not_sql.txt"
@@ -25,3 +25,7 @@ class WeeklyBackupTests(TestCase):
 
         with self.assertRaises(ValueError):
             daily_backup(source=test_file_path, destination=self.destination_dir)
+
+    def test_it_copies_input_file_to_destination(self):
+        daily_backup(source=Path(__file__).parent.parent.parent / 'db.sqlite3', destination=self.destination_dir)
+        self.assertTrue((self.destination_dir / 'db.sqlite3').is_file())
