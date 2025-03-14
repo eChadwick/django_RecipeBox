@@ -2,10 +2,12 @@ import shutil
 import sys
 from unittest import TestCase
 from pathlib import Path
+import time
 
 sys.path.append(str(Path(__file__).parent.parent))
-from data_backup import daily_backup
+from data_backup import daily_backup, MAX_DAILY_BACKUPS
 
+DB_FILE_LOCATION = Path(__file__).parent.parent.parent / 'db.sqlite3'
 
 class WeeklyBackupTests(TestCase):
     def setUp(self):
@@ -27,5 +29,15 @@ class WeeklyBackupTests(TestCase):
             daily_backup(source=test_file_path, destination=self.destination_dir)
 
     def test_it_copies_input_file_to_destination(self):
-        daily_backup(source=Path(__file__).parent.parent.parent / 'db.sqlite3', destination=self.destination_dir)
+        daily_backup(source=DB_FILE_LOCATION, destination=self.destination_dir)
         self.assertTrue((self.destination_dir / 'db.sqlite3').is_file())
+
+    def test_it_deletes_oldest_file_if_over_size_limit(self):
+        for i in range(7):
+            shutil.copy(DB_FILE_LOCATION , self.destination_dir / f'db_{i}')
+            time.sleep(.1)
+        
+        daily_backup(source=DB_FILE_LOCATION, destination=self.destination_dir)
+        
+        self.assertEqual(len(list(self.destination_dir.iterdir())), MAX_DAILY_BACKUPS)
+        self.assertFalse((self.destination_dir / 'db_0').is_file())
