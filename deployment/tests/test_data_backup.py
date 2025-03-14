@@ -12,7 +12,7 @@ from data_backup import daily_backup, MAX_DAILY_BACKUPS
 DB_FILE_LOCATION = Path(__file__).parent.parent.parent / 'db.sqlite3'
 
 @patch('rclone_python.rclone.sync')
-class WeeklyBackupTests(TestCase):
+class DataBackTests(TestCase):
     def setUp(self):
         self.source_dir = (Path(__file__).parent / "source_directory")
         self.source_dir.mkdir()
