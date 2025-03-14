@@ -1,5 +1,6 @@
 import shutil
 import sqlite3
+from rclone_python import rclone
 
 MAX_DAILY_BACKUPS = 7
 
@@ -33,3 +34,4 @@ def daily_backup(source, destination):
         delete_file = files.pop(0)
         delete_file.unlink()
     
+    rclone.sync(src_path=destination, dest_path='drive:')
