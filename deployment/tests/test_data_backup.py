@@ -5,11 +5,12 @@ from unittest.mock import patch
 from pathlib import Path
 import time
 from rclone_python import rclone
+from datetime import datetime
 
 sys.path.append(str(Path(__file__).parent.parent))
 from data_backup import daily_backup, MAX_DAILY_BACKUPS
 
-DB_FILE_LOCATION = Path(__file__).parent.parent.parent / 'db.sqlite3'
+DB_FILE_LOCATION = Path(__file__).parent / 'test_db.sqlite3'
 
 @patch('rclone_python.rclone.sync')
 class DataBackTests(TestCase):
@@ -33,7 +34,7 @@ class DataBackTests(TestCase):
 
     def test_it_copies_input_file_to_destination(self, _):
         daily_backup(source=DB_FILE_LOCATION, destination=self.destination_dir)
-        self.assertTrue((self.destination_dir / 'db.sqlite3').is_file())
+        self.assertTrue((self.destination_dir / f'{DB_FILE_LOCATION.name}-{datetime.now().strftime("%Y-%m-%d")}').is_file())
 
     def test_it_deletes_oldest_file_if_over_size_limit(self, _):
         for i in range(7):

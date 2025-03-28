@@ -1,6 +1,8 @@
 import shutil
 import sqlite3
 from rclone_python import rclone
+from datetime import datetime
+from pathlib import Path
 
 MAX_DAILY_BACKUPS = 7
 
@@ -25,7 +27,8 @@ def daily_backup(source, destination):
     
     db.close()
 
-    shutil.copy(source, destination)
+    new_file_path = Path(destination) / f'{Path(source).name}-{datetime.now().strftime("%Y-%m-%d")}'
+    shutil.copy(source, new_file_path)
     
     # Get all the files with the oldest first
     files = sorted([file for file in destination.iterdir()], key = lambda file: file.stat().st_ctime)
