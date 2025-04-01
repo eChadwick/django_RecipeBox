@@ -4,7 +4,6 @@ from unittest import TestCase
 from unittest.mock import patch
 from pathlib import Path
 import time
-from rclone_python import rclone
 from datetime import datetime
 
 sys.path.append(str(Path(__file__).parent.parent))
@@ -36,7 +35,8 @@ class DataBackTests(TestCase):
         daily_backup(source=DB_FILE_LOCATION, destination=self.destination_dir)
         self.assertTrue((self.destination_dir / f'{DB_FILE_LOCATION.name}-{datetime.now().strftime("%Y-%m-%d")}').is_file())
 
-    def test_it_deletes_oldest_file_if_over_size_limit(self, _):
+    @patch('pathlib.Path.unlink', wraps=Path.unlink, autospec=True)
+    def test_it_deletes_oldest_file_if_over_size_limit(self, mock_unlink, _):
         for i in range(7):
             shutil.copy(DB_FILE_LOCATION , self.destination_dir / f'db_{i}')
             time.sleep(.1)
@@ -44,7 +44,7 @@ class DataBackTests(TestCase):
         daily_backup(source=DB_FILE_LOCATION, destination=self.destination_dir)
         
         self.assertEqual(len(list(self.destination_dir.iterdir())), MAX_DAILY_BACKUPS)
-        self.assertFalse((self.destination_dir / 'db_0').is_file())
+        mock_unlink.assert_called_with(self.destination_dir / 'db_0')
 
     def test_it_syncs_the_desintation_dir(self, mock_sync):
         daily_backup(source = DB_FILE_LOCATION, destination = self.destination_dir)
