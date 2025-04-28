@@ -31,7 +31,7 @@ def daily_backup(source, destination):
     shutil.copy(source, new_file_path)
     
     # Get all the files with the oldest first
-    files = sorted([file for file in destination.iterdir()], key = lambda file: file.stat().st_ctime)
+    files = sorted([file for file in Path(destination).iterdir()], key = lambda file: file.stat().st_ctime)
 
     while len(files) > MAX_DAILY_BACKUPS:
         delete_file = files.pop(0)
@@ -39,7 +39,7 @@ def daily_backup(source, destination):
     
     rclone.sync(src_path=destination, dest_path='drive:')
 
-if __name__ == 'main':
+if __name__ == '__main__':
     from argparse import ArgumentParser
     parser = ArgumentParser()
     parser.add_argument('--source', '-s',
