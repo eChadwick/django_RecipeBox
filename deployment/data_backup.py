@@ -38,3 +38,16 @@ def daily_backup(source, destination):
         delete_file.unlink()
     
     rclone.sync(src_path=destination, dest_path='drive:')
+
+if __name__ == 'main':
+    from argparse import ArgumentParser
+    parser = ArgumentParser()
+    parser.add_argument('--source', '-s',
+                        type=str,
+                        required=True)
+    parser.add_argument('--dest', '-d',
+                        type=str,
+                        required=True)
+    args = parser.parse_args()
+    
+    daily_backup(source=args.source, destination=args.dest)
