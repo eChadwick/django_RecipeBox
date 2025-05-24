@@ -37,7 +37,7 @@ class IngredientForm(Form):
     DELETE = BooleanField(
         required=False,
         label='',
-        widget=CheckboxInput(attrs={'onclick': 'hideParent(this)'})
+        widget=CheckboxInput(attrs={'onclick': 'hideParent(this)', 'style': 'display: none;'})
     )
 
     def __eq__(self, other):

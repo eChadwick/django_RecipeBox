@@ -48,3 +48,10 @@ body {
     list-style: none;
     padding-left: 0;
 }
+
+.delete-label img {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    vertical-align: middle;
+}
