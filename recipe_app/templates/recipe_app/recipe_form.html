@@ -31,7 +31,7 @@
             {{ ingredients_list.management_form }}
             {% for i in ingredients_list %}
             <div>
-                {{ i.name }} - {{ i.measurement }} {{ i.DELETE }}
+                {{ i.measurement }} - {{ i.name }} {{ i.DELETE }}
                 <label for="{{ i.DELETE.id_for_label }}" class="delete-label">
                     <img src="{% static 'icons/icons8-minus-48.png' %}" />
                 </label>
