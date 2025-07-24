@@ -232,8 +232,7 @@ def recipe_search(request):
         else:
             exclude_ids = or_ids = and_ids = []
 
-        recipe_matches = Recipe.objects.exclude(
-            ingredients__id__in=exclude_ids)
+        recipe_matches = Recipe.objects.exclude(ingredients__id__in=exclude_ids)
 
         if or_ids:
             recipe_matches = recipe_matches.filter(ingredients__id__in=or_ids)
@@ -255,7 +254,7 @@ def recipe_search(request):
                     recipe_matches = recipe_matches.filter(
                         tags__id=entry['id'])
 
-        context = {'recipes_list': recipe_matches.distinct()}
+        context = {'recipes_list': recipe_matches.distinct().order_by('name')}
         return render(request, 'recipe_app/recipe_list.html', context)
     else:
         all_ingredients = list(Ingredient.objects.all().values())

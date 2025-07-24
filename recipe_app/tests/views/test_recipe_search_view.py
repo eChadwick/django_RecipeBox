@@ -346,3 +346,26 @@ class RecipeSearchViewPostTests(TestCase):
     def test_search_empty_ingredients_table_doesnt_error(self, mock_render):
         self.client.post(reverse('recipe-search'))
         self.assertTrue(True) # If we got here the test passed
+
+    def test_result_ordering(self, mock_render):
+        Recipe.objects.create(name = 'Recipe B', directions='jfkj')
+        Recipe.objects.create(name = 'Recipe C', directions='jfkj')
+        Recipe.objects.create(name = 'Recipe A', directions='jfkj')
+
+        post_data = {
+            'recipe_name': '',
+            'ingredient-form-TOTAL_FORMS': '0', 
+            'ingredient-form-INITIAL_FORMS': '0', 
+            'ingredient-form-MIN_NUM_FORMS': '0', 
+            'ingredient-form-MAX_NUM_FORMS': '1000', 
+            'tag-select-form-TOTAL_FORMS': '0', 
+            'tag-select-form-INITIAL_FORMS': '0', 
+            'tag-select-form-MIN_NUM_FORMS': '', 
+            'tag-select-form-MAX_NUM_FORMS': '', 
+            'csrfmiddlewaretoken': 'irrelevant'}
+        
+        self.client.post(reverse('recipe-search'), post_data)
+        rendered_recipe_list = mock_render.call_args[0][2]['recipes_list']
+        rendered_recipe_names = [recipe.name for recipe in rendered_recipe_list]
+
+        self.assertTrue(rendered_recipe_names == sorted(rendered_recipe_names))
