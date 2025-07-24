@@ -342,3 +342,7 @@ class RecipeSearchViewPostTests(TestCase):
         rendered_recipe_list = mock_render.call_args[0][2]['recipes_list']
         self.assertEqual(len(rendered_recipe_list), 1)
         self.assertIn(recipe3, rendered_recipe_list)
+
+    def test_search_empty_ingredients_table_doesnt_error(self, mock_render):
+        self.client.post(reverse('recipe-search'))
+        self.assertTrue(True) # If we got here the test passed

@@ -218,15 +218,19 @@ def recipe_search(request):
     if 'POST' == request.method:
         inclusion_forms = IngredientInclusionFormSet(
             request.POST, prefix=INGREDIENT_LIST_FORMSET_PREFIX)
-        exclude_ids = [
-            i['id'] for i in inclusion_forms.cleaned_data if i['inclusion'] == 'exclude'
-        ]
-        or_ids = [
-            i['id'] for i in inclusion_forms.cleaned_data if i['inclusion'] == 'or'
-        ]
-        and_ids = [
-            i['id'] for i in inclusion_forms.cleaned_data if i['inclusion'] == 'and'
-        ]
+        
+        if inclusion_forms.is_valid():
+            exclude_ids = [
+                i['id'] for i in inclusion_forms.cleaned_data if i['inclusion'] == 'exclude'
+            ]
+            or_ids = [
+                i['id'] for i in inclusion_forms.cleaned_data if i['inclusion'] == 'or'
+            ]
+            and_ids = [
+                i['id'] for i in inclusion_forms.cleaned_data if i['inclusion'] == 'and'
+            ]
+        else:
+            exclude_ids = or_ids = and_ids = []
 
         recipe_matches = Recipe.objects.exclude(
             ingredients__id__in=exclude_ids)
