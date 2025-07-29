@@ -33,6 +33,10 @@ class IngredientModelTests(TestCase):
         self.assertEqual(200, name_field.max_length)
         self.assertTrue(name_field.blank)
 
+    def test__str__(self):
+        ingredient = Ingredient(name=self.title_case_name)
+        self.assertEqual(ingredient.__str__(), self.title_case_name)
+
 
 class RecipeModelTests(TestCase):
     mixed_case_name = 'rEcIpE nAme'

@@ -19,6 +19,8 @@ class Ingredient(models.Model):
 
         models.Model.save(self, *args, **kwargs)
 
+    def __str__(self):
+        return self.name
 
 class Tag(models.Model):
     name = models.CharField(
