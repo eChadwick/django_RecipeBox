@@ -15,7 +15,7 @@ from recipe_app.forms.forms import (
 
 from recipe_app.forms.tag_selection_formset import TagSelectionFormset
 
-DEFAULT_PAGINATION = 25
+INGREDIENT_SUGGESTION_PAGINATION = 10
 
 RECIPE_NOT_FOUND_ERROR = 'Recipe not found'
 TAG_CREATE_FORMSET_PREFIX = 'tag-create-form'
@@ -273,4 +273,4 @@ def ingredient_autocomplete(request):
     if query:
         results = results.filter(name__icontains=query)
 
-    return JsonResponse(list(results[:10]), safe=False)
+    return JsonResponse(list(results[:INGREDIENT_SUGGESTION_PAGINATION]), safe=False)

@@ -1,6 +1,7 @@
 from django.test import TestCase
 from django.urls import reverse
 from recipe_app.models import Ingredient
+from recipe_app.views import INGREDIENT_SUGGESTION_PAGINATION
 
 class IngredientAutoCompleteViewTests(TestCase):
     def test_endpoint(self):
@@ -17,4 +18,9 @@ class IngredientAutoCompleteViewTests(TestCase):
         for result in results:
             self.assertIn(query, result.lower())
 
-    
+    def test_pagination(self):
+        for i in range(INGREDIENT_SUGGESTION_PAGINATION + 1):
+            Ingredient.objects.create(name=f'Ingredient{i}')
+
+        results = self.client.get(reverse('ingredient-autocomplete')).json()
+        self.assertEqual(len(results), INGREDIENT_SUGGESTION_PAGINATION)
