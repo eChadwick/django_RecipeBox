@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.paginator import Paginator
-from django.http import HttpResponse, HttpResponseNotFound
+from django.http import HttpResponse, HttpResponseNotFound, JsonResponse
 from django.urls import reverse
 from django.views.decorators.http import require_http_methods
 
@@ -265,3 +265,12 @@ def recipe_search(request):
             'tag_select': TagSelectionFormset(prefix=TAG_SELECT_FORMSET_PREFIX)
         }
         return render(request, 'recipe_app/recipe_search.html', context)
+
+def ingredient_autocomplete(request):
+    results = Ingredient.objects.all().values_list('name', flat=True)
+
+    query = request.GET.get('query', False)
+    if query:
+        results = results.filter(name__icontains=query)
+
+    return JsonResponse(list(results[:10]), safe=False)
