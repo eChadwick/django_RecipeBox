@@ -18,6 +18,7 @@ from recipe_app.models import Tag
 
 
 class IngredientForm(Form):
+    class_list = 'ingredient-input awesomplete'
     name_error = "Can't have Amount without Ingredient"
     name_field_placeholder = 'Ingredient'
     measurement_field_placeholder = 'Amount'
@@ -26,7 +27,13 @@ class IngredientForm(Form):
         max_length=255,
         required=False,
         label='',
-        widget=TextInput(attrs={'placeholder': name_field_placeholder})
+        widget=TextInput(
+            attrs={
+                'placeholder': name_field_placeholder, 
+                'class': class_list,
+                'autocomplete': 'off'
+            }
+        )
     )
     measurement = CharField(
         max_length=255,

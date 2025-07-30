@@ -17,6 +17,14 @@ class IngredientFormTests(TestCase):
             name_field.widget.attrs['placeholder'],
             IngredientForm.name_field_placeholder
         )
+        self.assertEqual(
+            name_field.widget.attrs['class'],
+            IngredientForm.class_list
+        )
+        self.assertEqual(
+            name_field.widget.attrs['autocomplete'],
+            'off'
+        )
 
         measurement_field = form.fields['measurement']
         self.assertIsInstance(measurement_field, CharField)

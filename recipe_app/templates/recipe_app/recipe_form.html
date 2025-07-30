@@ -5,6 +5,9 @@
 <script src={% static 'recipe_app/hide_parent.js' %}></script>
 <script src={% static 'recipe_app/add_ingredient.js' %}></script>
 <script src={% static 'recipe_app/add_tag.js' %}></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/awesomplete/1.1.5/awesomplete.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/awesomplete/1.1.5/awesomplete.min.js"></script>
+
 {% endblock %}
 
 {% block nav-bar-links %}
@@ -61,4 +64,29 @@
     </div>
     <button type="submit">Submit</button>
 </form>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const inputs = document.querySelectorAll(".ingredient-input");
+
+        inputs.forEach(function (input) {
+            const awesomplete = new Awesomplete(input, {
+                minChars: 1,
+                autoFirst: true
+            });
+
+            input.addEventListener("input", function () {
+                const query = input.value;
+                if (query.length < 1) return;
+
+                fetch("/ingredient-autocomplete?q=" + encodeURIComponent(query))
+                    .then(function (response) {
+                        return response.json();
+                    })
+                    .then(function (data) {
+                        awesomplete.list = data;
+                    });
+            });
+        });
+    });
+</script>
 {% endblock %}
