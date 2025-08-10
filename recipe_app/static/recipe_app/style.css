@@ -55,3 +55,18 @@ body {
     cursor: pointer;
     vertical-align: middle;
 }
+
+.ingredient-inclusion-form div div {
+    display: inline-block;
+    margin-right: 10px;
+    /* optional spacing */
+    vertical-align: middle;
+}
+
+.ingredient-inclusion-form {
+    display: flex;
+    align-items: center;
+    /* vertically align input and div */
+    gap: 10px;
+    /* horizontal spacing */
+}
