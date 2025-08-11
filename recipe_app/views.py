@@ -257,7 +257,7 @@ def recipe_search(request):
         context = {'recipes_list': recipe_matches.distinct().order_by('name')}
         return render(request, 'recipe_app/recipe_list.html', context)
     else:
-        all_ingredients = list(Ingredient.objects.all().values())
+        all_ingredients = list(Ingredient.objects.order_by('name').values())
 
         context = {
             'ingredients': IngredientInclusionFormSet(initial=all_ingredients, prefix=INGREDIENT_LIST_FORMSET_PREFIX),

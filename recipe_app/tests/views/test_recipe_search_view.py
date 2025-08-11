@@ -58,6 +58,16 @@ class RecipeSearchViewGetTests(TestCase):
         self.assertEqual(tag_select_form.prefix, TAG_SELECT_FORMSET_PREFIX)
         self.assertNotIn('on', tag_select_form.data.values())
 
+    def test_get_returns_ingredients_alphabetized(self, mock_render):
+        Ingredient.objects.create(name = 'Ingredient B')
+        Ingredient.objects.create(name = 'Ingredient A')
+        Ingredient.objects.create(name = 'Ingredient C')
+
+        self.client.get(reverse('recipe-search'))
+        ingredients_list = mock_render.call_args[0][2]['ingredients']
+        ingredient_names = [ ingredient['name'].value() for ingredient in ingredients_list.forms]   
+        self.assertEqual(ingredient_names, sorted(ingredient_names))
+
 
 @patch('recipe_app.views.render', return_value=HttpResponse())
 class RecipeSearchViewPostTests(TestCase):
