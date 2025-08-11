@@ -1,27 +1,28 @@
 {% extends "base.html" %}
 
 {% block nav-bar-links %}
-    <a href="{% url 'recipe-create' %}">New Recipe</a>
+<a href="{% url 'recipe-create' %}">New Recipe</a>
 {% endblock %}
 
 {% block body-content %}
-    <form method='post'>
-        <button type=Submit>Submit</button><br><br>
-        {{ recipe_name }}<br><br>
-        {{ ingredients.management_form}}
-        {{ tag_select.management_form}}
-        {% csrf_token %}
-        <h1>Ingredients</h1>
-        {% for i in ingredients %}
-            <div class='ingredient-inclusion-form'>
-                {{ i }}
-            </div>
-        {% endfor %}
-        <h1>Tags</h1>
-        {% for i in tag_select %}
-            <div class='tag-selection-form'>
-                {{ i }}
-            </div>
-        {% endfor %}
-    </form>
+<form method='post'>
+    <button type=Submit>Submit</button><br><br>
+    {{ ingredients.management_form}}
+    {{ tag_select.management_form}}
+    {% csrf_token %}
+    <h1>Recipe Name</h1>
+    {{ recipe_name.recipe_name }}<br><br>
+    <h1>Ingredients</h1>
+    {% for i in ingredients %}
+    <div class='ingredient-inclusion-form'>
+        {{ i }}
+    </div>
+    {% endfor %}
+    <h1>Tags</h1>
+    {% for i in tag_select %}
+    <div class='tag-selection-form'>
+        {{ i }}
+    </div>
+    {% endfor %}
+</form>
 {% endblock %}
