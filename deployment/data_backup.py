@@ -37,7 +37,7 @@ def daily_backup(source, destination):
         delete_file = files.pop(0)
         delete_file.unlink()
     
-    rclone.sync(src_path=destination, dest_path='drive:')
+    rclone.sync(src_path=destination, dest_path='recipe_backup:')
 
 if __name__ == '__main__':
     from argparse import ArgumentParser
