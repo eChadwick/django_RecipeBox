@@ -3,7 +3,8 @@ from django.forms import (
     CharField,
     IntegerField,
     HiddenInput,
-    BooleanField
+    BooleanField,
+    TextInput
 )
 
 from recipe_app.forms.forms import TagSelectionForm
@@ -17,6 +18,13 @@ class TagSelectionFormTests(TestCase):
         self.assertIsInstance(name_field, CharField)
         self.assertEqual(name_field.max_length, 250)
         self.assertEqual(name_field.label, '')
+
+        name_field_widget = name_field.widget
+        self.assertIsInstance(name_field_widget, TextInput)
+        self.assertEqual(
+            name_field_widget.attrs['readonly'],
+            'readonly'
+        )
 
         id_field = form.fields['id']
         self.assertIsInstance(id_field, IntegerField)

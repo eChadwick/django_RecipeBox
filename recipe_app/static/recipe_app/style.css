@@ -76,3 +76,11 @@ body {
     font: inherit;
     color: inherit;
 }
+
+.tag-selection-form input[readonly] {
+    border: none;
+    background: transparent;
+    padding: 0;
+    font: inherit;
+    color: inherit;
+}
