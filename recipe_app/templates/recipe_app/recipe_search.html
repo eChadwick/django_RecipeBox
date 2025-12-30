@@ -12,17 +12,23 @@
     {% csrf_token %}
     <h1>Recipe Name</h1>
     {{ recipe_name.recipe_name }}<br><br>
-    <h1>Ingredients</h1>
-    {% for i in ingredients %}
-    <div class='ingredient-inclusion-form'>
-        {{ i }}
+    <div class='content-flex'>
+        <div>
+            <h1>Ingredients</h1>
+            {% for i in ingredients %}
+            <div class='ingredient-inclusion-form'>
+                {{ i }}
+            </div>
+            {% endfor %}
+        </div>
+        <div>
+            <h1>Tags</h1>
+            {% for i in tag_select %}
+            <div class='tag-selection-form'>
+                {{ i }}
+            </div>
+            {% endfor %}
+        </div>
     </div>
-    {% endfor %}
-    <h1>Tags</h1>
-    {% for i in tag_select %}
-    <div class='tag-selection-form'>
-        {{ i }}
-    </div>
-    {% endfor %}
 </form>
 {% endblock %}
